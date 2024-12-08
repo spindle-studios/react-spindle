@@ -14,7 +14,7 @@ export const Popover: React.FC<
 > = ({ trigger, content, variant = 'bottom', align = 'center', sideOffset = 4, className, ...props }) => {
   return (
     <PopoverPrimitive.Root {...props}>
-      <PopoverPrimitive.Trigger>{trigger}</PopoverPrimitive.Trigger>
+      <PopoverPrimitive.Trigger className="focus-visible:outline-none">{trigger}</PopoverPrimitive.Trigger>
 
       <PopoverPrimitive.Portal>
         <PopoverPrimitive.Content
