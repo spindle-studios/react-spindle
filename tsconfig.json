@@ -6,8 +6,8 @@
     "allowJs": true,
     "jsx": "react",
     "sourceMap": true,
-    "outDir": "./dist",
     "strict": true,
+    "outDir": "./dist",
     "esModuleInterop": true,
     "declaration": true,
     "moduleResolution": "Bundler"
