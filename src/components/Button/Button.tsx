@@ -6,9 +6,10 @@ export const Button: React.FC<
     variant?: 'primary' | 'secondary' | 'destructive' | 'outline' | 'ghost' | 'icon';
     size?: 'lg' | 'md' | 'sm';
   }
-> = ({ variant = 'primary', size = 'md', className, ...props }) => {
+> = ({ variant = 'primary', size = 'md', type = 'button', className, ...props }) => {
   return (
     <button
+      type={type}
       className={clsx(
         'flex items-center justify-center transition-all shadow',
         'focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring focus-visible:ring-offset-1 focus-visible:ring-offset-background',

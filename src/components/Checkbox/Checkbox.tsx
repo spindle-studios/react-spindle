@@ -7,11 +7,14 @@ export const Checkbox = React.forwardRef<
   React.ElementRef<typeof CheckboxPrimitive.Root>,
   React.ComponentPropsWithoutRef<typeof CheckboxPrimitive.Root> & {
     label?: React.ReactNode;
+    labelPosition?: 'left' | 'right';
     containerClassName?: string;
   }
->(({ className, label, containerClassName, ...props }, ref) => {
+>(({ className, label, labelPosition = 'right', containerClassName, ...props }, ref) => {
   return (
-    <div className={clsx('flex items-center gap-2', containerClassName)}>
+    <div
+      className={clsx('flex items-center gap-2', labelPosition === 'left' && 'flex-row-reverse', containerClassName)}
+    >
       <CheckboxPrimitive.Root
         ref={ref}
         className={clsx(
@@ -27,8 +30,9 @@ export const Checkbox = React.forwardRef<
           <Check className="h-4 w-4" />
         </CheckboxPrimitive.Indicator>
       </CheckboxPrimitive.Root>
+
       {label && (
-        <label className="text-sm text-foreground select-none" htmlFor={props.id}>
+        <label className="text-sm text-foreground select-none cursor-pointer" htmlFor={props.id}>
           {label}
         </label>
       )}
