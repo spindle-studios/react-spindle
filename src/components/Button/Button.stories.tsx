@@ -1,3 +1,4 @@
+import { Pencil } from 'lucide-react';
 import React from 'react';
 import { Button } from './Button';
 
@@ -8,6 +9,9 @@ export const Default = () => (
     <Button variant="destructive">Destructive</Button>
     <Button variant="outline">Outline</Button>
     <Button variant="ghost">Ghost</Button>
+    <Button variant="icon">
+      <Pencil size={14} />
+    </Button>
   </div>
 );
 
