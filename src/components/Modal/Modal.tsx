@@ -4,14 +4,13 @@ import { X } from 'lucide-react';
 import React, { ComponentProps } from 'react';
 import { Button } from '../Button/Button';
 
-export const Sheet: React.FC<
-  ComponentProps<'div'> & {
+export const Modal: React.FC<
+  ComponentProps<typeof DialogPrimitive.Content> & {
     isOpen: boolean;
     onClose: () => void;
-    variant?: 'right' | 'left';
-    className?: string;
+    size?: 'sm' | 'md' | 'lg';
   }
-> = ({ isOpen, onClose, variant = 'left', className, children, ...props }) => {
+> = ({ isOpen, onClose, size = 'md', className, children, ...props }) => {
   return (
     <DialogPrimitive.Root open={isOpen} onOpenChange={(open) => !open && onClose()}>
       <DialogPrimitive.Portal>
@@ -25,11 +24,18 @@ export const Sheet: React.FC<
 
         <DialogPrimitive.Content
           className={clsx(
-            'fixed z-50 bg-background p-6 shadow-lg duration-300 border-input inset-y-0 animate-in',
-            'w-full h-full sm:max-w-sm sm:w-3/4',
+            'fixed z-50 bg-background p-6 shadow-lg border-input border rounded-lg',
+            'left-[50%] top-[50%] translate-x-[-50%] translate-y-[-50%]',
+            'data-[state=open]:animate-in data-[state=closed]:animate-out',
+            'data-[state=open]:fade-in-0 data-[state=closed]:fade-out-0',
+            'data-[state=open]:zoom-in-95 data-[state=closed]:zoom-out-95',
+            'data-[state=closed]:slide-out-to-left-1/2 data-[state=closed]:slide-out-to-top-[48%]',
+            'data-[state=open]:slide-in-from-left-1/2 data-[state=open]:slide-in-from-top-[48%]',
+            'w-full h-full sm:h-auto sm:max-w-[90vw] sm:max-h-[90vh]',
             {
-              'right-0 border-l slide-in-from-right': variant === 'right',
-              'left-0 border-r slide-in-from-left': variant === 'left',
+              'sm:w-[400px]': size === 'sm',
+              'sm:w-[500px]': size === 'md',
+              'sm:w-[600px]': size === 'lg',
             },
             className,
           )}
