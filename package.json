@@ -1,10 +1,18 @@
 {
   "name": "react-otio",
+  "description": "A component library for React",
+  "version": "0.0.1",
   "private": true,
-  "version": "0.0.0",
-  "type": "module",
+  "main": "dist/index.cjs.js",
+  "module": "dist/index.esm.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist",
+    "src"
+  ],
   "scripts": {
-    "start": "storybook dev -p 3000 --no-open"
+    "build": "rm -rf ./dist && rollup -c",
+    "start": "storybook dev -p 3000"
   },
   "peerDependencies": {
     "react": "^18.3.1",
@@ -30,6 +38,10 @@
   },
   "devDependencies": {
     "@eslint/js": "^9.15.0",
+    "@rollup/plugin-commonjs": "^28.0.1",
+    "@rollup/plugin-node-resolve": "^15.3.0",
+    "@rollup/plugin-terser": "^0.4.4",
+    "@rollup/plugin-typescript": "^12.1.1",
     "@storybook/addon-essentials": "^8.4.7",
     "@storybook/blocks": "^8.4.7",
     "@storybook/react": "^8.4.7",
@@ -48,14 +60,18 @@
     "prettier": "^3.4.2",
     "prettier-plugin-organize-imports": "^4.1.0",
     "prettier-plugin-tailwindcss": "^0.6.9",
-    "storybook": "^8.4.7",
-    "typescript": "~5.6.2",
-    "typescript-eslint": "^8.15.0",
-    "vite": "^6.0.1",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
+    "rollup": "^4.28.1",
+    "rollup-plugin-peer-deps-external": "^2.2.4",
+    "rollup-plugin-postcss": "^4.0.2",
+    "rollup-plugin-terser": "^7.0.2",
+    "storybook": "^8.4.7",
     "tailwindcss": "^3.4.16",
-    "tailwindcss-animate": "^1.0.7"
+    "tailwindcss-animate": "^1.0.7",
+    "typescript": "^5.7.2",
+    "typescript-eslint": "^8.15.0",
+    "vite": "^6.0.1"
   },
   "eslintConfig": {
     "extends": [

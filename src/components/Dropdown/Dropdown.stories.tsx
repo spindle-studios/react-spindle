@@ -1,12 +1,12 @@
 import { Check, Settings, Trash } from 'lucide-react';
 import React from 'react';
 import { Button } from '../Button/Button';
-import { DropdownMenu } from './Dropdown';
+import { Dropdown } from './Dropdown';
 
 export const Default = () => {
   return (
     <div className="w-[300px] flex flex-col">
-      <DropdownMenu
+      <Dropdown
         trigger={<Button variant="primary">Open</Button>}
         className="w-[300px]"
         items={[

@@ -2,12 +2,7 @@ import * as DropdownMenuPrimitive from '@radix-ui/react-dropdown-menu';
 import clsx from 'clsx';
 import React from 'react';
 
-export const DropdownMenu = ({
-  trigger,
-  items,
-  className,
-  sideOffset = 4,
-}: {
+export const Dropdown: React.FC<{
   trigger: React.ReactNode;
   items: {
     type?: 'item' | 'separator' | 'label';
@@ -20,7 +15,7 @@ export const DropdownMenu = ({
   }[];
   className?: string;
   sideOffset?: number;
-}) => {
+}> = ({ trigger, items, className, sideOffset = 4 }) => {
   return (
     <DropdownMenuPrimitive.Root>
       <DropdownMenuPrimitive.Trigger className="focus-visible:outline-none">{trigger}</DropdownMenuPrimitive.Trigger>
