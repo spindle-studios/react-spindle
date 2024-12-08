@@ -52,7 +52,7 @@ export const Select = <T,>({
         <SelectPrimitive.Portal>
           <SelectPrimitive.Content
             className={clsx(
-              'relative z-50 max-h-60 overflow-auto rounded-md border bg-popover text-popover-foreground shadow-md',
+              'relative z-50 max-h-60 overflow-auto rounded-md border border-input bg-popover text-popover-foreground shadow-md',
               'w-[var(--radix-select-trigger-width)] focus:outline-none mt-1',
             )}
             position="popper"
