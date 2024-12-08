@@ -1,5 +1,5 @@
 {
-  "name": "react-otio",
+  "name": "@olafkotur/react-otio",
   "description": "A component library for React",
   "version": "0.0.1",
   "private": true,
@@ -7,9 +7,15 @@
   "module": "dist/index.esm.js",
   "types": "dist/index.d.ts",
   "files": [
-    "dist",
-    "src"
+    "dist"
   ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/olafkotur/react-otio.git"
+  },
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com"
+  },
   "scripts": {
     "build": "rm -rf ./dist && rollup -c",
     "start": "storybook dev -p 3000"
