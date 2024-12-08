@@ -1,13 +1,13 @@
 import * as ToastPrimitives from '@radix-ui/react-toast';
 import clsx from 'clsx';
-import { AlertCircle, CheckCircle, X } from 'lucide-react';
+import { CircleCheck, CircleX, X } from 'lucide-react';
 import React from 'react';
 import { Button } from '../Button/Button';
 
 type ToastProps = {
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  variant: 'success' | 'error' | 'neutral' | 'action';
+  variant: 'positive' | 'negative' | 'neutral' | 'action';
   message: string;
   action?: string;
   duration?: number;
@@ -25,10 +25,10 @@ export const Toast: React.FC<ToastProps> = ({
 }) => {
   const getIcon = () => {
     switch (variant) {
-      case 'success':
-        return <CheckCircle className="h-5 w-5 text-green-500" />;
-      case 'error':
-        return <AlertCircle className="h-5 w-5 text-red-500" />;
+      case 'positive':
+        return <CircleCheck className="h-5 w-5 text-primary/50" />;
+      case 'negative':
+        return <CircleX className="h-5 w-5 text-primary/50" />;
       default:
         return null;
     }

@@ -8,7 +8,7 @@ export const Sheet: React.FC<
   ComponentProps<'div'> & {
     isOpen: boolean;
     onClose: () => void;
-    variant?: 'right' | 'left';
+    variant?: 'right' | 'left' | 'bottom';
     className?: string;
   }
 > = ({ isOpen, onClose, variant = 'left', className, children, ...props }) => {
@@ -25,11 +25,15 @@ export const Sheet: React.FC<
 
         <DialogPrimitive.Content
           className={clsx(
-            'fixed z-50 bg-background p-6 shadow-lg duration-300 border-input inset-y-0 animate-in',
-            'w-full h-full sm:max-w-sm sm:w-3/4',
+            'fixed z-50 bg-background p-6 shadow-lg border-input duration-300',
+            'data-[state=open]:animate-in data-[state=closed]:animate-out',
             {
-              'right-0 border-l slide-in-from-right': variant === 'right',
-              'left-0 border-r slide-in-from-left': variant === 'left',
+              'right-0 inset-y-0 w-full h-full sm:max-w-sm border-l data-[state=open]:slide-in-from-right data-[state=closed]:slide-out-to-right':
+                variant === 'right',
+              'left-0 inset-y-0 w-full h-full sm:max-w-sm border-r data-[state=open]:slide-in-from-left data-[state=closed]:slide-out-to-left':
+                variant === 'left',
+              'bottom-0 inset-x-0 max-h-[90vh] rounded-t-lg border-t data-[state=open]:slide-in-from-bottom data-[state=closed]:slide-out-to-bottom':
+                variant === 'bottom',
             },
             className,
           )}

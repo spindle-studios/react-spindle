@@ -4,7 +4,7 @@ import { Sheet } from './Sheet';
 
 export const Default = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const [variant, setVariant] = useState<'right' | 'left'>('left');
+  const [variant, setVariant] = useState<'right' | 'left' | 'bottom'>('left');
 
   return (
     <div className="flex flex-row items-center gap-2">
@@ -24,6 +24,15 @@ export const Default = () => {
         }}
       >
         Right
+      </Button>
+
+      <Button
+        onClick={() => {
+          setIsOpen(true);
+          setVariant('bottom');
+        }}
+      >
+        Bottom
       </Button>
 
       <Sheet isOpen={isOpen} onClose={() => setIsOpen(false)} variant={variant}>

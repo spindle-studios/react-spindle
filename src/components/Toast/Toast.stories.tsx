@@ -10,22 +10,22 @@ export const Default = () => {
 
   return (
     <div className="flex flex-col items-center justify-center h-screen gap-4">
-      <Button onClick={() => setSuccessOpen(true)}>Success</Button>
-      <Button onClick={() => setErrorOpen(true)}>Error</Button>
+      <Button onClick={() => setSuccessOpen(true)}>Positive</Button>
+      <Button onClick={() => setErrorOpen(true)}>Negative</Button>
       <Button onClick={() => setInfoOpen(true)}>Neutral</Button>
       <Button onClick={() => setActionOpen(true)}>Action</Button>
 
       <Toast
         open={successOpen}
         onOpenChange={setSuccessOpen}
-        variant="success"
+        variant="positive"
         message="Your changes were saved successfully."
       />
 
       <Toast
         open={errorOpen}
         onOpenChange={setErrorOpen}
-        variant="error"
+        variant="negative"
         message="Something went wrong. Please try again."
       />
 
