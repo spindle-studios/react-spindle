@@ -1,15 +1,7 @@
-import { Meta } from '@storybook/react';
 import React from 'react';
 import { Button } from './Button';
 
-const meta: Meta<typeof Button> = {
-  title: 'Components/Button',
-  component: Button,
-};
-
-export default meta;
-
-const Template = () => (
+export const Default = () => (
   <div className="flex flex-col items-start gap-2">
     <Button variant="primary">Primary</Button>
     <Button variant="secondary">Secondary</Button>
@@ -19,4 +11,5 @@ const Template = () => (
   </div>
 );
 
-export const Default = Template.bind({});
+Default.storyName = 'Button';
+export default { title: 'Components/Button' };
