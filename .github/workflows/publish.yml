@@ -6,7 +6,7 @@ on:
     branches: [main]
 
 jobs:
-  build_and_publish:
+  publish:
     if: github.event.pull_request.merged == true
     runs-on: ubuntu-latest
     steps:
