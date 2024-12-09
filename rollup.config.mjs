@@ -1,5 +1,6 @@
 import commonjs from '@rollup/plugin-commonjs';
 import resolve from '@rollup/plugin-node-resolve';
+import terser from '@rollup/plugin-terser';
 import typescript from '@rollup/plugin-typescript';
 import dts from 'rollup-plugin-dts';
 import postcss from 'rollup-plugin-postcss';
@@ -31,12 +32,10 @@ export default [
         },
         extensions: ['.css'],
         minimize: false,
-        inject: {
-          insertAt: 'top',
-        },
+        extract: 'global.css',
         plugins: [tailwindcss(tailwindConfig)],
       }),
-      // terser(),
+      terser(),
     ],
     onwarn,
   },
