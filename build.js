@@ -171,7 +171,7 @@ for (const [src, { default: defImport, named }] of importMap.entries()) {
 }
 
 // Combine everything
-let finalContent = "import '@config/global.css';\n\n";
+let finalContent = "import './config/global.css';\n\n";
 finalContent += finalImports.join('\n') + '\n\n' + codeLines.join('\n');
 
 // Remove any non-printable characters

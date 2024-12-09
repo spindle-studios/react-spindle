@@ -1,4 +1,4 @@
-import '@config/global.css';
+import './config/global.css';
 
 import React, { ComponentProps, ReactNode, Suspense, lazy, useEffect, useMemo, useRef, useState } from 'react';
 import clsx from 'clsx';
