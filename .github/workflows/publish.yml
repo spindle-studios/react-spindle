@@ -32,7 +32,7 @@ jobs:
           NODE_AUTH_TOKEN: ${{ secrets.GH_TOKEN }}
 
       - name: Bump Version
-        run: npm version minor --no-git-tag-version
+        run: npm version patch --no-git-tag-version
         env:
           NODE_AUTH_TOKEN: ${{ secrets.GH_TOKEN }}
 

@@ -1,13 +1,13 @@
 {
   "name": "@olafkotur/react-otio",
   "description": "A component library for React",
-  "version": "0.2.0",
+  "version": "0.2.2",
   "license": "MIT",
-  "main": "dist/index.js",
-  "module": "dist/index.js",
-  "types": "dist/index.d.ts",
+  "main": "build/index.js",
+  "module": "build/index.js",
+  "types": "build/index.d.ts",
   "files": [
-    "dist"
+    "build"
   ],
   "repository": {
     "type": "git",
@@ -18,12 +18,12 @@
   },
   "exports": {
     ".": {
-      "import": "./dist/index.js",
-      "types": "./dist/index.d.ts"
+      "import": "./build/index.js",
+      "types": "./build/index.d.ts"
     }
   },
   "scripts": {
-    "build": "rm -rf ./dist && rollup -c",
+    "build": "rm -rf ./build && rollup -c",
     "start": "storybook dev -p 3000"
   },
   "peerDependencies": {
@@ -76,6 +76,7 @@
     "react-dom": "^18.3.1",
     "rollup": "^4.28.1",
     "rollup-plugin-dts": "^6.1.1",
+    "rollup-plugin-postcss": "^4.0.2",
     "storybook": "^8.4.7",
     "tailwindcss": "^3.4.16",
     "tailwindcss-animate": "^1.0.7",
