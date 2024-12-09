@@ -1,4 +1,4 @@
-import './config/global.css';
+import '@config/global.css';
 
 import * as CheckboxPrimitive from '@radix-ui/react-checkbox';
 import * as DialogPrimitive from '@radix-ui/react-dialog';
