@@ -28,9 +28,13 @@ jobs:
 
       - name: Yarn Build
         run: yarn build
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GH_TOKEN }}
 
       - name: Bump Version
         run: npm version minor --no-git-tag-version
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GH_TOKEN }}
 
       - name: Publish Package
         run: npm publish
