@@ -9,7 +9,7 @@
     "allowSyntheticDefaultImports": true,
     "declaration": true,
     "emitDeclarationOnly": false,
-    "outDir": "./dist",
+    "outDir": "./build",
     "skipLibCheck": true,
     "paths": {
       "@components/*": ["./src/components/*"],
