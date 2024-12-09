@@ -1,10 +1,10 @@
 {
   "name": "@olafkotur/react-otio",
   "description": "A component library for React",
-  "version": "0.0.3",
+  "version": "0.0.5",
   "license": "MIT",
-  "main": "dist/index.cjs.js",
-  "module": "dist/index.esm.js",
+  "main": "dist/index.js",
+  "module": "dist/index.js",
   "types": "dist/index.d.ts",
   "files": [
     "dist"
@@ -15,6 +15,12 @@
   },
   "publishConfig": {
     "registry": "https://npm.pkg.github.com"
+  },
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    }
   },
   "scripts": {
     "build": "rm -rf ./dist && rollup -c",
@@ -69,9 +75,7 @@
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "rollup": "^4.28.1",
-    "rollup-plugin-peer-deps-external": "^2.2.4",
-    "rollup-plugin-postcss": "^4.0.2",
-    "rollup-plugin-terser": "^7.0.2",
+    "rollup-plugin-dts": "^6.1.1",
     "storybook": "^8.4.7",
     "tailwindcss": "^3.4.16",
     "tailwindcss-animate": "^1.0.7",
@@ -83,112 +87,5 @@
     "extends": [
       "plugin:storybook/recommended"
     ]
-  },
-  "exports": {
-    ".": {
-      "import": "./dist/index.esm.js",
-      "require": "./dist/index.cjs.js",
-      "types": "./dist/index.d.ts"
-    },
-    "./components/Badge": {
-      "import": "./dist/components/Badge/Badge.js",
-      "require": "./dist/components/Badge/Badge.js",
-      "types": "./dist/components/Badge/Badge.d.ts"
-    },
-    "./components/Button": {
-      "import": "./dist/components/Button/Button.js",
-      "require": "./dist/components/Button/Button.js",
-      "types": "./dist/components/Button/Button.d.ts"
-    },
-    "./components/Calendar": {
-      "import": "./dist/components/Calendar/Calendar.js",
-      "require": "./dist/components/Calendar/Calendar.js",
-      "types": "./dist/components/Calendar/Calendar.d.ts"
-    },
-    "./components/Card": {
-      "import": "./dist/components/Card/Card.js",
-      "require": "./dist/components/Card/Card.js",
-      "types": "./dist/components/Card/Card.d.ts"
-    },
-    "./components/Checkbox": {
-      "import": "./dist/components/Checkbox/Checkbox.js",
-      "require": "./dist/components/Checkbox/Checkbox.js",
-      "types": "./dist/components/Checkbox/Checkbox.d.ts"
-    },
-    "./components/Dropdown": {
-      "import": "./dist/components/Dropdown/Dropdown.js",
-      "require": "./dist/components/Dropdown/Dropdown.js",
-      "types": "./dist/components/Dropdown/Dropdown.d.ts"
-    },
-    "./components/File": {
-      "import": "./dist/components/File/File.js",
-      "require": "./dist/components/File/File.js",
-      "types": "./dist/components/File/File.d.ts"
-    },
-    "./components/Icon": {
-      "import": "./dist/components/Icon/Icon.js",
-      "require": "./dist/components/Icon/Icon.js",
-      "types": "./dist/components/Icon/Icon.d.ts"
-    },
-    "./components/Input": {
-      "import": "./dist/components/Input/Input.js",
-      "require": "./dist/components/Input/Input.js",
-      "types": "./dist/components/Input/Input.d.ts"
-    },
-    "./components/Loader": {
-      "import": "./dist/components/Loader/Loader.js",
-      "require": "./dist/components/Loader/Loader.js",
-      "types": "./dist/components/Loader/Loader.d.ts"
-    },
-    "./components/Modal": {
-      "import": "./dist/components/Modal/Modal.js",
-      "require": "./dist/components/Modal/Modal.js",
-      "types": "./dist/components/Modal/Modal.d.ts"
-    },
-    "./components/Popover": {
-      "import": "./dist/components/Popover/Popover.js",
-      "require": "./dist/components/Popover/Popover.js",
-      "types": "./dist/components/Popover/Popover.d.ts"
-    },
-    "./components/Scrollable": {
-      "import": "./dist/components/Scrollable/Scrollable.js",
-      "require": "./dist/components/Scrollable/Scrollable.js",
-      "types": "./dist/components/Scrollable/Scrollable.d.ts"
-    },
-    "./components/Select": {
-      "import": "./dist/components/Select/Select.js",
-      "require": "./dist/components/Select/Select.js",
-      "types": "./dist/components/Select/Select.d.ts"
-    },
-    "./components/Sheet": {
-      "import": "./dist/components/Sheet/Sheet.js",
-      "require": "./dist/components/Sheet/Sheet.js",
-      "types": "./dist/components/Sheet/Sheet.d.ts"
-    },
-    "./components/Slider": {
-      "import": "./dist/components/Slider/Slider.js",
-      "require": "./dist/components/Slider/Slider.js",
-      "types": "./dist/components/Slider/Slider.d.ts"
-    },
-    "./components/Switch": {
-      "import": "./dist/components/Switch/Switch.js",
-      "require": "./dist/components/Switch/Switch.js",
-      "types": "./dist/components/Switch/Switch.d.ts"
-    },
-    "./components/Textarea": {
-      "import": "./dist/components/Textarea/Textarea.js",
-      "require": "./dist/components/Textarea/Textarea.js",
-      "types": "./dist/components/Textarea/Textarea.d.ts"
-    },
-    "./components/Toast": {
-      "import": "./dist/components/Toast/Toast.js",
-      "require": "./dist/components/Toast/Toast.js",
-      "types": "./dist/components/Toast/Toast.d.ts"
-    },
-    "./components/Tooltip": {
-      "import": "./dist/components/Tooltip/Tooltip.js",
-      "require": "./dist/components/Tooltip/Tooltip.js",
-      "types": "./dist/components/Tooltip/Tooltip.d.ts"
-    }
   }
 }
