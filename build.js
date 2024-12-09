@@ -1,8 +1,3 @@
-// Updated script:
-// It appears some strange artifacts are still appearing in the output.
-// We'll do a post-processing step at the end to remove any lines that look suspicious.
-// For simplicity, we know the unwanted line contains "Bud1", so we'll filter out any lines containing that substring.
-//
 // Steps:
 // 1. Clear/create src/index.tsx
 // 2. Gather all files from src/components excluding .stories or .test
