@@ -20,6 +20,8 @@ jobs:
 
       - name: Install Dependencies
         run: yarn install --frozen-lockfile
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GH_TOKEN }}
 
       - name: Run Build Script
         run: node build.js
