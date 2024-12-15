@@ -22,7 +22,7 @@ export const Popover: React.FC<
           align={align}
           sideOffset={sideOffset}
           className={clsx(
-            'z-50 w-72 rounded-md border border-input bg-background p-4 text-foreground shadow-md outline-none',
+            'z-50 w-72 rounded-md border border-border bg-background p-4 text-foreground shadow-md outline-none',
             'data-[state=open]:animate-in data-[state=closed]:animate-out',
             'data-[state=open]:fade-in data-[state=closed]:fade-out',
             'data-[state=open]:zoom-in-95 data-[state=closed]:zoom-out-95',

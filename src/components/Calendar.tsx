@@ -20,7 +20,7 @@ export const Calendar: React.FC<ComponentProps<typeof DayPicker>> = ({
         caption_label: 'text-sm font-medium',
         nav: 'flex items-center space-x-1',
         nav_button: clsx(
-          'h-7 w-7 rounded-md transition-colors border border-input flex items-center justify-center opacity-50',
+          'h-7 w-7 rounded-md transition-colors border border-border flex items-center justify-center opacity-50',
           'focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring focus-visible:ring-offset-1 focus-visible:ring-offset-background',
           'hover:bg-accent',
         ),

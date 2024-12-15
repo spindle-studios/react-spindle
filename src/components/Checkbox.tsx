@@ -18,10 +18,11 @@ export const Checkbox = React.forwardRef<
       <CheckboxPrimitive.Root
         ref={ref}
         className={clsx(
-          'peer h-5 w-5 shrink-0 rounded-sm border border-input shadow focus-visible:outline-none',
+          'peer h-5 w-5 shrink-0 rounded-sm border border-border shadow focus-visible:outline-none',
           'focus-visible:ring-1 focus-visible:ring-ring focus-visible:ring-offset-1 focus-visible:ring-offset-background',
-          'disabled:cursor-not-allowed disabled:opacity-50',
+          'disabled:opacity-50',
           'data-[state=checked]:bg-primary data-[state=checked]:text-primary-foreground',
+          'transition-all active:scale-smaller active:disabled:scale-default',
           className,
         )}
         {...props}

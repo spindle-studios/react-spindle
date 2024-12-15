@@ -1,11 +1,8 @@
 import './config/global.css';
 
-import React, { ComponentProps, ReactNode, Suspense, lazy, useEffect, useMemo, useRef, useState } from 'react';
-import clsx from 'clsx';
-import { DayPicker } from 'react-day-picker';
 import * as CheckboxPrimitive from '@radix-ui/react-checkbox';
-import * as DropdownMenuPrimitive from '@radix-ui/react-dropdown-menu';
 import * as DialogPrimitive from '@radix-ui/react-dialog';
+import * as DropdownMenuPrimitive from '@radix-ui/react-dropdown-menu';
 import * as PopoverPrimitive from '@radix-ui/react-popover';
 import * as ScrollAreaPrimitive from '@radix-ui/react-scroll-area';
 import * as SelectPrimitive from '@radix-ui/react-select';
@@ -13,7 +10,9 @@ import * as SliderPrimitive from '@radix-ui/react-slider';
 import * as SwitchPrimitive from '@radix-ui/react-switch';
 import * as ToastPrimitives from '@radix-ui/react-toast';
 import * as TooltipPrimitive from '@radix-ui/react-tooltip';
-
+import clsx from 'clsx';
+import React, { ComponentProps, ReactNode, Suspense, lazy, useEffect, useMemo, useRef, useState } from 'react';
+import { DayPicker } from 'react-day-picker';
 
 export const Badge: React.FC<
   ComponentProps<'div'> & {
@@ -28,7 +27,7 @@ export const Badge: React.FC<
           'bg-primary text-primary-foreground hover:bg-primary/80': variant === 'primary',
           'bg-secondary text-secondary-foreground hover:bg-secondary/80': variant === 'secondary',
           'bg-destructive text-destructive-foreground hover:bg-destructive/80': variant === 'destructive',
-          'border border-input text-foreground': variant === 'outline',
+          'border border-border text-foreground': variant === 'outline',
         },
         className,
       )}
@@ -36,7 +35,6 @@ export const Badge: React.FC<
     />
   );
 };
-
 
 export const Button: React.FC<
   ComponentProps<'button'> & {
@@ -63,7 +61,7 @@ export const Button: React.FC<
           'bg-primary text-primary-foreground hover:bg-primary/80': variant === 'primary',
           'bg-secondary text-secondary-foreground hover:bg-secondary/80': variant === 'secondary',
           'bg-destructive text-destructive-foreground hover:bg-destructive/80': variant === 'destructive',
-          'border border-input bg-background hover:bg-accent': variant === 'outline',
+          'border border-border bg-background hover:bg-accent': variant === 'outline',
           'hover:bg-accent': variant === 'ghost',
           'aspect-square rounded-md bg-background hover:bg-accent !p-0': variant === 'icon',
         },
@@ -73,7 +71,6 @@ export const Button: React.FC<
     />
   );
 };
-
 
 export const Calendar: React.FC<ComponentProps<typeof DayPicker>> = ({
   className,
@@ -92,7 +89,7 @@ export const Calendar: React.FC<ComponentProps<typeof DayPicker>> = ({
         caption_label: 'text-sm font-medium',
         nav: 'flex items-center space-x-1',
         nav_button: clsx(
-          'h-7 w-7 rounded-md transition-colors border border-input flex items-center justify-center opacity-50',
+          'h-7 w-7 rounded-md transition-colors border border-border flex items-center justify-center opacity-50',
           'focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring focus-visible:ring-offset-1 focus-visible:ring-offset-background',
           'hover:bg-accent',
         ),
@@ -130,13 +127,11 @@ export const Calendar: React.FC<ComponentProps<typeof DayPicker>> = ({
   );
 };
 
-
 export const Card: React.FC<ComponentProps<'div'>> = ({ className, ...props }) => {
   return (
-    <div className={clsx('border border-input bg-card text-card-foreground rounded-md p-4', className)} {...props} />
+    <div className={clsx('border border-border bg-card text-card-foreground rounded-md p-4', className)} {...props} />
   );
 };
-
 
 export const Checkbox = React.forwardRef<
   React.ElementRef<typeof CheckboxPrimitive.Root>,
@@ -153,7 +148,7 @@ export const Checkbox = React.forwardRef<
       <CheckboxPrimitive.Root
         ref={ref}
         className={clsx(
-          'peer h-5 w-5 shrink-0 rounded-sm border border-input shadow focus-visible:outline-none',
+          'peer h-5 w-5 shrink-0 rounded-sm border border-border shadow focus-visible:outline-none',
           'focus-visible:ring-1 focus-visible:ring-ring focus-visible:ring-offset-1 focus-visible:ring-offset-background',
           'disabled:cursor-not-allowed disabled:opacity-50',
           'data-[state=checked]:bg-primary data-[state=checked]:text-primary-foreground',
@@ -174,7 +169,6 @@ export const Checkbox = React.forwardRef<
     </div>
   );
 });
-
 
 export const Dropdown: React.FC<{
   trigger: React.ReactNode;
@@ -198,7 +192,7 @@ export const Dropdown: React.FC<{
         <DropdownMenuPrimitive.Content
           sideOffset={sideOffset}
           className={clsx(
-            'z-50 min-w-[8rem] overflow-hidden rounded-md border border-input bg-popover p-1 text-popover-foreground shadow-md',
+            'z-50 min-w-[8rem] overflow-hidden rounded-md border border-border bg-popover p-1 text-popover-foreground shadow-md',
             'data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0',
             'data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95',
             className,
@@ -239,7 +233,6 @@ export const Dropdown: React.FC<{
     </DropdownMenuPrimitive.Root>
   );
 };
-
 
 export const File = React.forwardRef<
   HTMLInputElement,
@@ -295,7 +288,7 @@ export const File = React.forwardRef<
         <button
           type="button"
           className={clsx(
-            'flex h-10 w-full items-center justify-start rounded-md border border-input bg-background px-3 py-2 text-sm shadow-sm',
+            'flex h-10 w-full items-center justify-start rounded-md border border-border bg-background px-3 py-2 text-sm shadow-sm',
             'focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring focus-visible:ring-offset-1 focus-visible:ring-offset-background',
             'hover:bg-accent hover:text-accent-foreground disabled:opacity-50 disabled:cursor-not-allowed',
             className,
@@ -317,7 +310,6 @@ export const File = React.forwardRef<
 );
 
 File.displayName = 'File';
-
 
 export const Icon: React.FC<{
   name: string;
@@ -353,7 +345,6 @@ export const Icon: React.FC<{
   );
 };
 
-
 export const Input = React.forwardRef<
   HTMLInputElement,
   ComponentProps<'input'> & {
@@ -368,7 +359,7 @@ export const Input = React.forwardRef<
         ref={ref}
         type={type}
         className={clsx(
-          'flex w-full rounded-md border border-input bg-background px-3 py-2 text-sm shadow',
+          'flex w-full rounded-md border border-border bg-background px-3 py-2 text-sm shadow',
           'placeholder:text-sm',
           'focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring focus-visible:ring-offset-1 focus-visible:ring-offset-background',
           'disabled:cursor-not-allowed disabled:opacity-50',
@@ -383,7 +374,6 @@ export const Input = React.forwardRef<
     </div>
   );
 });
-
 
 export const Loader: React.FC<{
   size?: 'sm' | 'md' | 'lg';
@@ -412,7 +402,6 @@ export const Loader: React.FC<{
   );
 };
 
-
 export const Modal: React.FC<
   ComponentProps<typeof DialogPrimitive.Content> & {
     isOpen: boolean;
@@ -433,7 +422,7 @@ export const Modal: React.FC<
 
         <DialogPrimitive.Content
           className={clsx(
-            'fixed z-50 bg-background p-6 shadow-lg border-input border rounded-lg',
+            'fixed z-50 bg-background p-6 shadow-lg border-border border rounded-lg',
             'left-[50%] top-[50%] translate-x-[-50%] translate-y-[-50%]',
             'data-[state=open]:animate-in data-[state=closed]:animate-out',
             'data-[state=open]:fade-in-0 data-[state=closed]:fade-out-0',
@@ -461,7 +450,6 @@ export const Modal: React.FC<
   );
 };
 
-
 export const Popover: React.FC<
   ComponentProps<typeof PopoverPrimitive.Root> & {
     trigger: React.ReactNode;
@@ -482,7 +470,7 @@ export const Popover: React.FC<
           align={align}
           sideOffset={sideOffset}
           className={clsx(
-            'z-50 w-72 rounded-md border border-input bg-background p-4 text-foreground shadow-md outline-none',
+            'z-50 w-72 rounded-md border border-border bg-background p-4 text-foreground shadow-md outline-none',
             'data-[state=open]:animate-in data-[state=closed]:animate-out',
             'data-[state=open]:fade-in data-[state=closed]:fade-out',
             'data-[state=open]:zoom-in-95 data-[state=closed]:zoom-out-95',
@@ -497,7 +485,6 @@ export const Popover: React.FC<
     </PopoverPrimitive.Root>
   );
 };
-
 
 type ScrollAreaProps = ComponentProps<typeof ScrollAreaPrimitive.Root> & {
   disableScrollbar?: boolean;
@@ -541,7 +528,6 @@ export const Scrollable: React.FC<ScrollAreaProps> = ({
   );
 };
 
-
 export const Select = <T,>({
   label,
   options,
@@ -576,7 +562,7 @@ export const Select = <T,>({
       >
         <SelectPrimitive.Trigger
           className={clsx(
-            'flex h-10 w-full items-center justify-between rounded-md border border-input bg-background px-3 py-2 text-sm shadow-sm',
+            'flex h-10 w-full items-center justify-between rounded-md border border-border bg-background px-3 py-2 text-sm shadow-sm',
             'placeholder:text-muted-foreground',
             'focus:outline-none focus:ring-1 focus:ring-ring focus:ring-offset-1 focus:ring-offset-background',
             'disabled:cursor-not-allowed disabled:opacity-50',
@@ -591,7 +577,7 @@ export const Select = <T,>({
         <SelectPrimitive.Portal>
           <SelectPrimitive.Content
             className={clsx(
-              'relative z-50 max-h-60 overflow-auto rounded-md border border-input bg-popover text-popover-foreground shadow-md',
+              'relative z-50 max-h-60 overflow-auto rounded-md border border-border bg-popover text-popover-foreground shadow-md',
               'w-[var(--radix-select-trigger-width)] focus:outline-none mt-1',
             )}
             position="popper"
@@ -623,7 +609,6 @@ export const Select = <T,>({
   );
 };
 
-
 export const Sheet: React.FC<
   ComponentProps<'div'> & {
     isOpen: boolean;
@@ -645,7 +630,7 @@ export const Sheet: React.FC<
 
         <DialogPrimitive.Content
           className={clsx(
-            'fixed z-50 bg-background p-6 shadow-lg border-input duration-300',
+            'fixed z-50 bg-background p-6 shadow-lg border-border duration-300',
             'data-[state=open]:animate-in data-[state=closed]:animate-out',
             {
               'right-0 inset-y-0 w-full h-full sm:max-w-sm border-l data-[state=open]:slide-in-from-right data-[state=closed]:slide-out-to-right':
@@ -669,7 +654,6 @@ export const Sheet: React.FC<
     </DialogPrimitive.Root>
   );
 };
-
 
 export const Slider: React.FC<
   ComponentProps<typeof SliderPrimitive.Root> & {
@@ -701,7 +685,6 @@ export const Slider: React.FC<
     </div>
   );
 };
-
 
 export const Switch = React.forwardRef<
   React.ElementRef<typeof SwitchPrimitive.Root>,
@@ -743,7 +726,6 @@ export const Switch = React.forwardRef<
   );
 });
 
-
 export const Textarea = React.forwardRef<
   HTMLTextAreaElement,
   ComponentProps<'textarea'> & {
@@ -757,7 +739,7 @@ export const Textarea = React.forwardRef<
       <textarea
         ref={ref}
         className={clsx(
-          'flex w-full rounded-md border border-input bg-background px-3 py-2 text-sm shadow resize-none h-24',
+          'flex w-full rounded-md border border-border bg-background px-3 py-2 text-sm shadow resize-none h-24',
           'placeholder:text-sm',
           'focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring focus-visible:ring-offset-1 focus-visible:ring-offset-background',
           'disabled:cursor-not-allowed disabled:opacity-50',
@@ -768,7 +750,6 @@ export const Textarea = React.forwardRef<
     </div>
   );
 });
-
 
 type ToastProps = {
   open: boolean;
@@ -806,7 +787,7 @@ export const Toast: React.FC<ToastProps> = ({
         open={open}
         onOpenChange={onOpenChange}
         className={clsx(
-          'group pointer-events-auto relative justify-between flex w-full items-center space-x-4 rounded-md border p-4 shadow-lg transition-all bg-background text-foreground border-input',
+          'group pointer-events-auto relative justify-between flex w-full items-center space-x-4 rounded-md border p-4 shadow-lg transition-all bg-background text-foreground border-border',
           'data-[state=open]:animate-in data-[state=closed]:animate-out data-[swipe=end]:animate-out',
           'data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:slide-out-to-right-full data-[state=open]:slide-in-from-top-full sm:data-[state=open]:slide-in-from-bottom-full',
         )}
@@ -836,7 +817,6 @@ export const Toast: React.FC<ToastProps> = ({
   );
 };
 
-
 export const Tooltip: React.FC<{
   content: React.ReactNode;
   side?: 'top' | 'right' | 'bottom' | 'left';
@@ -854,7 +834,7 @@ export const Tooltip: React.FC<{
             side={side}
             sideOffset={4}
             className={clsx(
-              'z-50 overflow-hidden rounded-md bg-popover px-3 py-1.5 text-xs text-popover-foreground border border-input',
+              'z-50 overflow-hidden rounded-md bg-popover px-3 py-1.5 text-xs text-popover-foreground border border-border',
               'animate-in fade-in-0 zoom-in-95',
               'data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95',
               'data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2',

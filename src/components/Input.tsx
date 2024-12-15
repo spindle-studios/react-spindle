@@ -6,8 +6,9 @@ export const Input = React.forwardRef<
   ComponentProps<'input'> & {
     label?: React.ReactNode;
     containerClassName?: string;
+    size?: 'lg' | 'md' | 'sm';
   }
->(({ label, containerClassName, className, type = 'text', ...props }, ref) => {
+>(({ label, containerClassName, className, type = 'text', size = 'md', ...props }, ref) => {
   return (
     <div className={clsx('flex flex-col gap-1', containerClassName)}>
       {label && <label className="text-sm font-medium text-foreground">{label}</label>}
@@ -18,7 +19,13 @@ export const Input = React.forwardRef<
           'flex w-full rounded-md border border-input bg-background px-3 py-2 text-sm shadow',
           'placeholder:text-sm',
           'focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring focus-visible:ring-offset-1 focus-visible:ring-offset-background',
-          'disabled:cursor-not-allowed disabled:opacity-50',
+          'disabled:opacity-50',
+          'transition-all focus:scale-bigger active:disabled:scale-default',
+          {
+            'h-11 px-8 rounded-md': size === 'lg',
+            'h-10 px-4 py-2 rounded-md': size === 'md',
+            'h-9 px-3 text-xs rounded-sm': size === 'sm',
+          },
           {
             'appearance-none [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none':
               type === 'number',

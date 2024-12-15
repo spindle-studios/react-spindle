@@ -1,11 +1,12 @@
 {
   "name": "@olafkotur/react-otio",
   "description": "A component library for React",
-  "version": "0.2.5",
+  "version": "0.3.8",
   "license": "MIT",
   "main": "build/index.js",
   "module": "build/index.js",
   "types": "build/index.d.ts",
+  "style": "./build/global.css",
   "files": [
     "build"
   ],
@@ -20,7 +21,8 @@
     ".": {
       "import": "./build/index.js",
       "types": "./build/index.d.ts"
-    }
+    },
+    "./global.css": "./build/global.css"
   },
   "scripts": {
     "build": "rm -rf ./build && rollup -c",

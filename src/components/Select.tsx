@@ -37,10 +37,11 @@ export const Select = <T,>({
       >
         <SelectPrimitive.Trigger
           className={clsx(
-            'flex h-10 w-full items-center justify-between rounded-md border border-input bg-background px-3 py-2 text-sm shadow-sm',
+            'flex h-10 w-full items-center justify-between rounded-md border border-border bg-background px-3 py-2 text-sm shadow-sm',
             'placeholder:text-muted-foreground',
             'focus:outline-none focus:ring-1 focus:ring-ring focus:ring-offset-1 focus:ring-offset-background',
-            'disabled:cursor-not-allowed disabled:opacity-50',
+            'disabled:opacity-50',
+            'transition-all',
           )}
         >
           <SelectPrimitive.Value placeholder={placeholder} />
@@ -52,7 +53,7 @@ export const Select = <T,>({
         <SelectPrimitive.Portal>
           <SelectPrimitive.Content
             className={clsx(
-              'relative z-50 max-h-60 overflow-auto rounded-md border border-input bg-popover text-popover-foreground shadow-md',
+              'relative z-50 max-h-60 overflow-auto rounded-md border border-border bg-popover text-popover-foreground shadow-md',
               'w-[var(--radix-select-trigger-width)] focus:outline-none mt-1',
             )}
             position="popper"

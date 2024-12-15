@@ -14,10 +14,11 @@ export const Textarea = React.forwardRef<
       <textarea
         ref={ref}
         className={clsx(
-          'flex w-full rounded-md border border-input bg-background px-3 py-2 text-sm shadow resize-none h-24',
+          'flex w-full rounded-md border border-border bg-background px-3 py-2 text-sm shadow resize-none h-24',
           'placeholder:text-sm',
           'focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring focus-visible:ring-offset-1 focus-visible:ring-offset-background',
-          'disabled:cursor-not-allowed disabled:opacity-50',
+          'disabled:opacity-50',
+          'transition-all focus:scale-bigger focus:disabled:scale-default',
           className,
         )}
         {...props}

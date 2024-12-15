@@ -17,6 +17,7 @@ export const File = React.forwardRef<
       label,
       maxFileSize = 1024 * 1024 * 2, // 2MB
       containerClassName,
+      disabled,
       className,
       onFileChange,
       onError,
@@ -54,11 +55,13 @@ export const File = React.forwardRef<
         {label && <label className="text-sm font-medium text-foreground">{label}</label>}
         <input ref={inputRef} type="file" onChange={handleFileChange} className="hidden" {...props} />
         <button
+          disabled={disabled}
           type="button"
           className={clsx(
-            'flex h-10 w-full items-center justify-start rounded-md border border-input bg-background px-3 py-2 text-sm shadow-sm',
+            'flex h-10 w-full items-center justify-start rounded-md border border-border bg-background px-3 py-2 text-sm shadow-sm',
             'focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring focus-visible:ring-offset-1 focus-visible:ring-offset-background',
-            'hover:bg-accent hover:text-accent-foreground disabled:opacity-50 disabled:cursor-not-allowed',
+            'hover:bg-accent hover:text-accent-foreground disabled:opacity-50',
+            'transition-all active:scale-smaller active:disabled:scale-default',
             className,
           )}
           onClick={() => inputRef.current?.click()}

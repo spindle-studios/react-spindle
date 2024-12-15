@@ -25,7 +25,7 @@ export const Sheet: React.FC<
 
         <DialogPrimitive.Content
           className={clsx(
-            'fixed z-50 bg-background p-6 shadow-lg border-input duration-300',
+            'fixed z-50 bg-background p-6 shadow-lg border-border duration-300',
             'data-[state=open]:animate-in data-[state=closed]:animate-out',
             {
               'right-0 inset-y-0 w-full h-full sm:max-w-sm border-l data-[state=open]:slide-in-from-right data-[state=closed]:slide-out-to-right':

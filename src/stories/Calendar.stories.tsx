@@ -6,7 +6,7 @@ export const Default = () => {
 
   return (
     <div>
-      <Calendar mode="single" selected={date} onSelect={setDate} className="rounded-md border border-input" />
+      <Calendar mode="single" selected={date} onSelect={setDate} className="rounded-md border border-border" />
     </div>
   );
 };

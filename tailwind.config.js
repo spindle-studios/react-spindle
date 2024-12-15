@@ -3,6 +3,11 @@ module.exports = {
   content: ['./src/**/*.{js,ts,jsx,tsx}', './.storybook/**/*.{js,ts,jsx,tsx}'],
   theme: {
     extend: {
+      scale: {
+        default: 1,
+        smaller: 'calc(1 - var(--scale))',
+        bigger: 'calc(1 + var(--scale))',
+      },
       colors: {
         border: 'hsl(var(--border))',
         input: 'hsl(var(--input))',

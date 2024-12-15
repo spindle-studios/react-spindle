@@ -64,6 +64,7 @@ yarn add @olafkotur/react-otio
     --input: 240 3.7% 15.9%;
     --ring: 240 4.9% 83.9%;
     --radius: 0.5rem;
+    --scale: 0.01;
   }
 }
 
@@ -83,6 +84,11 @@ export default {
   content: ['./src/**/*.{js,ts,jsx,tsx}'],
   theme: {
     extend: {
+      scale: {
+        default: 1,
+        smaller: 'calc(1 - var(--scale))',
+        bigger: 'calc(1 + var(--scale))',
+      },
       colors: {
         border: 'hsl(var(--border))',
         input: 'hsl(var(--input))',
