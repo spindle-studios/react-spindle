@@ -13,6 +13,7 @@
     "skipLibCheck": true,
     "paths": {
       "@components/*": ["./src/components/*"],
+      "@hooks/*": ["./src/hooks/*"],
       "@config/*": ["./src/config/*"]
     }
   }
