@@ -1,6 +1,6 @@
 // Steps:
 // 1. Clear/create src/index.tsx
-// 2. Gather all files from src/components excluding .stories or .test
+// 2. Gather all files from src/components and src/hooks
 // 3. Parse imports:
 //    - Ignore local (@components/* and relative) imports
 //    - Deduplicate imports per source (React merged, others combined)
@@ -12,6 +12,7 @@ const fs = require('fs');
 const path = require('path');
 
 const componentsDir = path.join(__dirname, 'src', 'components');
+const hooksDir = path.join(__dirname, 'src', 'hooks');
 const outputFile = path.join(__dirname, 'src', 'index.tsx');
 
 // Clear or recreate `index.tsx`
@@ -24,14 +25,14 @@ function isExcluded(fileName) {
   return fileName.includes('.stories.') || fileName.includes('.test.');
 }
 
-function getAllComponentFiles(dir) {
+function getDirectoryContents(dir) {
   let files = [];
   const items = fs.readdirSync(dir, { withFileTypes: true });
 
   for (const item of items) {
     const itemPath = path.join(dir, item.name);
     if (item.isDirectory()) {
-      files = files.concat(getAllComponentFiles(itemPath));
+      files = files.concat(getDirectoryContents(itemPath));
     } else {
       if (!isExcluded(item.name)) {
         files.push(itemPath);
@@ -41,17 +42,16 @@ function getAllComponentFiles(dir) {
   return files;
 }
 
-const componentFiles = getAllComponentFiles(componentsDir);
-
-const reactNamedImports = new Set();
-let hasDefaultReactImport = false;
+const componentFiles = getDirectoryContents(componentsDir);
+const hooksFiles = getDirectoryContents(hooksDir);
+const allFiles = [...componentFiles, ...hooksFiles];
 
 const importMap = new Map();
-// key: source, value: { default: string|null, named: Set<string> }
-
+const reactNamedImports = new Set();
+let hasDefaultReactImport = false;
 let codeLines = [];
 
-for (const file of componentFiles) {
+for (const file of allFiles) {
   const content = fs.readFileSync(file, 'utf8');
   const lines = content.split('\n');
 
@@ -185,4 +185,4 @@ finalContent = finalContent
 
 fs.writeFileSync(outputFile, finalContent.trim() + '\n', 'utf8');
 
-console.log('Successfully combined component files into src/index.tsx');
+console.log('Successfully combined component and hook files into src/index.tsx');

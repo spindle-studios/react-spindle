@@ -1,8 +1,12 @@
 import './config/global.css';
 
+import React, { ComponentProps, ReactNode, RefObject, Suspense, lazy, useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import clsx from 'clsx';
+import { DayPicker } from 'react-day-picker';
 import * as CheckboxPrimitive from '@radix-ui/react-checkbox';
-import * as DialogPrimitive from '@radix-ui/react-dialog';
+import * as Collapsible from '@radix-ui/react-collapsible';
 import * as DropdownMenuPrimitive from '@radix-ui/react-dropdown-menu';
+import * as DialogPrimitive from '@radix-ui/react-dialog';
 import * as PopoverPrimitive from '@radix-ui/react-popover';
 import * as ScrollAreaPrimitive from '@radix-ui/react-scroll-area';
 import * as SelectPrimitive from '@radix-ui/react-select';
@@ -10,9 +14,7 @@ import * as SliderPrimitive from '@radix-ui/react-slider';
 import * as SwitchPrimitive from '@radix-ui/react-switch';
 import * as ToastPrimitives from '@radix-ui/react-toast';
 import * as TooltipPrimitive from '@radix-ui/react-tooltip';
-import clsx from 'clsx';
-import React, { ComponentProps, ReactNode, Suspense, lazy, useEffect, useMemo, useRef, useState } from 'react';
-import { DayPicker } from 'react-day-picker';
+
 
 export const Badge: React.FC<
   ComponentProps<'div'> & {
@@ -24,9 +26,9 @@ export const Badge: React.FC<
       className={clsx(
         'inline-flex items-center justify-center transition-all shadow text-xs rounded-xl px-2 h-6',
         {
-          'bg-primary text-primary-foreground hover:bg-primary/80': variant === 'primary',
-          'bg-secondary text-secondary-foreground hover:bg-secondary/80': variant === 'secondary',
-          'bg-destructive text-destructive-foreground hover:bg-destructive/80': variant === 'destructive',
+          'bg-primary text-primary-foreground': variant === 'primary',
+          'bg-secondary text-secondary-foreground': variant === 'secondary',
+          'bg-destructive text-destructive-foreground': variant === 'destructive',
           'border border-border text-foreground': variant === 'outline',
         },
         className,
@@ -36,26 +38,31 @@ export const Badge: React.FC<
   );
 };
 
+
 export const Button: React.FC<
-  ComponentProps<'button'> & {
+  (ComponentProps<'button'> & ComponentProps<'a'>) & {
     variant?: 'primary' | 'secondary' | 'destructive' | 'outline' | 'ghost' | 'icon';
     size?: 'lg' | 'md' | 'sm';
+    as?: 'button' | 'a';
   }
-> = ({ variant = 'primary', size = 'md', type = 'button', className, ...props }) => {
+> = ({ variant = 'primary', size = 'md', type = 'button', as = 'button', className, ...props }) => {
+  const Wrapper = as;
+
   return (
-    <button
+    <Wrapper
       type={type}
       className={clsx(
-        'flex items-center justify-center transition-all shadow',
+        'flex items-center justify-center shadow',
         'focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring focus-visible:ring-offset-1 focus-visible:ring-offset-background',
         'disabled:pointer-events-none disabled:opacity-50',
+        'transition-all active:scale-smaller active:disabled:scale-default',
         {
           'w-full': variant !== 'icon',
         },
         {
-          'h-10 px-8 rounded-md': size === 'lg',
-          'h-9 px-4 py-2 rounded-md': size === 'md',
-          'h-8 px-3 text-xs rounded-sm': size === 'sm',
+          'h-11 px-8 rounded-md': size === 'lg',
+          'h-10 px-4 py-2 rounded-md': size === 'md',
+          'h-9 px-3 text-xs rounded-sm': size === 'sm',
         },
         {
           'bg-primary text-primary-foreground hover:bg-primary/80': variant === 'primary',
@@ -71,6 +78,7 @@ export const Button: React.FC<
     />
   );
 };
+
 
 export const Calendar: React.FC<ComponentProps<typeof DayPicker>> = ({
   className,
@@ -127,11 +135,17 @@ export const Calendar: React.FC<ComponentProps<typeof DayPicker>> = ({
   );
 };
 
-export const Card: React.FC<ComponentProps<'div'>> = ({ className, ...props }) => {
+
+export const Card = React.forwardRef<HTMLDivElement, ComponentProps<'div'>>(({ className, ...props }, ref) => {
   return (
-    <div className={clsx('border border-border bg-card text-card-foreground rounded-md p-4', className)} {...props} />
+    <div
+      ref={ref}
+      className={clsx('border border-border bg-card text-card-foreground rounded-md p-4', className)}
+      {...props}
+    />
   );
-};
+});
+
 
 export const Checkbox = React.forwardRef<
   React.ElementRef<typeof CheckboxPrimitive.Root>,
@@ -150,8 +164,9 @@ export const Checkbox = React.forwardRef<
         className={clsx(
           'peer h-5 w-5 shrink-0 rounded-sm border border-border shadow focus-visible:outline-none',
           'focus-visible:ring-1 focus-visible:ring-ring focus-visible:ring-offset-1 focus-visible:ring-offset-background',
-          'disabled:cursor-not-allowed disabled:opacity-50',
+          'disabled:opacity-50',
           'data-[state=checked]:bg-primary data-[state=checked]:text-primary-foreground',
+          'transition-all active:scale-smaller active:disabled:scale-default',
           className,
         )}
         {...props}
@@ -169,6 +184,52 @@ export const Checkbox = React.forwardRef<
     </div>
   );
 });
+
+
+export const Collapse = ({
+  label,
+  children,
+  containerClassName,
+  defaultOpen = false,
+}: {
+  label: string;
+  children: React.ReactNode;
+  containerClassName?: string;
+  defaultOpen?: boolean;
+}) => {
+  const [open, setOpen] = useState(defaultOpen);
+
+  return (
+    <div className={clsx('flex flex-col gap-1', containerClassName)}>
+      <Collapsible.Root open={open} onOpenChange={setOpen}>
+        <Collapsible.Trigger
+          className={clsx(
+            'flex h-10 w-full items-center justify-between rounded-md border border-border bg-background px-3 py-2 text-sm shadow-sm',
+            'cursor-pointer',
+            'focus:outline-none focus:ring-1 focus:ring-ring focus:ring-offset-1 focus:ring-offset-background',
+            'transition-all active:scale-bigger active:disabled:scale-default',
+          )}
+        >
+          <span className="font-medium text-foreground">{label}</span>
+          <Icon
+            name="ChevronDown"
+            className={clsx('transition-transform duration-200', open ? 'rotate-180' : 'rotate-0')}
+          />
+        </Collapsible.Trigger>
+
+        <Collapsible.Content
+          className={clsx(
+            'overflow-hidden transition-all duration-200',
+            open ? 'animate-in fade-in slide-down' : 'animate-out fade-out slide-up',
+          )}
+        >
+          <div className="p-2 shadow-sm">{children}</div>
+        </Collapsible.Content>
+      </Collapsible.Root>
+    </div>
+  );
+};
+
 
 export const Dropdown: React.FC<{
   trigger: React.ReactNode;
@@ -234,6 +295,7 @@ export const Dropdown: React.FC<{
   );
 };
 
+
 export const File = React.forwardRef<
   HTMLInputElement,
   {
@@ -249,6 +311,7 @@ export const File = React.forwardRef<
       label,
       maxFileSize = 1024 * 1024 * 2, // 2MB
       containerClassName,
+      disabled,
       className,
       onFileChange,
       onError,
@@ -286,11 +349,13 @@ export const File = React.forwardRef<
         {label && <label className="text-sm font-medium text-foreground">{label}</label>}
         <input ref={inputRef} type="file" onChange={handleFileChange} className="hidden" {...props} />
         <button
+          disabled={disabled}
           type="button"
           className={clsx(
             'flex h-10 w-full items-center justify-start rounded-md border border-border bg-background px-3 py-2 text-sm shadow-sm',
             'focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring focus-visible:ring-offset-1 focus-visible:ring-offset-background',
-            'hover:bg-accent hover:text-accent-foreground disabled:opacity-50 disabled:cursor-not-allowed',
+            'hover:bg-accent hover:text-accent-foreground disabled:opacity-50',
+            'transition-all active:scale-smaller active:disabled:scale-default',
             className,
           )}
           onClick={() => inputRef.current?.click()}
@@ -310,6 +375,7 @@ export const File = React.forwardRef<
 );
 
 File.displayName = 'File';
+
 
 export const Icon: React.FC<{
   name: string;
@@ -345,13 +411,15 @@ export const Icon: React.FC<{
   );
 };
 
+
 export const Input = React.forwardRef<
   HTMLInputElement,
   ComponentProps<'input'> & {
     label?: React.ReactNode;
     containerClassName?: string;
+    size?: 'lg' | 'md' | 'sm';
   }
->(({ label, containerClassName, className, type = 'text', ...props }, ref) => {
+>(({ label, containerClassName, className, type = 'text', size = 'md', ...props }, ref) => {
   return (
     <div className={clsx('flex flex-col gap-1', containerClassName)}>
       {label && <label className="text-sm font-medium text-foreground">{label}</label>}
@@ -359,10 +427,16 @@ export const Input = React.forwardRef<
         ref={ref}
         type={type}
         className={clsx(
-          'flex w-full rounded-md border border-border bg-background px-3 py-2 text-sm shadow',
+          'flex w-full rounded-md border border-input bg-background px-3 py-2 text-sm shadow',
           'placeholder:text-sm',
           'focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring focus-visible:ring-offset-1 focus-visible:ring-offset-background',
-          'disabled:cursor-not-allowed disabled:opacity-50',
+          'disabled:opacity-50',
+          'transition-all focus:scale-bigger active:disabled:scale-default',
+          {
+            'h-11 px-8 rounded-md': size === 'lg',
+            'h-10 px-4 py-2 rounded-md': size === 'md',
+            'h-9 px-3 text-xs rounded-sm': size === 'sm',
+          },
           {
             'appearance-none [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none':
               type === 'number',
@@ -374,6 +448,7 @@ export const Input = React.forwardRef<
     </div>
   );
 });
+
 
 export const Loader: React.FC<{
   size?: 'sm' | 'md' | 'lg';
@@ -401,6 +476,7 @@ export const Loader: React.FC<{
     </div>
   );
 };
+
 
 export const Modal: React.FC<
   ComponentProps<typeof DialogPrimitive.Content> & {
@@ -450,6 +526,7 @@ export const Modal: React.FC<
   );
 };
 
+
 export const Popover: React.FC<
   ComponentProps<typeof PopoverPrimitive.Root> & {
     trigger: React.ReactNode;
@@ -485,6 +562,7 @@ export const Popover: React.FC<
     </PopoverPrimitive.Root>
   );
 };
+
 
 type ScrollAreaProps = ComponentProps<typeof ScrollAreaPrimitive.Root> & {
   disableScrollbar?: boolean;
@@ -528,6 +606,7 @@ export const Scrollable: React.FC<ScrollAreaProps> = ({
   );
 };
 
+
 export const Select = <T,>({
   label,
   options,
@@ -565,7 +644,8 @@ export const Select = <T,>({
             'flex h-10 w-full items-center justify-between rounded-md border border-border bg-background px-3 py-2 text-sm shadow-sm',
             'placeholder:text-muted-foreground',
             'focus:outline-none focus:ring-1 focus:ring-ring focus:ring-offset-1 focus:ring-offset-background',
-            'disabled:cursor-not-allowed disabled:opacity-50',
+            'disabled:opacity-50',
+            'transition-all',
           )}
         >
           <SelectPrimitive.Value placeholder={placeholder} />
@@ -608,6 +688,7 @@ export const Select = <T,>({
     </div>
   );
 };
+
 
 export const Sheet: React.FC<
   ComponentProps<'div'> & {
@@ -655,6 +736,7 @@ export const Sheet: React.FC<
   );
 };
 
+
 export const Slider: React.FC<
   ComponentProps<typeof SliderPrimitive.Root> & {
     label?: React.ReactNode;
@@ -667,7 +749,11 @@ export const Slider: React.FC<
 
       <SliderPrimitive.Root
         disabled={disabled}
-        className={clsx('relative flex w-full touch-none select-none items-center', className)}
+        className={clsx(
+          'relative flex w-full touch-none select-none items-center',
+          'transition-all active:scale-bigger active:disabled:scale-default',
+          className,
+        )}
         {...props}
       >
         <SliderPrimitive.Track className="relative h-1.5 w-full grow overflow-hidden rounded-full bg-primary/20">
@@ -685,6 +771,7 @@ export const Slider: React.FC<
     </div>
   );
 };
+
 
 export const Switch = React.forwardRef<
   React.ElementRef<typeof SwitchPrimitive.Root>,
@@ -704,7 +791,8 @@ export const Switch = React.forwardRef<
           'peer relative inline-flex h-5 w-9 shrink-0 cursor-pointer items-center rounded-full border-2 border-transparent shadow-sm',
           'transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring focus-visible:ring-offset-1 focus-visible:ring-offset-background',
           'data-[state=checked]:bg-primary data-[state=unchecked]:bg-input',
-          'disabled:cursor-not-allowed disabled:opacity-50',
+          'disabled:opacity-50',
+          'transition-all active:scale-bigger active:disabled:scale-default',
           className,
         )}
         {...props}
@@ -726,6 +814,7 @@ export const Switch = React.forwardRef<
   );
 });
 
+
 export const Textarea = React.forwardRef<
   HTMLTextAreaElement,
   ComponentProps<'textarea'> & {
@@ -742,7 +831,8 @@ export const Textarea = React.forwardRef<
           'flex w-full rounded-md border border-border bg-background px-3 py-2 text-sm shadow resize-none h-24',
           'placeholder:text-sm',
           'focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring focus-visible:ring-offset-1 focus-visible:ring-offset-background',
-          'disabled:cursor-not-allowed disabled:opacity-50',
+          'disabled:opacity-50',
+          'transition-all focus:scale-bigger focus:disabled:scale-default',
           className,
         )}
         {...props}
@@ -750,6 +840,7 @@ export const Textarea = React.forwardRef<
     </div>
   );
 });
+
 
 type ToastProps = {
   open: boolean;
@@ -817,6 +908,7 @@ export const Toast: React.FC<ToastProps> = ({
   );
 };
 
+
 export const Tooltip: React.FC<{
   content: React.ReactNode;
   side?: 'top' | 'right' | 'bottom' | 'left';
@@ -834,7 +926,7 @@ export const Tooltip: React.FC<{
             side={side}
             sideOffset={4}
             className={clsx(
-              'z-50 overflow-hidden rounded-md bg-popover px-3 py-1.5 text-xs text-popover-foreground border border-border',
+              'z-50 overflow-hidden rounded-md bg-popover px-3 py-1.5 text-xs text-popover-foreground border border-border max-w-60',
               'animate-in fade-in-0 zoom-in-95',
               'data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95',
               'data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2',
@@ -848,4 +940,232 @@ export const Tooltip: React.FC<{
       </TooltipPrimitive.Root>
     </TooltipPrimitive.Provider>
   );
+};
+
+
+export const useBreakpoints = ({ mobile = 600, desktop = 1024 } = {}) => {
+  const [isMobile, setIsMobile] = useState(window.innerWidth < mobile);
+  const [isTablet, setIsTablet] = useState(window.innerWidth >= mobile && window.innerWidth < desktop);
+  const [isDesktop, setIsDesktop] = useState(window.innerWidth >= desktop);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < mobile);
+      setIsTablet(window.innerWidth >= mobile && window.innerWidth < desktop);
+      setIsDesktop(window.innerWidth >= desktop);
+    };
+
+    window.addEventListener('resize', handleResize);
+
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
+
+  return { isMobile, isTablet, isDesktop };
+};
+
+
+export const useEnvironment = () => {
+  return useMemo(() => {
+    const hostname = window?.location.hostname;
+    const isDevelopment = hostname === 'localhost';
+    const isProduction = !isDevelopment;
+    return { isDevelopment, isProduction };
+  }, [location.hostname]);
+};
+
+
+export const useFormatCurrency = () => {
+  return useCallback((input: number, options?: Intl.NumberFormatOptions & { includeSymbol?: boolean }) => {
+    const { includeSymbol = true, ...restOptions } = options || {};
+    const defaultOptions: Intl.NumberFormatOptions = includeSymbol
+      ? { style: 'currency', currency: 'GBP' }
+      : { minimumFractionDigits: 2, maximumFractionDigits: 2 };
+
+    const formatter = new Intl.NumberFormat('en-US', { ...defaultOptions, ...restOptions });
+    return formatter.format(input);
+  }, []);
+};
+
+export const useFormatPercent = () => {
+  return useCallback((value: number) => {
+    let val = value;
+    if (value >= 1) {
+      val = value - 1;
+    }
+    return `${Math.floor(val * 100)}%`;
+  }, []);
+};
+
+export const useFormatDate = () => {
+  return useCallback(
+    (
+      value: Date | string,
+      options?: { format?: 'DD/MM/YYYY' | 'MM/DD/YYYY' | 'YYYY/MM/DD' | 'short' | 'long'; includeTime?: boolean },
+    ) => {
+      const { format = 'DD/MM/YYYY', includeTime = false } = options || {};
+
+      const date = new Date(value);
+      const day = date.getDate().toString().padStart(2, '0');
+      const month = (date.getMonth() + 1).toString().padStart(2, '0'); // Months are 0-based in JS
+      const year = date.getFullYear();
+      const time = date.toLocaleTimeString('en-US', {
+        hour: '2-digit',
+        minute: '2-digit',
+        hour12: false,
+      });
+
+      const suffix = includeTime ? ` ${time}` : '';
+
+      switch (format) {
+        case 'short':
+          return `${date
+            .toLocaleDateString('en-US', {
+              day: 'numeric',
+              month: 'short',
+              year: 'numeric',
+            })
+            .replace(',', '')}${suffix}`;
+        case 'long':
+          return `${date
+            .toLocaleDateString('en-US', {
+              day: 'numeric',
+              month: 'long',
+              year: 'numeric',
+            })
+            .replace(',', '')}${suffix}`;
+        case 'MM/DD/YYYY':
+          return `${month}/${day}/${year}${suffix}`;
+        case 'YYYY/MM/DD':
+          return `${year}/${month}/${day}${suffix}`;
+        default:
+          return `${day}/${month}/${year}${suffix}`;
+      }
+    },
+    [],
+  );
+};
+
+export const useFormatRelativeTime = () => {
+  return useCallback((date: Date | string) => {
+    const targetDate = new Date(date);
+    const current = new Date();
+    const difference = targetDate.getTime() - current.getTime();
+
+    const seconds = Math.abs(Math.floor(difference / 1000));
+    const minutes = Math.abs(Math.floor(seconds / 60));
+    const hours = Math.abs(Math.floor(minutes / 60));
+    const days = Math.abs(Math.floor(hours / 24));
+
+    const isFuture = difference > 0;
+
+    if (days > 0) return `${isFuture ? 'in' : ''} ${days} ${days === 1 ? 'day' : 'days'} ${isFuture ? '' : 'ago'}`;
+    if (hours > 0) return `${isFuture ? 'in' : ''} ${hours} ${hours === 1 ? 'hour' : 'hours'} ${isFuture ? '' : 'ago'}`;
+    if (minutes > 0)
+      return `${isFuture ? 'in' : ''} ${minutes} ${minutes === 1 ? 'minute' : 'minutes'} ${isFuture ? '' : 'ago'}`;
+    return isFuture ? 'Soon' : 'Just now';
+  }, []);
+};
+
+export const useFormatMinutesUntilNextHour = () => {
+  const date = new Date();
+  const minutes = date.getMinutes();
+  const minutesUntilNextHour = 60 - minutes;
+  return String(minutesUntilNextHour).padStart(2, '0'); // ensures it's always two digits
+};
+
+
+export const useOnClickout = (ignoredRefs: RefObject<Element>[], handler: Function) => {
+  const onMouseDown = useCallback(
+    (event: MouseEvent) => {
+      const containsIgnored = ignoredRefs.map((ref) => ref.current?.contains(event.target as Element));
+      const isIgnored = containsIgnored.some(Boolean);
+      if (!isIgnored) {
+        handler();
+      }
+    },
+    [ignoredRefs, handler],
+  );
+
+  useEffect(() => {
+    window.addEventListener('mousedown', onMouseDown);
+    return () => {
+      window.removeEventListener('mousedown', onMouseDown);
+    };
+  }, [onMouseDown]);
+};
+
+
+export const useOnKeypress = ({
+  key,
+  useShift,
+  useCtrl,
+  useMeta,
+  useAlt,
+  shouldSkip,
+  onPress,
+}: {
+  key: string;
+  useShift?: boolean;
+  useCtrl?: boolean;
+  useMeta?: boolean;
+  useAlt?: boolean;
+  shouldSkip?: boolean;
+  onPress: Function;
+}) => {
+  const handleKeyPress = useCallback(
+    async (event: KeyboardEvent) => {
+      if (shouldSkip) return;
+
+      const isShiftPressed = useShift === undefined ? true : event.shiftKey === useShift;
+      const isCtrlPressed = useCtrl === undefined ? true : event.ctrlKey === useCtrl;
+      const isMetaPressed = useMeta === undefined ? true : event.metaKey === useMeta;
+      const isAltPressed = useAlt === undefined ? true : event.altKey === useAlt;
+
+      if (
+        isShiftPressed &&
+        isCtrlPressed &&
+        isMetaPressed &&
+        isAltPressed &&
+        event.code === key &&
+        event.shiftKey === !!useShift &&
+        event.ctrlKey === !!useCtrl &&
+        event.metaKey === !!useMeta &&
+        event.altKey === !!useAlt
+      ) {
+        event.preventDefault();
+        onPress();
+      }
+    },
+    [key, useShift, useCtrl, useMeta, useAlt, onPress, shouldSkip],
+  );
+
+  useEffect(() => {
+    window.addEventListener('keydown', handleKeyPress);
+    return () => window.removeEventListener('keydown', handleKeyPress);
+  }, [handleKeyPress]);
+};
+
+
+export const useTimeout = (): ((ms: number) => Promise<void>) => {
+  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
+
+  useEffect(() => {
+    return () => {
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+      }
+    };
+  }, []);
+
+  const setTimeoutPromise = useCallback((ms: number) => {
+    return new Promise<void>((resolve) => {
+      timeoutRef.current = setTimeout(() => {
+        resolve();
+      }, ms);
+    });
+  }, []);
+
+  return setTimeoutPromise;
 };
