@@ -1,14 +1,11 @@
-## 👋🏽 About
+> [!IMPORTANT]
+> This package is built for personal use, whilst it's available publicly its primary goal is to combine some personal project code into one repository for reusability purposes. If there's any issues please bare with me.
 
-`react-otio` provides a collection of React components and hooks styled with Tailwind. Inspired by shadcn, these components help you rapidly build consistent and accessible interfaces.
+### 👋🏽 About
 
-#### Features
+`react-otio` provides a collection of React components and hooks styled with Tailwind. Initially a clone of [Shadcn](https://github.com/shadcn-ui/ui), but changed a little over time with slightly different functionalties and an addition of common hooks.
 
-- **Tailwind & Radix UI Primitives**: Combines the power of Tailwind with Radix UI.
-- **Hooks & Components**: Flexible React hooks and prebuilt components out-of-the-box.
-- **Design Principles from shadcn**: Consistent, accessible, and themable components.
-
-## 🔗 Peer Dependencies
+### 🔗 Peer Dependencies
 
 Make sure these are installed in your project:
 
@@ -21,9 +18,7 @@ Make sure these are installed in your project:
 }
 ```
 
-## 🔽 Installation
-
-**Note:** This is a private package. You must have a GitHub PAT (Personal Access Token) configured in your `.npmrc` to install.
+### 🔽 Installation
 
 ```bash
 npm install @olafkotur/react-otio
@@ -33,7 +28,7 @@ npm install @olafkotur/react-otio
 yarn add @olafkotur/react-otio
 ```
 
-## 🔨 Setup
+### 🔨 Setup
 
 #### Add the required Tailwind layers and variables in your global CSS file (imported at the root of your app):
 
@@ -81,7 +76,7 @@ yarn add @olafkotur/react-otio
 ```js
 /** @type {import('tailwindcss').Config} */
 export default {
-  content: ['./src/**/*.{js,ts,jsx,tsx}'],
+  content: ['./src/**/*.{js,ts,jsx,tsx}', './node_modules/@olafkotur/react-otio/**/*.js'],
   theme: {
     extend: {
       scale: {
@@ -135,31 +130,32 @@ export default {
 };
 ```
 
-## 📦 Usage
+### 📦 Usage
 
 #### After installing and configuring Tailwind, simply import and use the components:
 
 ```tsx
 import { Button } from 'react-otio';
 
-export function Example() {
+const Example: React.FC = () => {
   return <Button>Click me</Button>;
-}
+};
 ```
 
-## 💻 Contributing
+#### If you plan to use `Toast` and `useToast` you must also use an `OtioProvider`
 
-- Fork, clone, and create a new branch following feat/your-feature or fix/your-bug.
-- Install dependencies and run yarn or npm install.
-- Ensure code quality and consistency (e.g., using Prettier).
-- Open a PR against main with a concise description of changes.
+```tsx
+import { OtioProvider } from 'react-otio';
 
-## ⚠️ Issues
+const App: React.FC = ({ children }) => {
+  return <OtioProvider options={{ toast: { position: 'bottom-left' } }}>{children}</OtioProvider>;
+};
+```
+
+### ⚠️ Issues
 
 - Found a bug? Open an issue and provide a clear description.
 - Be respectful and provide enough context.
 - PRs are welcome to fix reported issues.
 
 </br>
-
-Built with ❤️ by Olaf Kotur
