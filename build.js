@@ -1,18 +1,9 @@
-// Steps:
-// 1. Clear/create src/index.tsx
-// 2. Gather all files from src/components and src/hooks
-// 3. Parse imports:
-//    - Ignore local (@components/* and relative) imports
-//    - Deduplicate imports per source (React merged, others combined)
-// 4. Remove any non-printable characters
-// 5. Remove any lines containing 'Bud1'
-// 6. Write out final unique imports + code into src/index.tsx
-
 const fs = require('fs');
 const path = require('path');
 
 const componentsDir = path.join(__dirname, 'src', 'components');
 const hooksDir = path.join(__dirname, 'src', 'hooks');
+const providersDir = path.join(__dirname, 'src', 'providers');
 const outputFile = path.join(__dirname, 'src', 'index.tsx');
 
 // Clear or recreate `index.tsx`
@@ -44,7 +35,8 @@ function getDirectoryContents(dir) {
 
 const componentFiles = getDirectoryContents(componentsDir);
 const hooksFiles = getDirectoryContents(hooksDir);
-const allFiles = [...componentFiles, ...hooksFiles];
+const providersFiles = getDirectoryContents(providersDir);
+const allFiles = [...componentFiles, ...hooksFiles, ...providersFiles];
 
 const importMap = new Map();
 const reactNamedImports = new Set();
@@ -68,11 +60,15 @@ for (const file of allFiles) {
       const importSpec = match[1];
       const importSource = match[2];
 
-      // Ignore local/@components imports
+      // Ignore local imports
       if (
         importSource.startsWith('.') ||
         importSource.includes('/components') ||
-        importSource.startsWith('@components/')
+        importSource.startsWith('@components/') ||
+        importSource.includes('/hooks') ||
+        importSource.startsWith('@hooks/') ||
+        importSource.includes('/providers') ||
+        importSource.startsWith('@providers/')
       ) {
         continue;
       }
@@ -185,4 +181,4 @@ finalContent = finalContent
 
 fs.writeFileSync(outputFile, finalContent.trim() + '\n', 'utf8');
 
-console.log('Successfully combined component and hook files into src/index.tsx');
+console.log('Successfully combined all files into src/index.tsx');

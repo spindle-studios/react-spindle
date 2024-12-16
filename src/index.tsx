@@ -1,6 +1,6 @@
 import './config/global.css';
 
-import React, { ComponentProps, ReactNode, RefObject, Suspense, lazy, useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import React, { ComponentProps, PropsWithChildren, ReactNode, RefObject, Suspense, createContext, lazy, useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
 import clsx from 'clsx';
 import { DayPicker } from 'react-day-picker';
 import * as CheckboxPrimitive from '@radix-ui/react-checkbox';
@@ -842,24 +842,26 @@ export const Textarea = React.forwardRef<
 });
 
 
-type ToastProps = {
+export const Toast: React.FC<{
   open: boolean;
-  onOpenChange: (open: boolean) => void;
-  variant: 'positive' | 'negative' | 'neutral' | 'action';
   message: string;
+  variant: 'positive' | 'negative' | 'neutral' | 'action';
+  position?: 'top-left' | 'top-right' | 'bottom-left' | 'bottom-right';
   action?: string;
   duration?: number;
+  className?: string;
   onClick?: () => void;
-};
-
-export const Toast: React.FC<ToastProps> = ({
+  onOpenChange?: (open: boolean) => void;
+}> = ({
   open,
-  onOpenChange,
-  variant,
   message,
+  variant,
+  position = 'bottom-left',
   action,
   duration = 3000,
+  className,
   onClick,
+  onOpenChange,
 }) => {
   const getIcon = () => {
     switch (variant) {
@@ -903,7 +905,21 @@ export const Toast: React.FC<ToastProps> = ({
         </div>
       </ToastPrimitives.Root>
 
-      <ToastPrimitives.Viewport className="fixed bottom-0 right-0 z-50 flex max-h-screen w-full flex-col-reverse p-4 sm:top-auto sm:flex-col md:max-w-[420px]" />
+      <ToastPrimitives.Viewport
+        className={clsx(
+          'fixed z-50 flex max-h-screen w-full flex-col-reverse',
+          'left-4 right-4 w-[calc(100%-32px)] sm:max-w-[420px]',
+          {
+            'top-4': position === 'top-left' || position === 'top-right',
+            'bottom-4': position === 'bottom-left' || position === 'bottom-right',
+          },
+          {
+            'sm:left-auto sm:right-4': position === 'top-right' || position === 'bottom-right',
+            'sm:right-auto sm:left-4': position === 'top-left' || position === 'bottom-left',
+          },
+          className,
+        )}
+      />
     </ToastPrimitives.Provider>
   );
 };
@@ -1168,4 +1184,80 @@ export const useTimeout = (): ((ms: number) => Promise<void>) => {
   }, []);
 
   return setTimeoutPromise;
+};
+
+
+export const useToast = () => {
+  const { addToast } = useToastContext();
+
+  return (options: {
+    variant: 'positive' | 'negative' | 'neutral' | 'action';
+    message: string;
+    action?: string;
+    duration?: number;
+    onClick?: () => void;
+  }) => {
+    addToast(options);
+  };
+};
+
+
+type ToastOptions = Partial<ComponentProps<typeof Toast>> & {
+  id?: string;
+};
+
+const ToastContext = createContext<
+  { addToast: (toast: ToastOptions) => void; removeToast: (id: string) => void } | undefined
+>(undefined);
+
+export const OtioProvider: React.FC<
+  PropsWithChildren<{
+    options?: {
+      toast?: {
+        position?: 'top-left' | 'top-right' | 'bottom-left' | 'bottom-right';
+        className?: string;
+      };
+    };
+  }>
+> = ({ options, children }) => {
+  const [toasts, setToasts] = useState<ToastOptions[]>([]);
+
+  const addToast = (toast: ToastOptions) => {
+    const id = toast.id || Math.random().toString(36).substring(2, 9);
+    setToasts((prev) => [...prev, { ...toast, id }]);
+  };
+
+  const removeToast = (id: string) => {
+    setToasts((prev) => prev.filter((toast) => toast.id !== id));
+  };
+
+  return (
+    <ToastContext.Provider value={{ addToast, removeToast }}>
+      {children}
+      <>
+        {toasts.map((toast) => (
+          <Toast
+            open
+            key={toast.id}
+            variant={toast.variant ?? 'neutral'}
+            message={toast.message ?? ''}
+            action={toast.action}
+            duration={toast.duration}
+            position={options?.toast?.position}
+            className={options?.toast?.className}
+            onClick={toast.onClick}
+            onOpenChange={() => removeToast(toast.id!)}
+          />
+        ))}
+      </>
+    </ToastContext.Provider>
+  );
+};
+
+export const useToastContext = () => {
+  const context = useContext(ToastContext);
+  if (!context) {
+    throw new Error('useToastContext must be used within an OtioProvider');
+  }
+  return context;
 };
