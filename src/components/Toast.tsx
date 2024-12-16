@@ -4,24 +4,26 @@ import * as ToastPrimitives from '@radix-ui/react-toast';
 import clsx from 'clsx';
 import React from 'react';
 
-type ToastProps = {
+export const Toast: React.FC<{
   open: boolean;
-  onOpenChange: (open: boolean) => void;
-  variant: 'positive' | 'negative' | 'neutral' | 'action';
   message: string;
+  variant: 'positive' | 'negative' | 'neutral' | 'action';
+  position?: 'top-left' | 'top-right' | 'bottom-left' | 'bottom-right';
   action?: string;
   duration?: number;
+  className?: string;
   onClick?: () => void;
-};
-
-export const Toast: React.FC<ToastProps> = ({
+  onOpenChange?: (open: boolean) => void;
+}> = ({
   open,
-  onOpenChange,
-  variant,
   message,
+  variant,
+  position = 'bottom-left',
   action,
   duration = 3000,
+  className,
   onClick,
+  onOpenChange,
 }) => {
   const getIcon = () => {
     switch (variant) {
@@ -65,7 +67,21 @@ export const Toast: React.FC<ToastProps> = ({
         </div>
       </ToastPrimitives.Root>
 
-      <ToastPrimitives.Viewport className="fixed bottom-0 right-0 z-50 flex max-h-screen w-full flex-col-reverse p-4 sm:top-auto sm:flex-col md:max-w-[420px]" />
+      <ToastPrimitives.Viewport
+        className={clsx(
+          'fixed z-50 flex max-h-screen w-full flex-col-reverse',
+          'left-4 right-4 w-[calc(100%-32px)] sm:max-w-[420px]',
+          {
+            'top-4': position === 'top-left' || position === 'top-right',
+            'bottom-4': position === 'bottom-left' || position === 'bottom-right',
+          },
+          {
+            'sm:left-auto sm:right-4': position === 'top-right' || position === 'bottom-right',
+            'sm:right-auto sm:left-4': position === 'top-left' || position === 'bottom-left',
+          },
+          className,
+        )}
+      />
     </ToastPrimitives.Provider>
   );
 };

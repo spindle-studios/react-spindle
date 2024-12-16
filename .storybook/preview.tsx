@@ -1,13 +1,16 @@
-import React from 'react';
 import '../src/config/global.css';
 
 import type { Preview } from '@storybook/react';
+import React from 'react';
+import { OtioProvider } from '../src/providers/Otio';
 
 const preview: Preview = {
   decorators: [
     (Story) => (
       <div className="flex items-center justify-center h-screen">
-        <Story />
+        <OtioProvider options={{ toast: { position: 'bottom-left' } }}>
+          <Story />
+        </OtioProvider>
       </div>
     ),
   ],
