@@ -67,3 +67,12 @@ jobs:
             git commit -m "Bump version and publish changes"
             git push origin main
           fi
+
+      - name: Build Storybook
+        run: yarn storybook build --output-dir=pages
+
+      - name: Deploy Storybook
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./pages
