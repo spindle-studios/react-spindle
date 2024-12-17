@@ -1,17 +1,16 @@
 import clsx from 'clsx';
-import React, { ComponentProps } from 'react';
+import React, { ComponentProps, forwardRef } from 'react';
 
-export const Button: React.FC<
-  (ComponentProps<'button'> & ComponentProps<'a'>) & {
+export const Button = forwardRef<
+  HTMLButtonElement,
+  ComponentProps<'button'> & {
     variant?: 'primary' | 'secondary' | 'destructive' | 'outline' | 'ghost' | 'icon';
     size?: 'lg' | 'md' | 'sm';
-    as?: 'button' | 'a';
   }
-> = ({ variant = 'primary', size = 'md', type = 'button', as = 'button', className, ...props }) => {
-  const Wrapper = as;
-
+>(({ variant = 'primary', size = 'md', type = 'button', className, ...props }, ref) => {
   return (
-    <Wrapper
+    <button
+      ref={ref}
       type={type}
       className={clsx(
         'flex items-center justify-center shadow',
@@ -39,4 +38,4 @@ export const Button: React.FC<
       {...props}
     />
   );
-};
+});

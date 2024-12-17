@@ -1,13 +1,15 @@
 import clsx from 'clsx';
-import React, { ComponentProps } from 'react';
+import React, { ComponentPropsWithoutRef, forwardRef } from 'react';
 
-export const Badge: React.FC<
-  ComponentProps<'div'> & {
+export const Badge = forwardRef<
+  HTMLDivElement,
+  ComponentPropsWithoutRef<'div'> & {
     variant?: 'primary' | 'secondary' | 'destructive' | 'outline';
   }
-> = ({ variant = 'primary', className, ...props }) => {
+>(({ variant = 'primary', className, ...props }, ref) => {
   return (
     <div
+      ref={ref}
       className={clsx(
         'inline-flex items-center justify-center transition-all shadow text-xs rounded-xl px-2 h-6',
         {
@@ -21,4 +23,4 @@ export const Badge: React.FC<
       {...props}
     />
   );
-};
+});

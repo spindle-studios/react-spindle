@@ -1,43 +1,26 @@
-import { Icon } from '@components/Icon';
 import * as Collapsible from '@radix-ui/react-collapsible';
 import clsx from 'clsx';
-import React, { useState } from 'react';
+import React, { ComponentProps } from 'react';
 
-export const Collapse = ({
-  label,
-  children,
-  containerClassName,
-  defaultOpen = false,
-}: {
-  label: string;
-  children: React.ReactNode;
-  containerClassName?: string;
-  defaultOpen?: boolean;
-}) => {
-  const [open, setOpen] = useState(defaultOpen);
-
+export const Collapse: React.FC<
+  ComponentProps<typeof Collapsible.Root> & {
+    trigger: React.ReactNode;
+    className?: string;
+  }
+> = ({ trigger, children, className, defaultOpen = false, ...props }) => {
   return (
-    <div className={clsx('flex flex-col gap-1', containerClassName)}>
-      <Collapsible.Root open={open} onOpenChange={setOpen}>
-        <Collapsible.Trigger
-          className={clsx(
-            'flex h-10 w-full items-center justify-between rounded-md border border-border bg-background px-3 py-2 text-sm shadow-sm',
-            'cursor-pointer',
-            'focus:outline-none focus:ring-1 focus:ring-ring focus:ring-offset-1 focus:ring-offset-background',
-            'transition-all active:scale-bigger active:disabled:scale-default',
-          )}
-        >
-          <span className="font-medium text-foreground">{label}</span>
-          <Icon
-            name="ChevronDown"
-            className={clsx('transition-transform duration-200', open ? 'rotate-180' : 'rotate-0')}
-          />
+    <div className={clsx('flex flex-col gap-1')}>
+      <Collapsible.Root defaultOpen={defaultOpen} {...props}>
+        <Collapsible.Trigger className="w-full focus:outline-none focus-visible:ring-1 focus-visible:ring-ring focus-visible:ring-offset-1">
+          {trigger}
         </Collapsible.Trigger>
 
         <Collapsible.Content
           className={clsx(
             'overflow-hidden transition-all duration-200',
-            open ? 'animate-in fade-in slide-down' : 'animate-out fade-out slide-up',
+            'animate-in fade-in slide-down',
+            'data-[state=closed]:animate-out data-[state=closed]:fade-out data-[state=closed]:slide-up',
+            className,
           )}
         >
           <div className="p-2 shadow-sm">{children}</div>
