@@ -1,6 +1,6 @@
 import './config/global.css';
 
-import React, { ComponentProps, PropsWithChildren, ReactNode, RefObject, Suspense, createContext, lazy, useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
+import React, { ComponentProps, ComponentPropsWithoutRef, PropsWithChildren, ReactNode, RefObject, Suspense, createContext, forwardRef, lazy, useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
 import clsx from 'clsx';
 import { DayPicker } from 'react-day-picker';
 import * as CheckboxPrimitive from '@radix-ui/react-checkbox';
@@ -16,13 +16,15 @@ import * as ToastPrimitives from '@radix-ui/react-toast';
 import * as TooltipPrimitive from '@radix-ui/react-tooltip';
 
 
-export const Badge: React.FC<
-  ComponentProps<'div'> & {
+export const Badge = forwardRef<
+  HTMLDivElement,
+  ComponentPropsWithoutRef<'div'> & {
     variant?: 'primary' | 'secondary' | 'destructive' | 'outline';
   }
-> = ({ variant = 'primary', className, ...props }) => {
+>(({ variant = 'primary', className, ...props }, ref) => {
   return (
     <div
+      ref={ref}
       className={clsx(
         'inline-flex items-center justify-center transition-all shadow text-xs rounded-xl px-2 h-6',
         {
@@ -36,20 +38,19 @@ export const Badge: React.FC<
       {...props}
     />
   );
-};
+});
 
 
-export const Button: React.FC<
-  (ComponentProps<'button'> & ComponentProps<'a'>) & {
+export const Button = forwardRef<
+  HTMLButtonElement,
+  ComponentProps<'button'> & {
     variant?: 'primary' | 'secondary' | 'destructive' | 'outline' | 'ghost' | 'icon';
     size?: 'lg' | 'md' | 'sm';
-    as?: 'button' | 'a';
   }
-> = ({ variant = 'primary', size = 'md', type = 'button', as = 'button', className, ...props }) => {
-  const Wrapper = as;
-
+>(({ variant = 'primary', size = 'md', type = 'button', className, ...props }, ref) => {
   return (
-    <Wrapper
+    <button
+      ref={ref}
       type={type}
       className={clsx(
         'flex items-center justify-center shadow',
@@ -77,7 +78,7 @@ export const Button: React.FC<
       {...props}
     />
   );
-};
+});
 
 
 export const Calendar: React.FC<ComponentProps<typeof DayPicker>> = ({
@@ -186,41 +187,25 @@ export const Checkbox = React.forwardRef<
 });
 
 
-export const Collapse = ({
-  label,
-  children,
-  containerClassName,
-  defaultOpen = false,
-}: {
-  label: string;
-  children: React.ReactNode;
-  containerClassName?: string;
-  defaultOpen?: boolean;
-}) => {
-  const [open, setOpen] = useState(defaultOpen);
-
+export const Collapse: React.FC<
+  ComponentProps<typeof Collapsible.Root> & {
+    trigger: React.ReactNode;
+    className?: string;
+  }
+> = ({ trigger, children, className, defaultOpen = false, ...props }) => {
   return (
-    <div className={clsx('flex flex-col gap-1', containerClassName)}>
-      <Collapsible.Root open={open} onOpenChange={setOpen}>
-        <Collapsible.Trigger
-          className={clsx(
-            'flex h-10 w-full items-center justify-between rounded-md border border-border bg-background px-3 py-2 text-sm shadow-sm',
-            'cursor-pointer',
-            'focus:outline-none focus:ring-1 focus:ring-ring focus:ring-offset-1 focus:ring-offset-background',
-            'transition-all active:scale-bigger active:disabled:scale-default',
-          )}
-        >
-          <span className="font-medium text-foreground">{label}</span>
-          <Icon
-            name="ChevronDown"
-            className={clsx('transition-transform duration-200', open ? 'rotate-180' : 'rotate-0')}
-          />
+    <div className={clsx('flex flex-col gap-1')}>
+      <Collapsible.Root defaultOpen={defaultOpen} {...props}>
+        <Collapsible.Trigger className="w-full focus:outline-none focus-visible:ring-1 focus-visible:ring-ring focus-visible:ring-offset-1">
+          {trigger}
         </Collapsible.Trigger>
 
         <Collapsible.Content
           className={clsx(
             'overflow-hidden transition-all duration-200',
-            open ? 'animate-in fade-in slide-down' : 'animate-out fade-out slide-up',
+            'animate-in fade-in slide-down',
+            'data-[state=closed]:animate-out data-[state=closed]:fade-out data-[state=closed]:slide-up',
+            className,
           )}
         >
           <div className="p-2 shadow-sm">{children}</div>
@@ -229,6 +214,22 @@ export const Collapse = ({
     </div>
   );
 };
+
+
+export const Divider = React.forwardRef<
+  React.ElementRef<'div'>,
+  React.ComponentPropsWithoutRef<'div'> & {
+    variant?: 'horizontal' | 'vertical';
+  }
+>(({ variant = 'horizontal', className, ...props }, ref) => {
+  return (
+    <div
+      ref={ref}
+      className={clsx('bg-muted', variant === 'horizontal' ? 'w-full h-px' : 'w-px h-full', className)}
+      {...props}
+    />
+  );
+});
 
 
 export const Dropdown: React.FC<{
