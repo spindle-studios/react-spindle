@@ -7,6 +7,7 @@ export const File = React.forwardRef<
   {
     label?: React.ReactNode;
     maxFileSize?: number;
+    initialFile?: string;
     containerClassName?: string;
     onFileChange: (file: string | null) => void;
     onError?: (error: string) => void;
@@ -16,6 +17,7 @@ export const File = React.forwardRef<
     {
       label,
       maxFileSize = 1024 * 1024 * 2, // 2MB
+      initialFile = null,
       containerClassName,
       disabled,
       className,
@@ -25,14 +27,14 @@ export const File = React.forwardRef<
     },
     ref,
   ) => {
-    const [fileSrc, setFileSrc] = useState<string | null>(null);
+    const [fileSrc, setFileSrc] = useState<string | null>(initialFile);
     const internalRef = useRef<HTMLInputElement>(null);
 
     const inputRef = (ref as React.RefObject<HTMLInputElement>) ?? internalRef;
 
     useEffect(() => {
-      setFileSrc(null);
-    }, [props.value]);
+      setFileSrc(initialFile);
+    }, [props.value, initialFile]);
 
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
       const file = e.target.files?.[0];

@@ -1,3 +1,4 @@
+import { Icon } from '@components/Icon';
 import { Input } from '@components/Input';
 import React from 'react';
 
@@ -8,6 +9,9 @@ export const Default = () => {
         <Input label="Label" placeholder="Username" />
         <Input placeholder="Username" />
         <Input disabled placeholder="Username (disabled)" />
+
+        <Input left={<Icon name="User" />} placeholder="Username" />
+        <Input right={<Icon name="User" />} placeholder="Username" />
       </div>
     </div>
   );

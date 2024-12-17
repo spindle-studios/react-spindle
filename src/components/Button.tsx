@@ -13,12 +13,12 @@ export const Button = forwardRef<
       ref={ref}
       type={type}
       className={clsx(
-        'flex items-center justify-center shadow',
+        'flex items-center justify-center',
         'focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring focus-visible:ring-offset-1 focus-visible:ring-offset-background',
         'disabled:pointer-events-none disabled:opacity-50',
         'transition-all active:scale-smaller active:disabled:scale-default',
         {
-          'w-full': variant !== 'icon',
+          'w-full shadow': variant !== 'icon',
         },
         {
           'h-11 px-8 rounded-md': size === 'lg' && variant !== 'icon',
@@ -36,7 +36,7 @@ export const Button = forwardRef<
           'bg-destructive text-destructive-foreground hover:bg-destructive/80': variant === 'destructive',
           'border border-border bg-background hover:bg-accent': variant === 'outline',
           'hover:bg-accent': variant === 'ghost',
-          'aspect-square rounded-md bg-background hover:bg-accent !p-0': variant === 'icon',
+          'aspect-square rounded-md bg-transparent hover:bg-accent !p-0': variant === 'icon',
         },
         className,
       )}
