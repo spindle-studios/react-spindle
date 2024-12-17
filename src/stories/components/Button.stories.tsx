@@ -9,9 +9,20 @@ export const Default = () => (
     <Button variant="destructive">Destructive</Button>
     <Button variant="outline">Outline</Button>
     <Button variant="ghost">Ghost</Button>
-    <Button variant="icon">
-      <Icon name="Pencil" />
-    </Button>
+
+    <div className="flex flex-row justify-between">
+      <Button variant="icon" size="sm">
+        <Icon name="Pencil" />
+      </Button>
+
+      <Button variant="icon" size="md">
+        <Icon name="Pencil" />
+      </Button>
+
+      <Button variant="icon" size="lg">
+        <Icon name="Pencil" />
+      </Button>
+    </div>
   </div>
 );
 

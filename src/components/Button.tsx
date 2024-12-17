@@ -21,9 +21,14 @@ export const Button = forwardRef<
           'w-full': variant !== 'icon',
         },
         {
-          'h-11 px-8 rounded-md': size === 'lg',
-          'h-10 px-4 py-2 rounded-md': size === 'md',
-          'h-9 px-3 text-xs rounded-sm': size === 'sm',
+          'h-11 px-8 rounded-md': size === 'lg' && variant !== 'icon',
+          'h-10 px-4 py-2 rounded-md': size === 'md' && variant !== 'icon',
+          'h-9 px-3 text-xs rounded-sm': size === 'sm' && variant !== 'icon',
+        },
+        {
+          'h-10 rounded-md': size === 'lg' && variant === 'icon',
+          'h-8 rounded-md': size === 'md' && variant === 'icon',
+          'h-6 rounded-sm': size === 'sm' && variant === 'icon',
         },
         {
           'bg-primary text-primary-foreground hover:bg-primary/80': variant === 'primary',
