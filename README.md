@@ -1,9 +1,9 @@
 > [!IMPORTANT]
-> This package is built for personal use, whilst it's available publicly its primary goal is to combine some personal project code into one repository for reusability purposes. If there's any issues please bare with me.
+> This package is built for personal use, whilst it's available to use by others its primary goal is to combine some personal project code into one repository for reusability purposes.
 
 ### 👋🏽 About
 
-`react-otio` provides a collection of React components and hooks styled with Tailwind. Initially a clone of [Shadcn](https://github.com/shadcn-ui/ui), but changed a little over time with slightly different functionalties and an addition of common hooks.
+`react-otio` provides a collection of React components and hooks styled with Tailwind and heavily based on [Shadcn](https://github.com/shadcn-ui/ui).
 
 ### 🔗 Peer Dependencies
 
@@ -151,11 +151,3 @@ const App: React.FC = ({ children }) => {
   return <OtioProvider options={{ toast: { position: 'bottom-left' } }}>{children}</OtioProvider>;
 };
 ```
-
-### ⚠️ Issues
-
-- Found a bug? Open an issue and provide a clear description.
-- Be respectful and provide enough context.
-- PRs are welcome to fix reported issues.
-
-</br>
