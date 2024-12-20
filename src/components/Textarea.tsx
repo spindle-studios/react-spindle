@@ -18,7 +18,7 @@ export const Textarea = React.forwardRef<
           'placeholder:text-sm',
           'focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring focus-visible:ring-offset-1 focus-visible:ring-offset-background',
           'disabled:opacity-50',
-          'transition-all focus:scale-bigger focus:disabled:scale-default',
+          'transition-all',
           className,
         )}
         {...props}

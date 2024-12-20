@@ -53,12 +53,12 @@ export const Button = forwardRef<
       ref={ref}
       type={type}
       className={clsx(
-        'flex items-center justify-center shadow',
+        'flex items-center justify-center',
         'focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring focus-visible:ring-offset-1 focus-visible:ring-offset-background',
         'disabled:pointer-events-none disabled:opacity-50',
         'transition-all active:scale-smaller active:disabled:scale-default',
         {
-          'w-full': variant !== 'icon',
+          'w-full shadow': variant !== 'icon',
         },
         {
           'h-11 px-8 rounded-md': size === 'lg' && variant !== 'icon',
@@ -76,7 +76,7 @@ export const Button = forwardRef<
           'bg-destructive text-destructive-foreground hover:bg-destructive/80': variant === 'destructive',
           'border border-border bg-background hover:bg-accent': variant === 'outline',
           'hover:bg-accent': variant === 'ghost',
-          'aspect-square rounded-md bg-background hover:bg-accent !p-0': variant === 'icon',
+          'aspect-square rounded-md bg-transparent hover:bg-accent !p-0': variant === 'icon',
         },
         className,
       )}
@@ -307,6 +307,7 @@ export const File = React.forwardRef<
   {
     label?: React.ReactNode;
     maxFileSize?: number;
+    initialFile?: string;
     containerClassName?: string;
     onFileChange: (file: string | null) => void;
     onError?: (error: string) => void;
@@ -316,6 +317,7 @@ export const File = React.forwardRef<
     {
       label,
       maxFileSize = 1024 * 1024 * 2, // 2MB
+      initialFile = null,
       containerClassName,
       disabled,
       className,
@@ -325,14 +327,14 @@ export const File = React.forwardRef<
     },
     ref,
   ) => {
-    const [fileSrc, setFileSrc] = useState<string | null>(null);
+    const [fileSrc, setFileSrc] = useState<string | null>(initialFile);
     const internalRef = useRef<HTMLInputElement>(null);
 
     const inputRef = (ref as React.RefObject<HTMLInputElement>) ?? internalRef;
 
     useEffect(() => {
-      setFileSrc(null);
-    }, [props.value]);
+      setFileSrc(initialFile);
+    }, [props.value, initialFile]);
 
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
       const file = e.target.files?.[0];
@@ -424,33 +426,40 @@ export const Input = React.forwardRef<
     label?: React.ReactNode;
     containerClassName?: string;
     size?: 'lg' | 'md' | 'sm';
+    left?: React.ReactNode;
+    right?: React.ReactNode;
   }
->(({ label, containerClassName, className, type = 'text', size = 'md', ...props }, ref) => {
+>(({ label, containerClassName, className, size = 'md', left, right, type = 'text', ...props }, ref) => {
   return (
     <div className={clsx('flex flex-col gap-1', containerClassName)}>
       {label && <label className="text-sm font-medium text-foreground">{label}</label>}
-      <input
-        ref={ref}
-        type={type}
+
+      <div
         className={clsx(
-          'flex w-full rounded-md border border-input bg-background px-3 py-2 text-sm shadow',
-          'placeholder:text-sm',
-          'focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring focus-visible:ring-offset-1 focus-visible:ring-offset-background',
-          'disabled:opacity-50',
-          'transition-all focus:scale-bigger active:disabled:scale-default',
+          'flex items-center w-full rounded-md border border-input bg-background shadow',
+          'focus-within:ring-1 focus-within:ring-ring focus-within:ring-offset-1 focus-within:ring-offset-background',
           {
-            'h-11 px-8 rounded-md': size === 'lg',
-            'h-10 px-4 py-2 rounded-md': size === 'md',
-            'h-9 px-3 text-xs rounded-sm': size === 'sm',
+            'h-11': size === 'lg',
+            'h-10': size === 'md',
+            'h-9': size === 'sm',
           },
-          {
-            'appearance-none [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none':
-              type === 'number',
-          },
-          className,
         )}
-        {...props}
-      />
+      >
+        {left && <div className="flex items-center pl-3 text-muted-foreground">{left}</div>}
+
+        <input
+          ref={ref}
+          type={type}
+          className={clsx(
+            'flex-1 bg-transparent px-3 py-2 text-sm outline-none',
+            'placeholder:text-sm disabled:opacity-50',
+            className,
+          )}
+          {...props}
+        />
+
+        {right && <div className="flex items-center pr-3 text-muted-foreground">{right}</div>}
+      </div>
     </div>
   );
 });

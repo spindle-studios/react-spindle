@@ -14,37 +14,32 @@ export const Input = React.forwardRef<
   return (
     <div className={clsx('flex flex-col gap-1', containerClassName)}>
       {label && <label className="text-sm font-medium text-foreground">{label}</label>}
-      <div className="relative flex items-center">
-        {left && <div className="absolute left-3">{left}</div>}
+
+      <div
+        className={clsx(
+          'flex items-center w-full rounded-md border border-input bg-background shadow',
+          'focus-within:ring-1 focus-within:ring-ring focus-within:ring-offset-1 focus-within:ring-offset-background',
+          {
+            'h-11': size === 'lg',
+            'h-10': size === 'md',
+            'h-9': size === 'sm',
+          },
+        )}
+      >
+        {left && <div className="flex items-center pl-3 text-muted-foreground">{left}</div>}
 
         <input
           ref={ref}
           type={type}
           className={clsx(
-            'flex w-full rounded-md border border-input bg-background px-3 py-2 text-sm shadow',
-            'placeholder:text-sm',
-            'focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring focus-visible:ring-offset-1 focus-visible:ring-offset-background',
-            'disabled:opacity-50',
-            'transition-all',
-            {
-              'h-11 px-8 rounded-md': size === 'lg',
-              'h-10 px-4 py-2 rounded-md': size === 'md',
-              'h-9 px-3 text-xs rounded-sm': size === 'sm',
-            },
-            {
-              'pl-9': left,
-              'pr-9': right,
-            },
-            {
-              'appearance-none [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none':
-                type === 'number',
-            },
+            'flex-1 bg-transparent px-3 py-2 text-sm outline-none',
+            'placeholder:text-sm disabled:opacity-50',
             className,
           )}
           {...props}
         />
 
-        {right && <div className="absolute right-3">{right}</div>}
+        {right && <div className="flex items-center pr-3 text-muted-foreground">{right}</div>}
       </div>
     </div>
   );
