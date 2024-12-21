@@ -24,12 +24,23 @@ const data: InvoiceData[] = [
 ];
 
 export const Default = () => {
+  const renderCell = (row: InvoiceData, columnKey: keyof InvoiceData, rowIndex: number) => {
+    if (columnKey === 'status') {
+      const statusColor =
+        row.status === 'Paid' ? 'text-green-600' : row.status === 'Pending' ? 'text-yellow-600' : 'text-red-600';
+      return <span className={statusColor}>{row.status}</span>;
+    }
+
+    return row[columnKey];
+  };
+
   return (
-    <div className="p-4 w-3/4">
+    <div className="p-4 w-3/4 h-[200px] bg-background">
       <Table
         columns={columns}
         data={data}
         onClick={(row, index) => alert(`Row clicked: ${row.invoice}, Index: ${index}`)}
+        render={renderCell}
       />
     </div>
   );

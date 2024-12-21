@@ -1,7 +1,7 @@
 {
   "name": "@olafkotur/react-otio",
   "description": "A component library for React",
-  "version": "0.3.16",
+  "version": "0.3.17",
   "license": "MIT",
   "main": "build/index.js",
   "module": "build/index.js",
@@ -45,6 +45,7 @@
     "@radix-ui/react-slider": "^1.2.1",
     "@radix-ui/react-switch": "^1.1.1",
     "@radix-ui/react-toast": "^1.2.2",
+    "@radix-ui/react-toggle-group": "^1.1.1",
     "@radix-ui/react-tooltip": "^1.1.4",
     "clsx": "^2.1.1",
     "date-fns": "^2.30.0",

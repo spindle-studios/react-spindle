@@ -1,17 +1,20 @@
 import clsx from 'clsx';
 import React, { useRef } from 'react';
+import { Scrollable } from './Scrollable';
 
 export function Table<T>({
   columns,
   data,
   className,
+  disableScrollbar,
   render,
   onClick,
 }: {
   data: T[];
   columns: { header: string; key: keyof T }[];
   className?: string;
-  render?: (row: T, columnKey: keyof T) => React.ReactNode;
+  disableScrollbar?: boolean;
+  render?: (row: T, columnKey: keyof T, rowIndex: number) => React.ReactNode;
   onClick?: (row: T, rowIndex: number) => void;
 }) {
   const ref = useRef<HTMLTableSectionElement | null>(null);
@@ -25,39 +28,28 @@ export function Table<T>({
 
     const focusRow = (index: number) => rows[index]?.focus();
 
-    switch (e.key) {
-      case 'Tab': {
-        e.preventDefault();
-        if (e.shiftKey) {
-          focusRow((currentIndex - 1 + rows.length) % rows.length);
-        } else {
-          focusRow((currentIndex + 1) % rows.length);
-        }
-        break;
-      }
-      case 'ArrowDown': {
-        e.preventDefault();
-        focusRow((currentIndex + 1) % rows.length);
-        break;
-      }
-      case 'ArrowUp': {
-        e.preventDefault();
-        focusRow((currentIndex - 1 + rows.length) % rows.length);
-        break;
-      }
-      case 'Enter': {
-        e.preventDefault();
-        onClick?.(data[rowIndex], rowIndex);
-        break;
-      }
+    if (e.key === 'Tab') {
+      e.preventDefault();
+      e.shiftKey
+        ? focusRow((currentIndex - 1 + rows.length) % rows.length)
+        : focusRow((currentIndex + 1) % rows.length);
+    } else if (e.key === 'ArrowDown') {
+      e.preventDefault();
+      focusRow((currentIndex + 1) % rows.length);
+    } else if (e.key === 'ArrowUp') {
+      e.preventDefault();
+      focusRow((currentIndex - 1 + rows.length) % rows.length);
+    } else if (e.key === 'Enter') {
+      e.preventDefault();
+      onClick?.(data[rowIndex], rowIndex);
     }
   };
 
   return (
-    <div className={clsx('relative w-full overflow-auto', className)}>
-      <table className="w-full text-sm">
-        <thead className="[&_tr]:border-b [&_tr]:border-b-muted">
-          <tr>
+    <Scrollable className="h-full" disableScrollbar={disableScrollbar}>
+      <table className="w-full text-sm border-collapse">
+        <thead className="sticky top-0 bg-background shadow-sm z-10">
+          <tr className="[&_th]:border-b [&_th]:border-b-muted">
             {columns.map((col) => (
               <th key={String(col.key)} className="h-12 px-4 text-left align-middle font-medium text-muted-foreground">
                 {col.header}
@@ -65,7 +57,7 @@ export function Table<T>({
             ))}
           </tr>
         </thead>
-        <tbody ref={ref} className="[&_tr:last-child]:border-0">
+        <tbody ref={ref} className={clsx('[&_tr:last-child]:border-0', className)}>
           {data.map((row, rowIndex) => (
             <tr
               key={rowIndex}
@@ -73,19 +65,19 @@ export function Table<T>({
               onKeyDown={(e) => handleKeyDown(e, rowIndex)}
               onClick={() => onClick?.(row, rowIndex)}
               className={clsx(
-                'border-b border-b-muted transition-colors focus:outline-none',
-                'hover:bg-muted/50 focus:bg-muted/50 cursor-pointer',
+                'border-b border-b-muted transition-colors',
+                'hover:bg-muted/50 focus:bg-muted/50 cursor-pointer focus:outline-none',
               )}
             >
               {columns.map((col) => (
                 <td key={String(col.key)} className="p-4 align-middle">
-                  {render ? render(row, col.key) : String((row as any)[col.key])}
+                  {render ? render(row, col.key, rowIndex) : String(row[col.key])}
                 </td>
               ))}
             </tr>
           ))}
         </tbody>
       </table>
-    </div>
+    </Scrollable>
   );
 }
