@@ -1,22 +1,18 @@
 import * as ScrollAreaPrimitive from '@radix-ui/react-scroll-area';
 import clsx from 'clsx';
-import React, { ComponentProps } from 'react';
+import React, { ComponentProps, forwardRef } from 'react';
 
-type ScrollAreaProps = ComponentProps<typeof ScrollAreaPrimitive.Root> & {
-  disableScrollbar?: boolean;
-  variant?: 'vertical' | 'horizontal';
-};
-
-export const Scrollable: React.FC<ScrollAreaProps> = ({
-  className,
-  children,
-  disableScrollbar = false,
-  variant = 'vertical',
-  ...props
-}) => {
+export const Scrollable = forwardRef<
+  HTMLDivElement,
+  ComponentProps<typeof ScrollAreaPrimitive.Root> & {
+    disableScrollbar?: boolean;
+    variant?: 'vertical' | 'horizontal';
+  }
+>(({ className, children, disableScrollbar = false, variant = 'vertical', ...props }, ref) => {
   return (
     <ScrollAreaPrimitive.Root className={clsx('relative overflow-hidden', className)} {...props}>
       <ScrollAreaPrimitive.Viewport
+        ref={ref}
         className={clsx('w-full rounded-[inherit]', {
           'h-full': variant === 'vertical',
           'h-auto whitespace-nowrap': variant === 'horizontal',
@@ -42,4 +38,4 @@ export const Scrollable: React.FC<ScrollAreaProps> = ({
       <ScrollAreaPrimitive.Corner />
     </ScrollAreaPrimitive.Root>
   );
-};
+});
