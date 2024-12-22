@@ -7,6 +7,7 @@ export function Table<T>({
   columns,
   data,
   className,
+  headerClassName,
   disableScrollbar,
   render,
   onClick,
@@ -14,21 +15,17 @@ export function Table<T>({
   data: T[];
   columns: { header: string; key: keyof T }[];
   className?: string;
+  headerClassName?: string;
   disableScrollbar?: boolean;
   render?: (row: T, columnKey: keyof T, rowIndex: number) => React.ReactNode;
   onClick?: (row: T, rowIndex: number) => void;
 }) {
-  const parentRef = useRef<HTMLDivElement>(null);
-
-  // Virtualization logic
-  const rowVirtualizer = useVirtual({
-    parentRef,
-    size: data.length,
-    overscan: 10, // Render extra rows for smoother scrolling
-  });
+  const ref = useRef<HTMLDivElement>(null);
+  const headerRef = useRef<HTMLTableCellElement>(null);
+  const rowVirtualizer = useVirtual({ parentRef: ref, size: data.length, overscan: 10 });
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLTableRowElement>, rowIndex: number) => {
-    const rows = parentRef.current?.querySelectorAll<HTMLTableRowElement>('tr[tabindex="0"]');
+    const rows = ref.current?.querySelectorAll<HTMLTableRowElement>('tr[tabindex="0"]');
     if (!rows) return;
 
     const currentRow = e.currentTarget;
@@ -54,12 +51,16 @@ export function Table<T>({
   };
 
   return (
-    <Scrollable ref={parentRef} className="h-full" disableScrollbar={disableScrollbar}>
+    <Scrollable ref={ref} className="h-full rounded-t-md" disableScrollbar={disableScrollbar}>
       <table className="w-full text-sm border-collapse table-fixed">
-        <thead className="sticky top-0 bg-background shadow-sm z-10">
+        <thead className={clsx('sticky top-0 bg-background shadow-sm z-10', headerClassName)}>
           <tr className="[&_th]:border-b [&_th]:border-b-muted">
             {columns.map((col) => (
-              <th key={String(col.key)} className="h-12 px-4 text-left align-middle font-medium text-muted-foreground">
+              <th
+                ref={headerRef}
+                key={String(col.key)}
+                className="h-12 px-4 text-left align-middle font-medium text-muted-foreground"
+              >
                 {col.header}
               </th>
             ))}
@@ -81,7 +82,11 @@ export function Table<T>({
                 style={{ top: `${virtualRow.start}px`, height: `${virtualRow.size}px` }}
               >
                 {columns.map((col) => (
-                  <td key={String(col.key)} className="p-4 align-middle">
+                  <td
+                    key={String(col.key)}
+                    className="p-4 align-middle"
+                    style={{ width: headerRef.current?.clientWidth }}
+                  >
                     {render ? render(row, col.key, virtualRow.index) : String(row[col.key])}
                   </td>
                 ))}

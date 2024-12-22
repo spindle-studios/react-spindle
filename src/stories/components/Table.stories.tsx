@@ -30,7 +30,7 @@ const generateTestData = (length: number) => {
 const data = generateTestData(5000);
 
 export const Default = () => {
-  const renderCell = (row: InvoiceData, columnKey: keyof InvoiceData, rowIndex: number) => {
+  const renderCell = (row: InvoiceData, columnKey: keyof InvoiceData) => {
     if (columnKey === 'status') {
       const statusColor =
         row.status === 'Paid' ? 'text-green-600' : row.status === 'Pending' ? 'text-yellow-600' : 'text-red-600';
