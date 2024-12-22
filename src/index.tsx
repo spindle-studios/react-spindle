@@ -13,6 +13,7 @@ import * as ToggleGroup from '@radix-ui/react-toggle-group';
 import * as SelectPrimitive from '@radix-ui/react-select';
 import * as SliderPrimitive from '@radix-ui/react-slider';
 import * as SwitchPrimitive from '@radix-ui/react-switch';
+import { useVirtual } from 'react-virtual';
 import * as ToastPrimitives from '@radix-ui/react-toast';
 import * as TooltipPrimitive from '@radix-ui/react-tooltip';
 
@@ -580,21 +581,17 @@ export const Popover: React.FC<
 };
 
 
-type ScrollAreaProps = ComponentProps<typeof ScrollAreaPrimitive.Root> & {
-  disableScrollbar?: boolean;
-  variant?: 'vertical' | 'horizontal';
-};
-
-export const Scrollable: React.FC<ScrollAreaProps> = ({
-  className,
-  children,
-  disableScrollbar = false,
-  variant = 'vertical',
-  ...props
-}) => {
+export const Scrollable = forwardRef<
+  HTMLDivElement,
+  ComponentProps<typeof ScrollAreaPrimitive.Root> & {
+    disableScrollbar?: boolean;
+    variant?: 'vertical' | 'horizontal';
+  }
+>(({ className, children, disableScrollbar = false, variant = 'vertical', ...props }, ref) => {
   return (
     <ScrollAreaPrimitive.Root className={clsx('relative overflow-hidden', className)} {...props}>
       <ScrollAreaPrimitive.Viewport
+        ref={ref}
         className={clsx('w-full rounded-[inherit]', {
           'h-full': variant === 'vertical',
           'h-auto whitespace-nowrap': variant === 'horizontal',
@@ -620,7 +617,7 @@ export const Scrollable: React.FC<ScrollAreaProps> = ({
       <ScrollAreaPrimitive.Corner />
     </ScrollAreaPrimitive.Root>
   );
-};
+});
 
 
 export const Segment: React.FC<{
@@ -906,6 +903,7 @@ export function Table<T>({
   columns,
   data,
   className,
+  headerClassName,
   disableScrollbar,
   render,
   onClick,
@@ -913,11 +911,14 @@ export function Table<T>({
   data: T[];
   columns: { header: string; key: keyof T }[];
   className?: string;
+  headerClassName?: string;
   disableScrollbar?: boolean;
   render?: (row: T, columnKey: keyof T, rowIndex: number) => React.ReactNode;
   onClick?: (row: T, rowIndex: number) => void;
 }) {
-  const ref = useRef<HTMLTableSectionElement | null>(null);
+  const ref = useRef<HTMLDivElement>(null);
+  const headerRef = useRef<HTMLTableCellElement>(null);
+  const rowVirtualizer = useVirtual({ parentRef: ref, size: data.length, overscan: 10 });
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLTableRowElement>, rowIndex: number) => {
     const rows = ref.current?.querySelectorAll<HTMLTableRowElement>('tr[tabindex="0"]');
@@ -946,36 +947,48 @@ export function Table<T>({
   };
 
   return (
-    <Scrollable className="h-full" disableScrollbar={disableScrollbar}>
-      <table className="w-full text-sm border-collapse">
-        <thead className="sticky top-0 bg-background shadow-sm z-10">
+    <Scrollable ref={ref} className="h-full rounded-t-md" disableScrollbar={disableScrollbar}>
+      <table className="w-full text-sm border-collapse table-fixed">
+        <thead className={clsx('sticky top-0 bg-background shadow-sm z-10', headerClassName)}>
           <tr className="[&_th]:border-b [&_th]:border-b-muted">
             {columns.map((col) => (
-              <th key={String(col.key)} className="h-12 px-4 text-left align-middle font-medium text-muted-foreground">
+              <th
+                ref={headerRef}
+                key={String(col.key)}
+                className="h-12 px-4 text-left align-middle font-medium text-muted-foreground"
+              >
                 {col.header}
               </th>
             ))}
           </tr>
         </thead>
-        <tbody ref={ref} className={clsx('[&_tr:last-child]:border-0', className)}>
-          {data.map((row, rowIndex) => (
-            <tr
-              key={rowIndex}
-              tabIndex={0}
-              onKeyDown={(e) => handleKeyDown(e, rowIndex)}
-              onClick={() => onClick?.(row, rowIndex)}
-              className={clsx(
-                'border-b border-b-muted transition-colors',
-                'hover:bg-muted/50 focus:bg-muted/50 cursor-pointer focus:outline-none',
-              )}
-            >
-              {columns.map((col) => (
-                <td key={String(col.key)} className="p-4 align-middle">
-                  {render ? render(row, col.key, rowIndex) : String(row[col.key])}
-                </td>
-              ))}
-            </tr>
-          ))}
+        <tbody className={clsx('relative', className)} style={{ height: `${rowVirtualizer.totalSize}px` }}>
+          {rowVirtualizer.virtualItems.map((virtualRow) => {
+            const row = data[virtualRow.index];
+            return (
+              <tr
+                key={virtualRow.index}
+                tabIndex={0}
+                onKeyDown={(e) => handleKeyDown(e, virtualRow.index)}
+                onClick={() => onClick?.(row, virtualRow.index)}
+                className={clsx(
+                  'border-b border-b-muted transition-colors absolute left-0 right-0',
+                  'hover:bg-muted/50 focus:bg-muted/50 cursor-pointer focus:outline-none',
+                )}
+                style={{ top: `${virtualRow.start}px`, height: `${virtualRow.size}px` }}
+              >
+                {columns.map((col) => (
+                  <td
+                    key={String(col.key)}
+                    className="p-4 align-middle truncate"
+                    style={{ width: headerRef.current?.clientWidth, maxWidth: headerRef.current?.clientWidth }}
+                  >
+                    {render ? render(row, col.key, virtualRow.index) : String(row[col.key])}
+                  </td>
+                ))}
+              </tr>
+            );
+          })}
         </tbody>
       </table>
     </Scrollable>

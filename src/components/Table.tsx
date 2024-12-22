@@ -84,8 +84,8 @@ export function Table<T>({
                 {columns.map((col) => (
                   <td
                     key={String(col.key)}
-                    className="p-4 align-middle"
-                    style={{ width: headerRef.current?.clientWidth }}
+                    className="p-4 align-middle truncate"
+                    style={{ width: headerRef.current?.clientWidth, maxWidth: headerRef.current?.clientWidth }}
                   >
                     {render ? render(row, col.key, virtualRow.index) : String(row[col.key])}
                   </td>
