@@ -9,7 +9,7 @@ export const File = React.forwardRef<
     maxFileSize?: number;
     initialFile?: string;
     containerClassName?: string;
-    onFileChange: (file: string | null) => void;
+    onFileChange: (files: string[]) => void;
     onError?: (error: string) => void;
   } & React.InputHTMLAttributes<HTMLInputElement>
 >(
@@ -20,6 +20,7 @@ export const File = React.forwardRef<
       initialFile = null,
       containerClassName,
       disabled,
+      multiple,
       className,
       onFileChange,
       onError,
@@ -36,26 +37,41 @@ export const File = React.forwardRef<
       setFileSrc(initialFile);
     }, [props.value, initialFile]);
 
-    const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-      const file = e.target.files?.[0];
-      if (file) {
-        if (file.size > maxFileSize) {
-          return onError?.(`File must be less than ${maxFileSize / 1024 / 1024}MB`);
-        }
-        const reader = new FileReader();
-        reader.onloadend = () => {
-          const base64String = reader.result as string;
-          setFileSrc(base64String);
-          onFileChange(base64String);
-        };
-        reader.readAsDataURL(file);
+    const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+      const files = e.target.files;
+      if (files) {
+        const fileReaders: Promise<string>[] = Array.from(files).map((file) => {
+          return new Promise((resolve, reject) => {
+            if (file.size > maxFileSize) {
+              onError?.(`File must be less than ${maxFileSize / 1024 / 1024}MB`);
+              return reject();
+            }
+            const reader = new FileReader();
+            reader.onloadend = () => {
+              resolve(reader.result as string);
+            };
+            reader.onerror = () => reject(reader.error);
+            reader.readAsDataURL(file);
+          });
+        });
+
+        const base64Files = await Promise.all(fileReaders);
+        setFileSrc(base64Files[0] ?? null);
+        onFileChange(base64Files);
       }
     };
 
     return (
       <div className={clsx('flex flex-col gap-1', containerClassName)}>
         {label && <label className="text-sm font-medium text-foreground">{label}</label>}
-        <input ref={inputRef} type="file" onChange={handleFileChange} className="hidden" {...props} />
+        <input
+          ref={inputRef}
+          type="file"
+          onChange={handleFileChange}
+          multiple={multiple}
+          className="hidden"
+          {...props}
+        />
         <button
           disabled={disabled}
           type="button"
@@ -68,18 +84,23 @@ export const File = React.forwardRef<
           )}
           onClick={() => inputRef.current?.click()}
         >
-          <div className="flex h-5 w-5 items-center justify-center mr-2">
+          <div className="relative flex h-5 w-5 items-center justify-center mr-2">
             {fileSrc ? (
-              <img src={fileSrc} alt="Uploaded file preview" className="h-5 w-5 rounded-md object-cover" />
+              multiple ? (
+                <Icon name="Images" size={20} className="text-muted-foreground" />
+              ) : (
+                <img src={fileSrc} alt="Uploaded file preview" className="h-5 w-5 rounded-md object-cover" />
+              )
             ) : (
               <Icon name="Upload" size={20} className="text-muted-foreground" />
             )}
           </div>
-          <span className="truncate">{fileSrc ? 'Change File' : 'Upload File'}</span>
+
+          <span className="truncate">
+            {fileSrc ? 'Change' : 'Upload'} {multiple ? 'files' : 'file'}
+          </span>
         </button>
       </div>
     );
   },
 );
-
-File.displayName = 'File';

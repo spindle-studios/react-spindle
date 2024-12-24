@@ -20,7 +20,7 @@ const generateTestData = (length: number) => {
   const methods = ['Credit Card', 'PayPal', 'Bank Transfer'];
 
   return Array.from({ length }, (_, index) => ({
-    invoice: `INV${String(index + 1).padStart(4, '0')} sdjashdjska daskjhdask jdhas hsdhaskjd haksdhsajkdhaskdhas dashdjsa hdkas dhj`,
+    invoice: `INV${String(index + 1).padStart(4, '0')}`,
     status: statuses[Math.floor(Math.random() * statuses.length)],
     method: methods[Math.floor(Math.random() * methods.length)],
     amount: `$${(Math.random() * (5000 - 1) + 1).toFixed(2)}`,
