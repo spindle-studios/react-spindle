@@ -22,14 +22,14 @@ export const Slider: React.FC<
         {...props}
       >
         <SliderPrimitive.Track className="relative h-1.5 w-full grow overflow-hidden rounded-full bg-primary/20">
-          <SliderPrimitive.Range className={clsx('absolute h-full bg-primary', { 'bg-muted': disabled })} />
+          <SliderPrimitive.Range className={clsx('absolute h-full bg-primary', { '!bg-primary/60': disabled })} />
         </SliderPrimitive.Track>
 
         <SliderPrimitive.Thumb
           className={clsx(
             'block h-4 w-4 rounded-full border border-primary bg-background shadow transition-all',
             'focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background',
-            { 'pointer-events-none bg-muted-foreground border-muted-foreground': disabled },
+            { hidden: disabled },
           )}
         />
       </SliderPrimitive.Root>

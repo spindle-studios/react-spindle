@@ -12,6 +12,8 @@ export const Default = () => {
 
         <Input left={<Icon name="User" />} placeholder="Username" />
         <Input right={<Icon name="User" />} placeholder="Username" />
+
+        <Input left={<Icon name="PoundSterling" />} placeholder="Value" type="number" />
       </div>
     </div>
   );

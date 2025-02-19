@@ -2,6 +2,7 @@ import { Icon } from '@components/Icon';
 import * as SelectPrimitive from '@radix-ui/react-select';
 import clsx from 'clsx';
 import React from 'react';
+import { Button } from './Button';
 
 export const Select = <T,>({
   label,
@@ -13,17 +14,21 @@ export const Select = <T,>({
   containerClassName,
   disabled = false,
   placeholder = 'Select an option',
+  clearable = true,
 }: {
   label?: string;
   options: T[];
   value: T | null;
-  onSelect: (value: T) => void;
+  onSelect: (value: T | null) => void;
   render?: (option: T) => React.ReactNode;
   getOptionKey?: (option: T) => string | number;
   containerClassName?: string;
   disabled?: boolean;
   placeholder?: string;
+  clearable?: boolean;
 }) => {
+  const showClearOption = clearable && value !== null && !disabled;
+
   return (
     <div className={clsx('flex flex-col gap-1', containerClassName)}>
       {label && <label className="text-sm font-medium text-foreground">{label}</label>}
@@ -35,20 +40,31 @@ export const Select = <T,>({
           if (selected) onSelect(selected);
         }}
       >
-        <SelectPrimitive.Trigger
-          className={clsx(
-            'flex h-10 w-full items-center justify-between rounded-md border border-border bg-background px-3 py-2 text-sm shadow-sm',
-            'placeholder:text-muted-foreground',
-            'focus:outline-none focus:ring-1 focus:ring-ring focus:ring-offset-1 focus:ring-offset-background',
-            'disabled:opacity-50',
-            'transition-all',
-          )}
-        >
-          <SelectPrimitive.Value placeholder={placeholder} />
-          <SelectPrimitive.Icon>
-            <Icon name="ChevronDown" className="opacity-50" />
-          </SelectPrimitive.Icon>
-        </SelectPrimitive.Trigger>
+        <div className="relative">
+          <SelectPrimitive.Trigger
+            className={clsx(
+              'flex h-10 w-full items-center justify-between rounded-md border border-border bg-background px-3 py-2 text-sm shadow-sm',
+              'placeholder:text-muted-foreground',
+              'focus:outline-none focus:ring-1 focus:ring-ring focus:ring-offset-1 focus:ring-offset-background',
+              'disabled:opacity-50',
+              'transition-all',
+            )}
+          >
+            <SelectPrimitive.Value placeholder={placeholder} />
+            <SelectPrimitive.Icon>
+              <Icon name="ChevronDown" className="opacity-50" />
+            </SelectPrimitive.Icon>
+          </SelectPrimitive.Trigger>
+
+          <Button
+            className={clsx('absolute right-8 top-1/2 -translate-y-1/2', !showClearOption && 'hidden')}
+            variant="icon"
+            size="sm"
+            onClick={() => onSelect(null)}
+          >
+            <Icon name="X" className="opacity-50" />
+          </Button>
+        </div>
 
         <SelectPrimitive.Portal>
           <SelectPrimitive.Content

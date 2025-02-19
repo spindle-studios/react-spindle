@@ -10,8 +10,8 @@ export const Default = () => {
     <div className="flex flex-row items-center gap-2">
       <Button
         onClick={() => {
-          setIsOpen(true);
           setVariant('left');
+          setIsOpen(true);
         }}
       >
         Left
@@ -19,8 +19,8 @@ export const Default = () => {
 
       <Button
         onClick={() => {
-          setIsOpen(true);
           setVariant('right');
+          setIsOpen(true);
         }}
       >
         Right
@@ -28,8 +28,8 @@ export const Default = () => {
 
       <Button
         onClick={() => {
-          setIsOpen(true);
           setVariant('bottom');
+          setIsOpen(true);
         }}
       >
         Bottom
