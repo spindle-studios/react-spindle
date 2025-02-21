@@ -6,6 +6,7 @@ import {
   useFormatMinutesUntilNextHour,
   useFormatPercent,
   useFormatRelativeTime,
+  useFormatTime,
 } from '@hooks/useFormat';
 import React from 'react';
 
@@ -13,6 +14,7 @@ export const Default = () => {
   const formatCurrency = useFormatCurrency();
   const formatPercent = useFormatPercent();
   const formatDate = useFormatDate();
+  const formatTime = useFormatTime();
   const formatRelativeTime = useFormatRelativeTime();
   const minutesUntilNextHour = useFormatMinutesUntilNextHour();
 
@@ -48,6 +50,15 @@ export const Default = () => {
           <Badge variant="outline">{formatDate(now)}</Badge>
           <Badge variant="outline">{formatDate(pastDate, { format: 'short' })}</Badge>
           <Badge variant="outline">{formatDate(pastDate, { includeTime: true })}</Badge>
+        </div>
+      </Card>
+
+      <Card className="p-4 flex flex-col gap-2">
+        <h2 className="text-lg font-bold">useFormatTime</h2>
+        <h3 className="text-sm text-muted-foreground">Formats dates into time.</h3>
+        <div className="flex gap-2">
+          <Badge variant="outline">{formatTime(now, { format: 'HH:MM' })}</Badge>
+          <Badge variant="outline">{formatTime(now, { format: 'HH:MM:SS' })}</Badge>
         </div>
       </Card>
 
