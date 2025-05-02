@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react';
 
 export const useBreakpoints = ({ mobile = 600, desktop = 1024 } = {}) => {
-  const [isMobile, setIsMobile] = useState(window.innerWidth < mobile);
-  const [isTablet, setIsTablet] = useState(window.innerWidth >= mobile && window.innerWidth < desktop);
-  const [isDesktop, setIsDesktop] = useState(window.innerWidth >= desktop);
+  const [isMobile, setIsMobile] = useState(false);
+  const [isTablet, setIsTablet] = useState(false);
+  const [isDesktop, setIsDesktop] = useState(false);
 
   useEffect(() => {
     const handleResize = () => {
@@ -12,12 +12,15 @@ export const useBreakpoints = ({ mobile = 600, desktop = 1024 } = {}) => {
       setIsDesktop(window.innerWidth >= desktop);
     };
 
+    // Initial check
+    handleResize();
+
     window.addEventListener('resize', handleResize);
 
     return () => {
       window.removeEventListener('resize', handleResize);
     };
-  }, []);
+  }, [mobile, desktop]);
 
   return { isMobile, isTablet, isDesktop };
 };
