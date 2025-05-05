@@ -144,6 +144,18 @@ export const Calendar: React.FC<ComponentProps<typeof DayPicker>> = ({
 };
 
 
+export const Callout = React.forwardRef<HTMLDivElement, ComponentProps<'div'> & { icon: React.ReactNode }>(
+  ({ className, icon, children, ...props }, ref) => {
+    return (
+      <Card ref={ref} className={clsx('flex items-center gap-3', className)} {...props}>
+        <div className="flex-shrink-0 px-2">{icon}</div>
+        <div className="flex-1">{children}</div>
+      </Card>
+    );
+  },
+);
+
+
 export const Card = React.forwardRef<HTMLDivElement, ComponentProps<'div'>>(({ className, ...props }, ref) => {
   return (
     <div
@@ -476,6 +488,7 @@ export const Input = React.forwardRef<
           className={clsx(
             'flex-1 bg-transparent px-3 py-2 text-sm outline-none',
             'placeholder:text-sm disabled:opacity-50',
+            'appearance-none [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none [-moz-appearance:textfield]',
             className,
           )}
           {...props}
@@ -722,17 +735,21 @@ export const Select = <T,>({
   containerClassName,
   disabled = false,
   placeholder = 'Select an option',
+  clearable = true,
 }: {
   label?: string;
   options: T[];
   value: T | null;
-  onSelect: (value: T) => void;
+  onSelect: (value: T | null) => void;
   render?: (option: T) => React.ReactNode;
   getOptionKey?: (option: T) => string | number;
   containerClassName?: string;
   disabled?: boolean;
   placeholder?: string;
+  clearable?: boolean;
 }) => {
+  const showClearOption = clearable && value !== null && !disabled;
+
   return (
     <div className={clsx('flex flex-col gap-1', containerClassName)}>
       {label && <label className="text-sm font-medium text-foreground">{label}</label>}
@@ -744,20 +761,31 @@ export const Select = <T,>({
           if (selected) onSelect(selected);
         }}
       >
-        <SelectPrimitive.Trigger
-          className={clsx(
-            'flex h-10 w-full items-center justify-between rounded-md border border-border bg-background px-3 py-2 text-sm shadow-sm',
-            'placeholder:text-muted-foreground',
-            'focus:outline-none focus:ring-1 focus:ring-ring focus:ring-offset-1 focus:ring-offset-background',
-            'disabled:opacity-50',
-            'transition-all',
-          )}
-        >
-          <SelectPrimitive.Value placeholder={placeholder} />
-          <SelectPrimitive.Icon>
-            <Icon name="ChevronDown" className="opacity-50" />
-          </SelectPrimitive.Icon>
-        </SelectPrimitive.Trigger>
+        <div className="relative">
+          <SelectPrimitive.Trigger
+            className={clsx(
+              'flex h-10 w-full items-center justify-between rounded-md border border-border bg-background px-3 py-2 text-sm shadow-sm',
+              'placeholder:text-muted-foreground',
+              'focus:outline-none focus:ring-1 focus:ring-ring focus:ring-offset-1 focus:ring-offset-background',
+              'disabled:opacity-50',
+              'transition-all',
+            )}
+          >
+            <SelectPrimitive.Value placeholder={placeholder} />
+            <SelectPrimitive.Icon>
+              <Icon name="ChevronDown" className="opacity-50" />
+            </SelectPrimitive.Icon>
+          </SelectPrimitive.Trigger>
+
+          <Button
+            className={clsx('absolute right-8 top-1/2 -translate-y-1/2', !showClearOption && 'hidden')}
+            variant="icon"
+            size="sm"
+            onClick={() => onSelect(null)}
+          >
+            <Icon name="X" className="opacity-50" />
+          </Button>
+        </div>
 
         <SelectPrimitive.Portal>
           <SelectPrimitive.Content
@@ -862,14 +890,14 @@ export const Slider: React.FC<
         {...props}
       >
         <SliderPrimitive.Track className="relative h-1.5 w-full grow overflow-hidden rounded-full bg-primary/20">
-          <SliderPrimitive.Range className={clsx('absolute h-full bg-primary', { 'bg-muted': disabled })} />
+          <SliderPrimitive.Range className={clsx('absolute h-full bg-primary', { '!bg-primary/60': disabled })} />
         </SliderPrimitive.Track>
 
         <SliderPrimitive.Thumb
           className={clsx(
             'block h-4 w-4 rounded-full border border-primary bg-background shadow transition-all',
             'focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background',
-            { 'pointer-events-none bg-muted-foreground border-muted-foreground': disabled },
+            { hidden: disabled },
           )}
         />
       </SliderPrimitive.Root>
@@ -1162,9 +1190,9 @@ export const Tooltip: React.FC<{
 
 
 export const useBreakpoints = ({ mobile = 600, desktop = 1024 } = {}) => {
-  const [isMobile, setIsMobile] = useState(window.innerWidth < mobile);
-  const [isTablet, setIsTablet] = useState(window.innerWidth >= mobile && window.innerWidth < desktop);
-  const [isDesktop, setIsDesktop] = useState(window.innerWidth >= desktop);
+  const [isMobile, setIsMobile] = useState(false);
+  const [isTablet, setIsTablet] = useState(false);
+  const [isDesktop, setIsDesktop] = useState(false);
 
   useEffect(() => {
     const handleResize = () => {
@@ -1173,12 +1201,15 @@ export const useBreakpoints = ({ mobile = 600, desktop = 1024 } = {}) => {
       setIsDesktop(window.innerWidth >= desktop);
     };
 
+    // Initial check
+    handleResize();
+
     window.addEventListener('resize', handleResize);
 
     return () => {
       window.removeEventListener('resize', handleResize);
     };
-  }, []);
+  }, [mobile, desktop]);
 
   return { isMobile, isTablet, isDesktop };
 };
@@ -1276,6 +1307,32 @@ export const useFormatDate = () => {
           return `${year}/${month}/${day}${suffix}`;
         default:
           return `${day}/${month}/${year}${suffix}`;
+      }
+    },
+    [],
+  );
+};
+
+export const useFormatTime = () => {
+  return useCallback(
+    (
+      value: Date | string,
+      options?: {
+        format?: 'HH:MM' | 'HH:MM:SS';
+      },
+    ) => {
+      const { format = 'HH:MM' } = options || {};
+
+      const date = new Date(value);
+      const hours = date.getHours().toString().padStart(2, '0');
+      const minutes = date.getMinutes().toString().padStart(2, '0');
+      const seconds = date.getSeconds().toString().padStart(2, '0');
+
+      switch (format) {
+        case 'HH:MM:SS':
+          return `${hours}:${minutes}:${seconds}`;
+        default:
+          return `${hours}:${minutes}`;
       }
     },
     [],
