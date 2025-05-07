@@ -1,7 +1,7 @@
 {
   "name": "@olafkotur/react-otio",
   "description": "A component library for React",
-  "version": "0.4.34",
+  "version": "0.4.35",
   "license": "MIT",
   "main": "build/index.js",
   "module": "build/index.js",
