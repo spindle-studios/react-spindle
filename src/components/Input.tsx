@@ -32,8 +32,8 @@ export const Input = React.forwardRef<
           ref={ref}
           type={type}
           className={clsx(
-            'flex-1 bg-transparent px-3 py-2 text-sm outline-none',
-            'placeholder:text-sm disabled:opacity-50',
+            'flex-1 bg-transparent px-3 py-2 text-md sm:text-sm outline-none',
+            'placeholder:text-md sm:placeholder:text-sm disabled:opacity-50',
             'appearance-none [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none [-moz-appearance:textfield]',
             className,
           )}

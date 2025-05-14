@@ -14,17 +14,7 @@ export const Toast: React.FC<{
   className?: string;
   onClick?: () => void;
   onOpenChange?: (open: boolean) => void;
-}> = ({
-  open,
-  message,
-  variant,
-  position = 'bottom-left',
-  action,
-  duration = 3000,
-  className,
-  onClick,
-  onOpenChange,
-}) => {
+}> = ({ open, message, variant, position = 'bottom-left', action, duration, className, onClick, onOpenChange }) => {
   const getIcon = () => {
     switch (variant) {
       case 'positive':

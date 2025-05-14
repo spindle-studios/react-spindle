@@ -13,8 +13,9 @@ export const OtioProvider: React.FC<
   PropsWithChildren<{
     options?: {
       toast?: {
-        position?: 'top-left' | 'top-right' | 'bottom-left' | 'bottom-right';
         className?: string;
+        defaultDuration?: number;
+        position?: 'top-left' | 'top-right' | 'bottom-left' | 'bottom-right';
       };
     };
   }>
@@ -41,7 +42,7 @@ export const OtioProvider: React.FC<
             variant={toast.variant ?? 'neutral'}
             message={toast.message ?? ''}
             action={toast.action}
-            duration={toast.duration}
+            duration={toast.duration ?? options?.toast?.defaultDuration ?? 5000}
             position={options?.toast?.position}
             className={options?.toast?.className}
             onClick={toast.onClick}

@@ -155,7 +155,7 @@ export const Callout = React.forwardRef<
     <Card
       ref={ref}
       className={clsx(
-        'flex items-center gap-3',
+        'flex items-center gap-3 text-sm',
         {
           'bg-primary/10 text-primary': variant === 'primary',
           'bg-secondary/10 text-secondary': variant === 'secondary',
@@ -253,6 +253,59 @@ export const Collapse: React.FC<
 };
 
 
+const DEFAULT_COLORS = ['#FFFFFF', '#94A3B8', '#000000', '#3B82F6', '#10B981', '#8B5CF6', '#EF4444', '#14B8A6'];
+
+export const ColorPicker: React.FC<{
+  value?: string;
+  onChange?: (color: string) => void;
+  className?: string;
+  predefinedColors?: string[];
+  disableDefaultColors?: boolean;
+}> = ({ value = '', onChange, className, predefinedColors = DEFAULT_COLORS, disableDefaultColors = false }) => {
+  const [localValue, setLocalValue] = useState(value.replace('#', '').toUpperCase());
+
+  const handleValueChange = (newValue: string) => {
+    const formattedValue = newValue.toUpperCase().replace(/[^0-9A-F]/g, '');
+    setLocalValue(formattedValue);
+    if (onChange && /^[0-9A-F]{6}$/.test(formattedValue)) {
+      onChange(`#${formattedValue}`);
+    }
+  };
+
+  return (
+    <div className={clsx('flex flex-col gap-3 min-w-0 w-full', className)}>
+      {!disableDefaultColors && (
+        <div className="grid grid-cols-4 gap-2 w-full min-w-0">
+          {predefinedColors.map((color) => (
+            <button
+              key={color}
+              className={clsx(
+                'aspect-square w-full min-w-0 rounded-md border border-border bg-background shadow-sm',
+                'hover:ring-1 hover:ring-ring hover:ring-offset-1 hover:ring-offset-background',
+                'focus:outline-none focus:ring-1 focus:ring-ring focus:ring-offset-1 focus:ring-offset-background',
+                'transition-colors',
+                `#${localValue}` === color && 'ring-2 ring-primary ring-offset-2 ring-offset-background',
+              )}
+              style={{ backgroundColor: color }}
+              onClick={() => handleValueChange(color.replace('#', ''))}
+              aria-label={`Select color ${color}`}
+            />
+          ))}
+        </div>
+      )}
+
+      <Input
+        value={localValue}
+        onChange={(e) => handleValueChange(e.target.value)}
+        placeholder="000000"
+        maxLength={6}
+        left={<Icon name="Hash" />}
+      />
+    </div>
+  );
+};
+
+
 export const Divider = React.forwardRef<
   React.ElementRef<'div'>,
   React.ComponentPropsWithoutRef<'div'> & {
@@ -338,6 +391,7 @@ export const File = React.forwardRef<
   HTMLInputElement,
   {
     label?: React.ReactNode;
+    title?: string;
     maxFileSize?: number;
     initialFile?: string;
     containerClassName?: string;
@@ -348,6 +402,7 @@ export const File = React.forwardRef<
   (
     {
       label,
+      title,
       maxFileSize = 1024 * 1024 * 2, // 2MB
       initialFile = null,
       containerClassName,
@@ -427,10 +482,13 @@ export const File = React.forwardRef<
               <Icon name="Upload" size={20} className="text-muted-foreground" />
             )}
           </div>
-
-          <span className="truncate">
-            {fileSrc ? 'Change' : 'Upload'} {multiple ? 'files' : 'file'}
-          </span>
+          {title ? (
+            <span className="truncate">{title}</span>
+          ) : (
+            <span className="truncate">
+              {fileSrc ? 'Change' : 'Upload'} {multiple ? 'files' : 'file'}
+            </span>
+          )}
         </button>
       </div>
     );
@@ -441,8 +499,9 @@ export const File = React.forwardRef<
 export const Icon: React.FC<{
   name: string;
   size?: number | string;
+  fill?: string;
   className?: string;
-}> = ({ name, size = 16, className, ...props }) => {
+}> = ({ name, size = 16, fill = 'transparent', className, ...props }) => {
   const LucideIcon = useMemo(() => {
     // @ts-expect-error - lazy import
     return lazy(async () => {
@@ -467,7 +526,7 @@ export const Icon: React.FC<{
         />
       }
     >
-      <LucideIcon className={clsx(className)} size={size} {...props} />
+      <LucideIcon className={clsx(className)} size={size} fill={fill} {...props} />
     </Suspense>
   );
 };
@@ -504,8 +563,8 @@ export const Input = React.forwardRef<
           ref={ref}
           type={type}
           className={clsx(
-            'flex-1 bg-transparent px-3 py-2 text-sm outline-none',
-            'placeholder:text-sm disabled:opacity-50',
+            'flex-1 bg-transparent px-3 py-2 text-md sm:text-sm outline-none',
+            'placeholder:text-md sm:placeholder:text-sm disabled:opacity-50',
             'appearance-none [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none [-moz-appearance:textfield]',
             className,
           )}
@@ -1100,17 +1159,7 @@ export const Toast: React.FC<{
   className?: string;
   onClick?: () => void;
   onOpenChange?: (open: boolean) => void;
-}> = ({
-  open,
-  message,
-  variant,
-  position = 'bottom-left',
-  action,
-  duration = 3000,
-  className,
-  onClick,
-  onOpenChange,
-}) => {
+}> = ({ open, message, variant, position = 'bottom-left', action, duration, className, onClick, onOpenChange }) => {
   const getIcon = () => {
     switch (variant) {
       case 'positive':
@@ -1508,8 +1557,9 @@ export const OtioProvider: React.FC<
   PropsWithChildren<{
     options?: {
       toast?: {
-        position?: 'top-left' | 'top-right' | 'bottom-left' | 'bottom-right';
         className?: string;
+        defaultDuration?: number;
+        position?: 'top-left' | 'top-right' | 'bottom-left' | 'bottom-right';
       };
     };
   }>
@@ -1536,7 +1586,7 @@ export const OtioProvider: React.FC<
             variant={toast.variant ?? 'neutral'}
             message={toast.message ?? ''}
             action={toast.action}
-            duration={toast.duration}
+            duration={toast.duration ?? options?.toast?.defaultDuration ?? 5000}
             position={options?.toast?.position}
             className={options?.toast?.className}
             onClick={toast.onClick}

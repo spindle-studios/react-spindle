@@ -13,7 +13,7 @@ export const Callout = React.forwardRef<
     <Card
       ref={ref}
       className={clsx(
-        'flex items-center gap-3',
+        'flex items-center gap-3 text-sm',
         {
           'bg-primary/10 text-primary': variant === 'primary',
           'bg-secondary/10 text-secondary': variant === 'secondary',

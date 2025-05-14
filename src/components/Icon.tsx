@@ -4,8 +4,9 @@ import React, { Suspense, lazy, useMemo } from 'react';
 export const Icon: React.FC<{
   name: string;
   size?: number | string;
+  fill?: string;
   className?: string;
-}> = ({ name, size = 16, className, ...props }) => {
+}> = ({ name, size = 16, fill = 'transparent', className, ...props }) => {
   const LucideIcon = useMemo(() => {
     // @ts-expect-error - lazy import
     return lazy(async () => {
@@ -30,7 +31,7 @@ export const Icon: React.FC<{
         />
       }
     >
-      <LucideIcon className={clsx(className)} size={size} {...props} />
+      <LucideIcon className={clsx(className)} size={size} fill={fill} {...props} />
     </Suspense>
   );
 };

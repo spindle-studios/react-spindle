@@ -6,6 +6,7 @@ export const File = React.forwardRef<
   HTMLInputElement,
   {
     label?: React.ReactNode;
+    title?: string;
     maxFileSize?: number;
     initialFile?: string;
     containerClassName?: string;
@@ -16,6 +17,7 @@ export const File = React.forwardRef<
   (
     {
       label,
+      title,
       maxFileSize = 1024 * 1024 * 2, // 2MB
       initialFile = null,
       containerClassName,
@@ -95,10 +97,13 @@ export const File = React.forwardRef<
               <Icon name="Upload" size={20} className="text-muted-foreground" />
             )}
           </div>
-
-          <span className="truncate">
-            {fileSrc ? 'Change' : 'Upload'} {multiple ? 'files' : 'file'}
-          </span>
+          {title ? (
+            <span className="truncate">{title}</span>
+          ) : (
+            <span className="truncate">
+              {fileSrc ? 'Change' : 'Upload'} {multiple ? 'files' : 'file'}
+            </span>
+          )}
         </button>
       </div>
     );
