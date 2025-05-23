@@ -1,0 +1,21 @@
+import{c as i}from"./clsx-B-dksMZM.js";import{r as v,R as e}from"./index-D4H_InIO.js";import{I as h}from"./Icon-CY7ex0Pt.js";import{I as C}from"./Input-DzmGrhi7.js";import"./iframe-DrfhUaOA.js";import"../sb-preview/runtime.js";const w=["#FFFFFF","#94A3B8","#000000","#3B82F6","#10B981","#8B5CF6","#EF4444","#14B8A6"],a=({value:o="",onChange:s,className:f,predefinedColors:p=w,disableDefaultColors:g=!1})=>{const[n,F]=v.useState(o.replace("#","").toUpperCase()),c=r=>{const l=r.toUpperCase().replace(/[^0-9A-F]/g,"");F(l),s&&/^[0-9A-F]{6}$/.test(l)&&s(`#${l}`)};return e.createElement("div",{className:i("flex flex-col gap-3 min-w-0 w-full",f)},!g&&e.createElement("div",{className:"grid grid-cols-4 gap-2 w-full min-w-0"},p.map(r=>e.createElement("button",{key:r,className:i("aspect-square w-full min-w-0 rounded-md border border-border bg-background shadow-sm","hover:ring-1 hover:ring-ring hover:ring-offset-1 hover:ring-offset-background","focus:outline-none focus:ring-1 focus:ring-ring focus:ring-offset-1 focus:ring-offset-background","transition-colors",`#${n}`===r&&"ring-2 ring-primary ring-offset-2 ring-offset-background"),style:{backgroundColor:r},onClick:()=>c(r.replace("#","")),"aria-label":`Select color ${r}`}))),e.createElement(C,{value:n,onChange:r=>c(r.target.value),placeholder:"000000",maxLength:6,left:e.createElement(h,{name:"Hash"})}))};a.__docgenInfo={description:"",methods:[],displayName:"ColorPicker",props:{value:{required:!1,tsType:{name:"string"},description:"",defaultValue:{value:"''",computed:!1}},onChange:{required:!1,tsType:{name:"signature",type:"function",raw:"(color: string) => void",signature:{arguments:[{type:{name:"string"},name:"color"}],return:{name:"void"}}},description:""},className:{required:!1,tsType:{name:"string"},description:""},predefinedColors:{required:!1,tsType:{name:"Array",elements:[{name:"string"}],raw:"string[]"},description:"",defaultValue:{value:"['#FFFFFF', '#94A3B8', '#000000', '#3B82F6', '#10B981', '#8B5CF6', '#EF4444', '#14B8A6']",computed:!1}},disableDefaultColors:{required:!1,tsType:{name:"boolean"},description:"",defaultValue:{value:"false",computed:!1}}}};const t=()=>e.createElement("div",{className:"flex flex-col gap-4"},e.createElement("div",null,e.createElement("h3",{className:"text-sm font-medium mb-2"},"Default"),e.createElement(a,{value:"FF0000",onChange:o=>window.alert("Selected color: "+o)})),e.createElement("div",null,e.createElement("h3",{className:"text-sm font-medium mb-2"},"Empty value"),e.createElement(a,{value:"",onChange:o=>window.alert("Selected color: "+o)})),e.createElement("div",null,e.createElement("h3",{className:"text-sm font-medium mb-2"},"Custom colors"),e.createElement(a,{value:"FF00FF",onChange:o=>window.alert("Selected color: "+o),predefinedColors:["#FF0000","#00FF00","#0000FF"]})),e.createElement("div",null,e.createElement("h3",{className:"text-sm font-medium mb-2"},"Without colors"),e.createElement(a,{value:"0000FF",onChange:o=>window.alert("Selected color: "+o),disableDefaultColors:!0})));t.storyName="ColorPicker";const S={title:"Components/ColorPicker"};t.__docgenInfo={description:"",methods:[],displayName:"Default"};var m,d,u;t.parameters={...t.parameters,docs:{...(m=t.parameters)==null?void 0:m.docs,source:{originalSource:`() => <div className="flex flex-col gap-4">
+    <div>
+      <h3 className="text-sm font-medium mb-2">Default</h3>
+      <ColorPicker value="FF0000" onChange={color => window.alert('Selected color: ' + color)} />
+    </div>
+
+    <div>
+      <h3 className="text-sm font-medium mb-2">Empty value</h3>
+      <ColorPicker value="" onChange={color => window.alert('Selected color: ' + color)} />
+    </div>
+
+    <div>
+      <h3 className="text-sm font-medium mb-2">Custom colors</h3>
+      <ColorPicker value="FF00FF" onChange={color => window.alert('Selected color: ' + color)} predefinedColors={['#FF0000', '#00FF00', '#0000FF']} />
+    </div>
+
+    <div>
+      <h3 className="text-sm font-medium mb-2">Without colors</h3>
+      <ColorPicker value="0000FF" onChange={color => window.alert('Selected color: ' + color)} disableDefaultColors />
+    </div>
+  </div>`,...(u=(d=t.parameters)==null?void 0:d.docs)==null?void 0:u.source}}};const B=["Default"];export{t as Default,B as __namedExportsOrder,S as default};

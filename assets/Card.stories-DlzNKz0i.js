@@ -1,0 +1,6 @@
+import{C as o}from"./Card-DKGsw4s_.js";import{R as t}from"./index-D4H_InIO.js";import"./clsx-B-dksMZM.js";const e=()=>t.createElement("div",{className:"flex flex-col items-center justify-center"},t.createElement(o,{className:"max-w-[300px]"},"Voluptate et nisi aliquam. Sed sint error. Ab molestiae exercitationem. Aperiam soluta sed sint velit autem cupiditate at. Enim omnis occaecati nostrum earum sed voluptate. Porro quo consectetur. Voluptate et nisi aliquam."));e.storyName="Card";const c={title:"Components/Card"};e.__docgenInfo={description:"",methods:[],displayName:"Default"};var a,s,r;e.parameters={...e.parameters,docs:{...(a=e.parameters)==null?void 0:a.docs,source:{originalSource:`() => <div className="flex flex-col items-center justify-center">
+    <Card className="max-w-[300px]">
+      Voluptate et nisi aliquam. Sed sint error. Ab molestiae exercitationem. Aperiam soluta sed sint velit autem
+      cupiditate at. Enim omnis occaecati nostrum earum sed voluptate. Porro quo consectetur. Voluptate et nisi aliquam.
+    </Card>
+  </div>`,...(r=(s=e.parameters)==null?void 0:s.docs)==null?void 0:r.source}}};const l=["Default"];export{e as Default,l as __namedExportsOrder,c as default};
