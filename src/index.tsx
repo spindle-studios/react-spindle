@@ -1553,7 +1553,7 @@ const ToastContext = createContext<
   { addToast: (toast: ToastOptions) => void; removeToast: (id: string) => void } | undefined
 >(undefined);
 
-export const OtioProvider: React.FC<
+export const SpindleProvider: React.FC<
   PropsWithChildren<{
     options?: {
       toast?: {
@@ -1601,7 +1601,7 @@ export const OtioProvider: React.FC<
 export const useToastContext = () => {
   const context = useContext(ToastContext);
   if (!context) {
-    throw new Error('useToastContext must be used within an OtioProvider');
+    throw new Error('useToastContext must be used within a SpindleProvider');
   }
   return context;
 };

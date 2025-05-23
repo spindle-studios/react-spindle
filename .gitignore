@@ -14,6 +14,7 @@ pages
 dist-ssr
 *.local
 .cache
+storybook-static
 
 # Editor directories and files
 .vscode/*

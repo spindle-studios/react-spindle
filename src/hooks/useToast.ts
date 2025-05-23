@@ -1,4 +1,4 @@
-import { useToastContext } from '@providers/Otio';
+import { useToastContext } from '@providers/Spindle';
 
 export const useToast = () => {
   const { addToast } = useToastContext();

@@ -1,9 +1,9 @@
-> [!IMPORTANT]
-> This package is built for personal use, whilst it's available to use by others its primary goal is to combine some personal project code into one repository for reusability purposes.
+> [!NOTE]
+> This package is maintained by Spindle Studios and is used across our projects. While it's publicly available, it's primarily designed for our internal use cases.
 
 ### 👋🏽 About
 
-`react-otio` provides a collection of React components and hooks styled with Tailwind and heavily based on [Shadcn](https://github.com/shadcn-ui/ui).
+`react-spindle` is a collection of React components and hooks styled with Tailwind and heavily based on [Shadcn](https://github.com/shadcn-ui/ui). It's maintained by Spindle Studios and used across our projects.
 
 ### 🔗 Peer Dependencies
 
@@ -21,11 +21,11 @@ Make sure these are installed in your project:
 ### 🔽 Installation
 
 ```bash
-npm install @olafkotur/react-otio
+npm install @spindle-studios/react-spindle
 ```
 
 ```bash
-yarn add @olafkotur/react-otio
+yarn add @spindle-studios/react-spindle
 ```
 
 ### 🔨 Setup
@@ -76,7 +76,7 @@ yarn add @olafkotur/react-otio
 ```js
 /** @type {import('tailwindcss').Config} */
 export default {
-  content: ['./src/**/*.{js,ts,jsx,tsx}', './node_modules/@olafkotur/react-otio/**/*.js'],
+  content: ['./src/**/*.{js,ts,jsx,tsx}', './node_modules/@spindle-studios/react-spindle/**/*.js'],
   theme: {
     extend: {
       scale: {
@@ -135,19 +135,19 @@ export default {
 #### After installing and configuring Tailwind, simply import and use the components:
 
 ```tsx
-import { Button } from 'react-otio';
+import { Button } from 'react-spindle';
 
 const Example: React.FC = () => {
   return <Button>Click me</Button>;
 };
 ```
 
-#### If you plan to use `Toast` and `useToast` you must also use an `OtioProvider`
+#### If you plan to use `Toast` and `useToast` you must also use a `SpindleProvider`
 
 ```tsx
-import { OtioProvider } from 'react-otio';
+import { SpindleProvider } from 'react-spindle';
 
 const App: React.FC = ({ children }) => {
-  return <OtioProvider options={{ toast: { position: 'bottom-left' } }}>{children}</OtioProvider>;
+  return <SpindleProvider options={{ toast: { position: 'bottom-left' } }}>{children}</SpindleProvider>;
 };
 ```

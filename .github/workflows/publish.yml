@@ -23,7 +23,7 @@ jobs:
       - name: Get Last Version
         id: last_version
         run: |
-          LAST_VERSION=$(npm view @olafkotur/react-otio version --registry https://registry.npmjs.org)
+          LAST_VERSION=$(npm view @spindle-studios/react-spindle version --registry https://registry.npmjs.org)
           echo "last_version=$LAST_VERSION" >> $GITHUB_ENV
         env:
           NODE_AUTH_TOKEN: ${{ secrets.GH_TOKEN }}

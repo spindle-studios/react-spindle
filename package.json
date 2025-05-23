@@ -1,6 +1,7 @@
 {
-  "name": "@olafkotur/react-otio",
+  "name": "@spindle-studios/react-spindle",
   "description": "A component library for React",
+  "homepage": "https://spindle-studios.github.io/react-spindle",
   "version": "0.5.4",
   "license": "MIT",
   "main": "build/index.js",
@@ -12,7 +13,7 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/olafkotur/react-otio.git"
+    "url": "git+https://github.com/spindle-studios/react-spindle.git"
   },
   "publishConfig": {
     "registry": "https://npm.pkg.github.com"
@@ -26,7 +27,9 @@
   },
   "scripts": {
     "start": "storybook dev -p 3000",
-    "build": "rm -rf ./build && rollup -c"
+    "package": "rm -rf ./build && rollup -c",
+    "build": "storybook build -o storybook-static",
+    "deploy": "gh-pages -d storybook-static"
   },
   "peerDependencies": {
     "react": "^18.3.1",
@@ -49,6 +52,7 @@
     "@radix-ui/react-tooltip": "^1.1.4",
     "clsx": "^2.1.1",
     "date-fns": "^2.30.0",
+    "gh-pages": "^6.3.0",
     "lucide-react": "^0.468.0",
     "react-day-picker": "^8.7.1",
     "react-virtual": "^2.10.4"
