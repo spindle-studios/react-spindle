@@ -1,1 +1,0 @@
-import{c as a}from"./clsx-B-dksMZM.js";import{R as r}from"./index-D4H_InIO.js";const t=r.forwardRef(({className:e,...d},o)=>r.createElement("div",{ref:o,className:a("border border-border bg-card text-card-foreground rounded-md p-4",e),...d}));t.__docgenInfo={description:"",methods:[],displayName:"Card"};export{t as C};
