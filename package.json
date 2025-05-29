@@ -2,7 +2,7 @@
   "name": "@spindle-studios/react-spindle",
   "description": "A component library for React",
   "homepage": "https://spindle-studios.github.io/react-spindle",
-  "version": "0.5.6",
+  "version": "0.6.0",
   "license": "MIT",
   "main": "build/index.js",
   "module": "build/index.js",
@@ -55,7 +55,8 @@
     "gh-pages": "^6.3.0",
     "lucide-react": "^0.468.0",
     "react-day-picker": "^8.7.1",
-    "react-virtual": "^2.10.4"
+    "react-virtual": "^2.10.4",
+    "recharts": "^2.15.3"
   },
   "devDependencies": {
     "@eslint/js": "^9.15.0",
