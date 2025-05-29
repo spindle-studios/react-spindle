@@ -42,6 +42,7 @@ const importMap = new Map();
 const reactNamedImports = new Set();
 let hasDefaultReactImport = false;
 let codeLines = [];
+let rechartsImports = new Set();
 
 for (const file of allFiles) {
   const content = fs.readFileSync(file, 'utf8');

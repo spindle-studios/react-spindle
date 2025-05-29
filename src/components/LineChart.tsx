@@ -1,15 +1,6 @@
 import clsx from 'clsx';
 import React from 'react';
-import {
-  CartesianGrid,
-  Legend,
-  Line,
-  LineChart as RechartsLineChart,
-  ResponsiveContainer,
-  Tooltip,
-  XAxis,
-  YAxis,
-} from 'recharts';
+import * as Recharts from 'recharts';
 import { Card } from './Card';
 
 export interface DataPoint {
@@ -55,8 +46,8 @@ export const LineChart = React.forwardRef<HTMLDivElement, LineChartProps>(
   ) => {
     return (
       <Card ref={ref} className={clsx('p-4', className)}>
-        <ResponsiveContainer width="100%" height={height}>
-          <RechartsLineChart
+        <Recharts.ResponsiveContainer width="100%" height={height}>
+          <Recharts.LineChart
             data={data}
             margin={
               minimal
@@ -69,9 +60,11 @@ export const LineChart = React.forwardRef<HTMLDivElement, LineChartProps>(
                   }
             }
           >
-            {!minimal && showGrid && <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" opacity={0.2} />}
+            {!minimal && showGrid && (
+              <Recharts.CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" opacity={0.2} />
+            )}
             {!minimal && (
-              <XAxis
+              <Recharts.XAxis
                 dataKey="name"
                 stroke="hsl(var(--foreground))"
                 tick={{ fill: 'hsl(var(--foreground))' }}
@@ -87,7 +80,7 @@ export const LineChart = React.forwardRef<HTMLDivElement, LineChartProps>(
               />
             )}
             {!minimal && (
-              <YAxis
+              <Recharts.YAxis
                 stroke="hsl(var(--foreground))"
                 tick={{ fill: 'hsl(var(--foreground))' }}
                 label={
@@ -103,7 +96,7 @@ export const LineChart = React.forwardRef<HTMLDivElement, LineChartProps>(
               />
             )}
             {showTooltip && (
-              <Tooltip
+              <Recharts.Tooltip
                 contentStyle={{
                   backgroundColor: 'hsl(var(--card))',
                   border: '1px solid hsl(var(--border))',
@@ -114,14 +107,14 @@ export const LineChart = React.forwardRef<HTMLDivElement, LineChartProps>(
               />
             )}
             {!minimal && showLegend && (
-              <Legend
+              <Recharts.Legend
                 wrapperStyle={{
                   color: 'hsl(var(--foreground))',
                 }}
               />
             )}
             {lines.map((line) => (
-              <Line
+              <Recharts.Line
                 key={line.key}
                 type="monotone"
                 dataKey={line.key}
@@ -133,8 +126,8 @@ export const LineChart = React.forwardRef<HTMLDivElement, LineChartProps>(
                 animationDuration={animationDuration}
               />
             ))}
-          </RechartsLineChart>
-        </ResponsiveContainer>
+          </Recharts.LineChart>
+        </Recharts.ResponsiveContainer>
       </Card>
     );
   },

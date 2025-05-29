@@ -27,7 +27,7 @@
   },
   "scripts": {
     "start": "storybook dev -p 3000",
-    "package": "rm -rf ./build && rollup -c",
+    "package": "node build.js && rm -rf ./build && rollup -c",
     "build": "storybook build -o storybook-static",
     "deploy": "gh-pages -d storybook-static"
   },

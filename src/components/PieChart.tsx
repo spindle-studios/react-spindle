@@ -1,6 +1,6 @@
 import clsx from 'clsx';
 import React from 'react';
-import { Cell, Legend, Pie, PieChart as RechartsPieChart, ResponsiveContainer, Tooltip } from 'recharts';
+import * as Recharts from 'recharts';
 import { Card } from './Card';
 
 export interface PieChartData {
@@ -50,9 +50,9 @@ export const PieChart = React.forwardRef<HTMLDivElement, PieChartProps>(
   ) => {
     return (
       <Card ref={ref} className={clsx('p-4', className)}>
-        <ResponsiveContainer width="100%" height={height}>
-          <RechartsPieChart>
-            <Pie
+        <Recharts.ResponsiveContainer width="100%" height={height}>
+          <Recharts.PieChart>
+            <Recharts.Pie
               data={data}
               cx="50%"
               cy="50%"
@@ -63,24 +63,24 @@ export const PieChart = React.forwardRef<HTMLDivElement, PieChartProps>(
               animationDuration={animationDuration}
             >
               {data.map((entry, index) => (
-                <Cell
+                <Recharts.Cell
                   key={`cell-${index}`}
                   fill={entry.color || `hsl(var(--primary))`}
                   stroke="hsl(var(--card))"
                   strokeWidth={2}
                 />
               ))}
-            </Pie>
-            {showTooltip && <Tooltip content={<CustomTooltip />} />}
+            </Recharts.Pie>
+            {showTooltip && <Recharts.Tooltip content={<CustomTooltip />} />}
             {showLegend && (
-              <Legend
+              <Recharts.Legend
                 wrapperStyle={{
                   color: 'hsl(var(--foreground))',
                 }}
               />
             )}
-          </RechartsPieChart>
-        </ResponsiveContainer>
+          </Recharts.PieChart>
+        </Recharts.ResponsiveContainer>
       </Card>
     );
   },

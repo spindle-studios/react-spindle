@@ -6,6 +6,7 @@ import { DayPicker } from 'react-day-picker';
 import * as CheckboxPrimitive from '@radix-ui/react-checkbox';
 import * as Collapsible from '@radix-ui/react-collapsible';
 import * as DropdownMenuPrimitive from '@radix-ui/react-dropdown-menu';
+import * as Recharts from 'recharts';
 import * as DialogPrimitive from '@radix-ui/react-dialog';
 import * as PopoverPrimitive from '@radix-ui/react-popover';
 import * as ScrollAreaPrimitive from '@radix-ui/react-scroll-area';
@@ -578,6 +579,137 @@ export const Input = React.forwardRef<
 });
 
 
+export interface DataPoint {
+  name: string;
+  [key: string]: any;
+}
+
+export interface LineChartProps {
+  data: DataPoint[];
+  lines: {
+    key: string;
+    color?: string;
+    strokeWidth?: number;
+    name?: string;
+  }[];
+  height?: number;
+  className?: string;
+  showGrid?: boolean;
+  showLegend?: boolean;
+  showTooltip?: boolean;
+  xAxisLabel?: string;
+  yAxisLabel?: string;
+  animationDuration?: number;
+  minimal?: boolean;
+}
+
+export const LineChart = React.forwardRef<HTMLDivElement, LineChartProps>(
+  (
+    {
+      data,
+      lines,
+      height = 400,
+      className,
+      showGrid = true,
+      showLegend = true,
+      showTooltip = true,
+      xAxisLabel,
+      yAxisLabel,
+      animationDuration = 500,
+      minimal = false,
+    },
+    ref,
+  ) => {
+    return (
+      <Card ref={ref} className={clsx('p-4', className)}>
+        <Recharts.ResponsiveContainer width="100%" height={height}>
+          <Recharts.LineChart
+            data={data}
+            margin={
+              minimal
+                ? { top: 5, right: 5, left: 5, bottom: 5 }
+                : {
+                    top: 20,
+                    right: 30,
+                    left: 20,
+                    bottom: 20,
+                  }
+            }
+          >
+            {!minimal && showGrid && (
+              <Recharts.CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" opacity={0.2} />
+            )}
+            {!minimal && (
+              <Recharts.XAxis
+                dataKey="name"
+                stroke="hsl(var(--foreground))"
+                tick={{ fill: 'hsl(var(--foreground))' }}
+                label={
+                  xAxisLabel
+                    ? {
+                        value: xAxisLabel,
+                        position: 'bottom',
+                        fill: 'hsl(var(--foreground))',
+                      }
+                    : undefined
+                }
+              />
+            )}
+            {!minimal && (
+              <Recharts.YAxis
+                stroke="hsl(var(--foreground))"
+                tick={{ fill: 'hsl(var(--foreground))' }}
+                label={
+                  yAxisLabel
+                    ? {
+                        value: yAxisLabel,
+                        angle: -90,
+                        position: 'insideLeft',
+                        fill: 'hsl(var(--foreground))',
+                      }
+                    : undefined
+                }
+              />
+            )}
+            {showTooltip && (
+              <Recharts.Tooltip
+                contentStyle={{
+                  backgroundColor: 'hsl(var(--card))',
+                  border: '1px solid hsl(var(--border))',
+                  borderRadius: 'var(--radius)',
+                  color: 'hsl(var(--foreground))',
+                }}
+                labelStyle={{ color: 'hsl(var(--foreground))' }}
+              />
+            )}
+            {!minimal && showLegend && (
+              <Recharts.Legend
+                wrapperStyle={{
+                  color: 'hsl(var(--foreground))',
+                }}
+              />
+            )}
+            {lines.map((line) => (
+              <Recharts.Line
+                key={line.key}
+                type="monotone"
+                dataKey={line.key}
+                name={line.name || line.key}
+                stroke={line.color || 'hsl(var(--primary))'}
+                strokeWidth={line.strokeWidth || 2}
+                dot={minimal ? false : { fill: 'hsl(var(--card))', stroke: line.color || 'hsl(var(--primary))' }}
+                activeDot={minimal ? false : { r: 8, fill: line.color || 'hsl(var(--primary))' }}
+                animationDuration={animationDuration}
+              />
+            ))}
+          </Recharts.LineChart>
+        </Recharts.ResponsiveContainer>
+      </Card>
+    );
+  },
+);
+
+
 export const Loader: React.FC<{
   size?: 'sm' | 'md' | 'lg';
   variant?: 'primary' | 'secondary';
@@ -653,6 +785,90 @@ export const Modal: React.FC<
     </DialogPrimitive.Root>
   );
 };
+
+
+export interface PieChartData {
+  name: string;
+  value: number;
+  color?: string;
+}
+
+export interface PieChartProps {
+  data: PieChartData[];
+  height?: number;
+  className?: string;
+  showLegend?: boolean;
+  showTooltip?: boolean;
+  innerRadius?: number;
+  outerRadius?: number;
+  animationDuration?: number;
+  paddingAngle?: number;
+}
+
+const CustomTooltip = ({ active, payload }: any) => {
+  if (active && payload && payload.length) {
+    return (
+      <div className="bg-card border border-border rounded-md p-2 text-foreground">
+        <p className="font-medium">{payload[0].name}</p>
+        <p className="text-sm">{payload[0].value}</p>
+      </div>
+    );
+  }
+  return null;
+};
+
+export const PieChart = React.forwardRef<HTMLDivElement, PieChartProps>(
+  (
+    {
+      data,
+      height = 400,
+      className,
+      showLegend = true,
+      showTooltip = true,
+      innerRadius = 0,
+      outerRadius = '80%',
+      animationDuration = 500,
+      paddingAngle = 0,
+    },
+    ref,
+  ) => {
+    return (
+      <Card ref={ref} className={clsx('p-4', className)}>
+        <Recharts.ResponsiveContainer width="100%" height={height}>
+          <Recharts.PieChart>
+            <Recharts.Pie
+              data={data}
+              cx="50%"
+              cy="50%"
+              innerRadius={innerRadius}
+              outerRadius={outerRadius}
+              paddingAngle={paddingAngle}
+              dataKey="value"
+              animationDuration={animationDuration}
+            >
+              {data.map((entry, index) => (
+                <Recharts.Cell
+                  key={`cell-${index}`}
+                  fill={entry.color || `hsl(var(--primary))`}
+                  stroke="hsl(var(--card))"
+                  strokeWidth={2}
+                />
+              ))}
+            </Recharts.Pie>
+            {showTooltip && <Recharts.Tooltip content={<CustomTooltip />} />}
+            {showLegend && (
+              <Recharts.Legend
+                wrapperStyle={{
+                  color: 'hsl(var(--foreground))',
+                }}
+              />
+            )}
+          </Recharts.PieChart>
+        </Recharts.ResponsiveContainer>
+      </Card>
+    );
+  },
+);
 
 
 export const Popover: React.FC<
