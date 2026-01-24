@@ -21,7 +21,7 @@ export interface PieChartProps {
   paddingAngle?: number;
 }
 
-const CustomTooltip = ({ active, payload }: any) => {
+const CustomPieChartTooltip = ({ active, payload }: any) => {
   if (active && payload && payload.length) {
     return (
       <div className="bg-card border border-border rounded-md p-2 text-foreground">
@@ -71,7 +71,7 @@ export const PieChart = React.forwardRef<HTMLDivElement, PieChartProps>(
                 />
               ))}
             </Recharts.Pie>
-            {showTooltip && <Recharts.Tooltip content={<CustomTooltip />} />}
+            {showTooltip && <Recharts.Tooltip content={<CustomPieChartTooltip />} />}
             {showLegend && (
               <Recharts.Legend
                 wrapperStyle={{

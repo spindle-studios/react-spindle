@@ -27,6 +27,26 @@ export interface LineChartProps {
   minimal?: boolean;
 }
 
+const CustomLineChartTooltip = ({ active, payload, label, data }: any) => {
+  if (active && payload && payload.length) {
+    let displayLabel = label;
+    if (typeof label === 'number' && Array.isArray(data) && data[label] && data[label].name) {
+      displayLabel = data[label].name;
+    }
+    return (
+      <div className="bg-card border border-border rounded-md p-2 text-foreground">
+        <p className="font-medium">{displayLabel}</p>
+        {payload.map((entry: any, index: number) => (
+          <p key={index} className="text-sm" style={{ color: entry.color }}>
+            {entry.name}: {entry.value}
+          </p>
+        ))}
+      </div>
+    );
+  }
+  return null;
+};
+
 export const LineChart = React.forwardRef<HTMLDivElement, LineChartProps>(
   (
     {
@@ -97,13 +117,13 @@ export const LineChart = React.forwardRef<HTMLDivElement, LineChartProps>(
             )}
             {showTooltip && (
               <Recharts.Tooltip
+                content={<CustomLineChartTooltip data={data} />}
                 contentStyle={{
                   backgroundColor: 'hsl(var(--card))',
                   border: '1px solid hsl(var(--border))',
                   borderRadius: 'var(--radius)',
                   color: 'hsl(var(--foreground))',
                 }}
-                labelStyle={{ color: 'hsl(var(--foreground))' }}
               />
             )}
             {!minimal && showLegend && (
