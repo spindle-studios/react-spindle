@@ -135,7 +135,7 @@ export default {
 #### After installing and configuring Tailwind, simply import and use the components:
 
 ```tsx
-import { Button } from 'react-spindle';
+import { Button } from '@spindle-studios/react-spindle';
 
 const Example: React.FC = () => {
   return <Button>Click me</Button>;
@@ -145,7 +145,7 @@ const Example: React.FC = () => {
 #### If you plan to use `Toast` and `useToast` you must also use a `SpindleProvider`
 
 ```tsx
-import { SpindleProvider } from 'react-spindle';
+import { SpindleProvider } from '@spindle-studios/react-spindle';
 
 const App: React.FC = ({ children }) => {
   return <SpindleProvider options={{ toast: { position: 'bottom-left' } }}>{children}</SpindleProvider>;
