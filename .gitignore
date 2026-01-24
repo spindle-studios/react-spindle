@@ -1,38 +1,17 @@
-# Environment variables
-.env
-.env.*
-
-# Logs
-logs
-*.log
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-pnpm-debug.log*
-lerna-debug.log*
-
+# Dependencies
 node_modules
-dist
-build
-pages
-dist-ssr
-*.local
-.cache
-storybook-static
 
+# Build output
+build
+storybook-static
+.cache
+
+# Yarn
 .yarn/install-state.gz
 .yarn/build-state.yml
 
-# Editor directories and files
-.vscode/*
-!.vscode/extensions.json
-.idea
+# Editor
+.vscode
+
+# OS
 .DS_Store
-*.suo
-*.ntvs*
-*.njsproj
-*.sln
-*.sw?
-
-
-shadcn
