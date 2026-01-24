@@ -1,0 +1,17 @@
+import{c as p}from"./clsx-B-dksMZM.js";import{R as e}from"./index-DQDNmYQF.js";import{C as f}from"./Card-D4JKBJRj.js";import{I as r}from"./Icon-DKM_MZHR.js";import"./iframe-DJsnAtT2.js";import"../sb-preview/runtime.js";const t=e.forwardRef(({className:s,icon:m,children:c,variant:i="primary",...u},d)=>e.createElement(f,{ref:d,className:p("flex items-center gap-3 text-sm",{"bg-primary/10 text-primary":i==="primary","bg-secondary/10 text-secondary":i==="secondary","bg-destructive/10 text-destructive":i==="destructive","border border-border bg-background":i==="outline","bg-accent/10":i==="ghost"},s),...u},e.createElement("div",{className:"flex-shrink-0 px-1"},m),e.createElement("div",{className:"flex-1"},c)));t.__docgenInfo={description:"",methods:[],displayName:"Callout",props:{icon:{required:!0,tsType:{name:"ReactReactNode",raw:"React.ReactNode"},description:""},variant:{required:!1,tsType:{name:"union",raw:"'primary' | 'secondary' | 'destructive' | 'outline' | 'ghost'",elements:[{name:"literal",value:"'primary'"},{name:"literal",value:"'secondary'"},{name:"literal",value:"'destructive'"},{name:"literal",value:"'outline'"},{name:"literal",value:"'ghost'"}]},description:"",defaultValue:{value:"'primary'",computed:!1}}}};const a=()=>e.createElement("div",{className:"flex flex-col items-start gap-2 max-w-[500px]"},e.createElement(t,{icon:e.createElement(r,{name:"Info",size:24}),variant:"primary"},"Voluptate et nisi aliquam. Sed sint error. Ab molestiae exercitationem."),e.createElement(t,{icon:e.createElement(r,{name:"Info",size:24}),variant:"secondary"},"Voluptate et nisi aliquam. Sed sint error. Ab molestiae exercitationem."),e.createElement(t,{icon:e.createElement(r,{name:"Info",size:24}),variant:"destructive"},"Voluptate et nisi aliquam. Sed sint error. Ab molestiae exercitationem."),e.createElement(t,{icon:e.createElement(r,{name:"Info",size:24}),variant:"outline"},"Voluptate et nisi aliquam. Sed sint error. Ab molestiae exercitationem."),e.createElement(t,{icon:e.createElement(r,{name:"Info",size:24}),variant:"ghost"},"Voluptate et nisi aliquam. Sed sint error. Ab molestiae exercitationem."));a.storyName="Callout";const g={title:"Components/Callout"};a.__docgenInfo={description:"",methods:[],displayName:"Default"};var o,n,l;a.parameters={...a.parameters,docs:{...(o=a.parameters)==null?void 0:o.docs,source:{originalSource:`() => <div className="flex flex-col items-start gap-2 max-w-[500px]">
+    <Callout icon={<Icon name="Info" size={24} />} variant="primary">
+      Voluptate et nisi aliquam. Sed sint error. Ab molestiae exercitationem.
+    </Callout>
+    <Callout icon={<Icon name="Info" size={24} />} variant="secondary">
+      Voluptate et nisi aliquam. Sed sint error. Ab molestiae exercitationem.
+    </Callout>
+    <Callout icon={<Icon name="Info" size={24} />} variant="destructive">
+      Voluptate et nisi aliquam. Sed sint error. Ab molestiae exercitationem.
+    </Callout>
+    <Callout icon={<Icon name="Info" size={24} />} variant="outline">
+      Voluptate et nisi aliquam. Sed sint error. Ab molestiae exercitationem.
+    </Callout>
+    <Callout icon={<Icon name="Info" size={24} />} variant="ghost">
+      Voluptate et nisi aliquam. Sed sint error. Ab molestiae exercitationem.
+    </Callout>
+  </div>`,...(l=(n=a.parameters)==null?void 0:n.docs)==null?void 0:l.source}}};const E=["Default"];export{a as Default,E as __namedExportsOrder,g as default};
