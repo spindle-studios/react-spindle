@@ -1,7 +1,9 @@
 name: publish
 
 on:
-  workflow_dispatch: # Manual trigger
+  push:
+    branches:
+      - main
 
 jobs:
   publish:
@@ -14,6 +16,7 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '20'
+          registry-url: 'https://npm.pkg.github.com'
 
       - name: Enable Corepack
         run: corepack enable
@@ -23,50 +26,43 @@ jobs:
         env:
           NODE_AUTH_TOKEN: ${{ secrets.GH_TOKEN }}
 
-      - name: Get Last Version
-        id: last_version
-        run: |
-          LAST_VERSION=$(npm view @spindle-studios/react-spindle version --registry https://npm.pkg.github.com 2>/dev/null || echo "0.0.0")
-          echo "last_version=$LAST_VERSION" >> $GITHUB_ENV
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.GH_TOKEN }}
-
-      - name: Check Current Version
-        id: current_version
+      - name: Check Versions
+        id: check_version
         run: |
           CURRENT_VERSION=$(node -p "require('./package.json').version")
-          echo "current_version=$CURRENT_VERSION" >> $GITHUB_ENV
-
-      - name: Compare and Bump Version
-        if: env.last_version == env.current_version
-        run: |
-          echo "Current version ($CURRENT_VERSION) matches the last published version ($LAST_VERSION). Bumping patch..."
-          npm version patch --no-git-tag-version
+          PUBLISHED_VERSION=$(npm view @spindle-studios/react-spindle version --registry https://npm.pkg.github.com 2>/dev/null || echo "0.0.0")
+          echo "current=$CURRENT_VERSION" >> $GITHUB_OUTPUT
+          echo "published=$PUBLISHED_VERSION" >> $GITHUB_OUTPUT
+          if [ "$CURRENT_VERSION" != "$PUBLISHED_VERSION" ]; then
+            echo "should_publish=true" >> $GITHUB_OUTPUT
+            echo "Version changed: $PUBLISHED_VERSION -> $CURRENT_VERSION"
+          else
+            echo "should_publish=false" >> $GITHUB_OUTPUT
+            echo "Version unchanged ($CURRENT_VERSION), skipping publish"
+          fi
         env:
           NODE_AUTH_TOKEN: ${{ secrets.GH_TOKEN }}
 
       - name: Run Build Script
+        if: steps.check_version.outputs.should_publish == 'true'
         run: node build.js
 
       - name: Yarn Build
+        if: steps.check_version.outputs.should_publish == 'true'
         run: yarn build
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.GH_TOKEN }}
 
       - name: Publish Package
+        if: steps.check_version.outputs.should_publish == 'true'
         run: npm publish --access restricted
         env:
           NODE_AUTH_TOKEN: ${{ secrets.GH_TOKEN }}
 
-      - name: Commit and Push Changes
+      - name: Create Git Tag
+        if: steps.check_version.outputs.should_publish == 'true'
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add package.json
-          # Check if there are changes to commit
-          if git diff --cached --quiet; then
-            echo "No changes to commit. Skipping."
-          else
-            git commit -m "Bump version and publish changes"
-            git push origin main
-          fi
+          git tag "v${{ steps.check_version.outputs.current }}"
+          git push origin "v${{ steps.check_version.outputs.current }}"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
