@@ -1,3 +1,5 @@
+[![publish](https://github.com/spindle-studios/react-spindle/actions/workflows/publish.yml/badge.svg)](https://github.com/spindle-studios/react-spindle/actions/workflows/publish.yml)
+
 > [!NOTE]
 > This package is maintained by Spindle Studios and is used across our projects. While it's publicly available, it's primarily designed for our internal use cases.
 
