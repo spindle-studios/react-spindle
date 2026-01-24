@@ -20,6 +20,9 @@ dist-ssr
 .cache
 storybook-static
 
+.yarn/install-state.gz
+.yarn/build-state.yml
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json
