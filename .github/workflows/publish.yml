@@ -43,13 +43,9 @@ jobs:
         env:
           NODE_AUTH_TOKEN: ${{ secrets.GH_TOKEN }}
 
-      - name: Run Build Script
+      - name: Build Package
         if: steps.check_version.outputs.should_publish == 'true'
-        run: node build.js
-
-      - name: Yarn Build
-        if: steps.check_version.outputs.should_publish == 'true'
-        run: yarn build
+        run: yarn package
 
       - name: Publish Package
         if: steps.check_version.outputs.should_publish == 'true'
