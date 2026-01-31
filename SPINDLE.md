@@ -2,6 +2,86 @@
 
 > LLM-optimized documentation for @spindle-studios/react-spindle
 
+---
+
+## Quick Lookup
+
+| Component | Category | Line |
+|-----------|----------|------|
+| Input | Form Inputs | ~50 |
+| Textarea | Form Inputs | ~70 |
+| Checkbox | Form Inputs | ~90 |
+| Switch | Form Inputs | ~110 |
+| Slider | Form Inputs | ~130 |
+| Select | Form Inputs | ~150 |
+| File | Form Inputs | ~180 |
+| Calendar | Form Inputs | ~205 |
+| ColorPicker | Form Inputs | ~225 |
+| Password | Form Inputs | ~245 |
+| Email | Form Inputs | ~295 |
+| DatePicker | Form Inputs | ~330 |
+| Button | Buttons & Actions | ~375 |
+| Dropdown | Buttons & Actions | ~405 |
+| Card | Layout & Containers | ~440 |
+| Callout | Layout & Containers | ~455 |
+| Divider | Layout & Containers | ~475 |
+| Scrollable | Layout & Containers | ~490 |
+| Collapse | Layout & Containers | ~510 |
+| Modal | Overlays & Modals | ~530 |
+| Sheet | Overlays & Modals | ~555 |
+| Popover | Overlays & Modals | ~575 |
+| Tooltip | Overlays & Modals | ~600 |
+| Avatar | Feedback | ~620 |
+| Toast | Feedback | ~645 |
+| Loader | Feedback | ~690 |
+| Badge | Feedback | ~710 |
+| Notification | Feedback | ~730 |
+| Table | Data Display | ~760 |
+| LineChart | Data Display | ~800 |
+| PieChart | Data Display | ~840 |
+| Statistic | Data Display | ~875 |
+| Segment | Navigation | ~915 |
+| Pagination | Navigation | ~950 |
+| Icon | Utility | ~1000 |
+
+| Hook | Line |
+|------|------|
+| useBreakpoints | ~1030 |
+| useDebounce | ~1050 |
+| useEnvironment | ~1065 |
+| useOnClickout | ~1080 |
+| useOnKeypress | ~1095 |
+| useTimeout | ~1115 |
+| useToast | ~1130 |
+| Formatting Hooks | ~1150 |
+
+| Section | Line |
+|---------|------|
+| Theming | ~1180 |
+| Common Patterns | ~1270 |
+| Setup | ~1440 |
+
+---
+
+## Table of Contents
+
+- [Overview](#overview)
+- [Components by Category](#components-by-category)
+  - [Form Inputs](#form-inputs) - Input, Textarea, Checkbox, Switch, Slider, Select, File, Calendar, ColorPicker, Password, Email, DatePicker
+  - [Buttons & Actions](#buttons--actions) - Button, Dropdown
+  - [Layout & Containers](#layout--containers) - Card, Callout, Divider, Scrollable, Collapse
+  - [Overlays & Modals](#overlays--modals) - Modal, Sheet, Popover, Tooltip
+  - [Feedback](#feedback) - Avatar, Toast, Loader, Badge, Notification
+  - [Data Display](#data-display) - Table, LineChart, PieChart, Statistic
+  - [Navigation](#navigation) - Segment, Pagination
+  - [Utility](#utility) - Icon
+- [Hooks](#hooks) - useBreakpoints, useDebounce, useEnvironment, useOnClickout, useOnKeypress, useTimeout, useToast, Formatting
+- [Theming](#theming) - CSS Variables, Variable Usage, Theme Switching
+- [Common Patterns](#common-patterns) - Form, Modal, Table, Dashboard, Toast, Popover examples
+- [Setup](#setup) - Installation, CSS Import, Tailwind Config, Provider
+
+---
+
 ## Overview
 
 React Spindle is a component library built on Radix UI primitives with Tailwind CSS styling. All components use CSS variables for theming and support dark/light modes.
@@ -203,6 +283,123 @@ Color selection with predefined palette and hex input.
 
 **Default colors:** #FFFFFF, #94A3B8, #000000, #3B82F6, #10B981, #8B5CF6, #EF4444, #14B8A6
 
+#### Password
+Password input with configurable validation requirements and visibility toggle.
+
+```tsx
+const [password, setPassword] = useState('');
+
+<Password
+  value={password}
+  onChange={setPassword}
+  label="Password"
+  onValidate={(isValid) => console.log('Valid:', isValid)}
+  requirements={{
+    minLength: 8,
+    maxLength: 64,
+    requireUppercase: true,
+    requireLowercase: true,
+    requireNumber: true,
+    requireSpecial: true,
+  }}
+/>
+```
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| value | string | required | Current password value |
+| onChange | (value: string) => void | required | Value change handler |
+| onValidate | (isValid: boolean) => void | - | Validation status callback |
+| onKeyDown | (e: KeyboardEvent) => void | - | Key down handler |
+| requirements | PasswordRequirementConfig | defaults | Validation requirements |
+| showRequirements | boolean | true | Show requirement checklist |
+| placeholder | string | 'Password' | Input placeholder |
+| label | string | - | Label above input |
+| size | 'lg' \| 'md' \| 'sm' | 'md' | Input size |
+
+**Requirement config:**
+```tsx
+{
+  minLength?: number;      // default: 8
+  maxLength?: number;      // default: 64
+  requireUppercase?: boolean;  // default: true
+  requireLowercase?: boolean;  // default: true
+  requireNumber?: boolean;     // default: false
+  requireSpecial?: boolean;    // default: true
+  specialChars?: string;       // default: '!@#$%^&*(),.?":{}|<>'
+}
+```
+
+#### Email
+Email input with validation indicator and optional custom validation.
+
+```tsx
+const [email, setEmail] = useState('');
+
+<Email
+  value={email}
+  onChange={setEmail}
+  label="Email address"
+  onValidate={(isValid) => console.log('Valid:', isValid)}
+/>
+
+// Custom validation
+<Email
+  value={email}
+  onChange={setEmail}
+  validate={(value) => value.endsWith('@company.com')}
+/>
+```
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| value | string | required | Current email value |
+| onChange | (value: string) => void | required | Value change handler |
+| onValidate | (isValid: boolean) => void | - | Validation status callback |
+| validate | (value: string) => boolean | - | Custom validation function |
+| placeholder | string | 'Email' | Input placeholder |
+| label | string | - | Label above input |
+| size | 'lg' \| 'md' \| 'sm' | 'md' | Input size |
+| showIcon | boolean | true | Show mail icon |
+| showValidation | boolean | true | Show validation indicator |
+
+#### DatePicker
+Date picker with optional time selection, built on Calendar and Popover.
+
+```tsx
+const [date, setDate] = useState<Date | null>(null);
+
+<DatePicker
+  value={date}
+  onChange={setDate}
+  label="Event date"
+  tooltip="When will the event occur?"
+/>
+
+// With time picker
+<DatePicker
+  value={date}
+  onChange={setDate}
+  label="Start time"
+  includeTime
+  quickTimeOptions={[9, 12, 15, 18, 21]}
+/>
+```
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| value | Date \| null | required | Selected date |
+| onChange | (value: Date) => void | required | Selection handler |
+| label | string | - | Label above button |
+| tooltip | string | - | Info tooltip next to label |
+| placeholder | string | 'Select a date' | Button placeholder text |
+| includeTime | boolean | false | Enable time selection step |
+| quickTimeOptions | number[] | [9,12,15,18,21] | Quick time presets |
+| locale | string | 'en-GB' | Date format locale |
+| minDate | Date | - | Minimum selectable date |
+| maxDate | Date | - | Maximum selectable date |
+| disabled | boolean | false | Disable interaction |
+
 ---
 
 ### Buttons & Actions
@@ -223,7 +420,7 @@ Primary interactive element with variants.
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
 | variant | 'primary' \| 'secondary' \| 'destructive' \| 'outline' \| 'ghost' \| 'icon' | 'primary' | Visual style |
-| size | 'lg' \| 'md' \| 'sm' | 'md' | Button size |
+| size | 'lg' \| 'md' \| 'sm' \| 'xs' | 'md' | Button size |
 | + all native button props |
 
 **Variant colors:**
@@ -420,6 +617,23 @@ Hover tooltip for additional info.
 
 ### Feedback
 
+#### Avatar
+User profile image with fallback support.
+
+```tsx
+<Avatar src="https://example.com/avatar.jpg" size="md" />
+<Avatar fallback="AB" size="lg" />
+<Avatar fallback={<Icon name="User" />} onClick={() => openProfile()} />
+```
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| src | string \| null | - | Image URL |
+| fallback | string \| ReactNode | - | Fallback content (initials or icon) |
+| size | 'xs' \| 'sm' \| 'md' \| 'lg' \| 'xl' | 'md' | Avatar size (16/24/40/56/80px) |
+| onClick | () => void | - | Click handler (renders as button) |
+| + native div/button props |
+
 #### Toast
 Temporary notification message. Requires SpindleProvider.
 
@@ -479,6 +693,33 @@ Small label for status/categorization.
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
 | variant | 'primary' \| 'secondary' \| 'destructive' \| 'outline' | 'primary' | Style |
+
+#### Notification
+Notification count badge with tooltip, for indicating unread items.
+
+```tsx
+// Basic usage
+<Notification value={5} />
+
+// With button
+<div className="relative inline-flex">
+  <Button variant="icon">
+    <Icon name="Bell" />
+  </Button>
+  <div className="absolute -top-1 -right-1">
+    <Notification value={3} size="sm" description="unread message" />
+  </div>
+</div>
+```
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| value | number | required | Count to display |
+| size | 'sm' \| 'md' \| 'lg' | 'sm' | Badge size |
+| max | number | 99 | Maximum before showing "99+" |
+| description | string | 'unread notification' | Tooltip text suffix |
+| showTooltip | boolean | true | Show tooltip on hover |
+| variant | 'destructive' \| 'primary' \| 'secondary' | 'destructive' | Color variant |
 
 ---
 
@@ -575,6 +816,38 @@ Pie/donut chart for proportional data.
 | showTooltip | boolean | true | Show hover tooltip |
 | paddingAngle | number | 0 | Gap between segments |
 
+#### Statistic
+Metric card displaying a value with optional icon, trend, and description.
+
+```tsx
+<Statistic
+  title="Total Users"
+  value="12,345"
+  icon="Users"
+  iconColor="#3B82F6"
+/>
+
+// With trend
+<Statistic
+  title="Revenue"
+  value="$45,678"
+  icon="DollarSign"
+  iconColor="#10B981"
+  trend={{ value: 12, direction: 'up' }}
+  description="Compared to last month"
+/>
+```
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| title | string | required | Metric label |
+| value | string \| number \| ReactNode | required | Metric value |
+| icon | string | - | Lucide icon name |
+| iconColor | string | hsl(var(--primary)) | Icon and background color |
+| description | string | - | Additional context text |
+| trend | { value: number, direction: 'up' \| 'down' } | - | Trend indicator |
+| variant | 'default' \| 'compact' | 'default' | Size variant |
+
 ---
 
 ### Navigation
@@ -608,6 +881,50 @@ Tab-like toggle group that shows corresponding children.
 | size | 'sm' \| 'md' \| 'lg' | 'md' | Button size |
 | onValueChange | (id: string) => void | - | Selection handler |
 | children | ReactNode[] | - | Content panels (matched by index) |
+
+#### Pagination
+Navigation controls for paginated data.
+
+```tsx
+const [page, setPage] = useState(1);
+
+<Pagination
+  data={{
+    page: page,
+    limit: 10,
+    total: 97,
+    totalPages: 10,
+  }}
+  onChange={setPage}
+/>
+
+// Minimal variant
+<Pagination
+  data={paginationData}
+  onChange={setPage}
+  variant="minimal"
+/>
+```
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| data | PaginationData | required | Pagination state object |
+| onChange | (page: number) => void | required | Page change handler |
+| showInfo | boolean | true | Show "Showing X-Y of Z" text |
+| showFirstLast | boolean | false | Show first/last page buttons |
+| size | 'sm' \| 'md' \| 'lg' | 'sm' | Button size |
+| variant | 'default' \| 'minimal' | 'default' | Layout variant |
+
+**PaginationData type:**
+```tsx
+{
+  page: number;       // Current page (1-indexed)
+  limit: number;      // Items per page
+  total: number;      // Total item count
+  totalPages: number; // Total page count
+  hasMore?: boolean;  // Override for next button state
+}
+```
 
 ---
 

@@ -3,7 +3,7 @@
   "packageManager": "yarn@4.9.4",
   "description": "A component library for React",
   "homepage": "https://spindle-studios.github.io/react-spindle",
-  "version": "0.1.4",
+  "version": "0.2.4",
   "license": "MIT",
   "main": "build/index.js",
   "module": "build/index.js",
@@ -29,7 +29,7 @@
     "./SPINDLE.md": "./SPINDLE.md"
   },
   "scripts": {
-    "start": "storybook dev -p 3000",
+    "dev": "storybook dev -p 3000",
     "package": "node build.js && rm -rf ./build && rollup -c",
     "build": "storybook build -o storybook-static",
     "deploy": "gh-pages -d storybook-static"

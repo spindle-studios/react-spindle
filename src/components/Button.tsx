@@ -5,7 +5,7 @@ export const Button = forwardRef<
   HTMLButtonElement,
   ComponentProps<'button'> & {
     variant?: 'primary' | 'secondary' | 'destructive' | 'outline' | 'ghost' | 'icon';
-    size?: 'lg' | 'md' | 'sm';
+    size?: 'lg' | 'md' | 'sm' | 'xs';
   }
 >(({ variant = 'primary', size = 'md', type = 'button', className, ...props }, ref) => {
   return (
@@ -24,11 +24,13 @@ export const Button = forwardRef<
           'h-11 px-8 rounded-md': size === 'lg' && variant !== 'icon',
           'h-10 px-4 py-2 rounded-md': size === 'md' && variant !== 'icon',
           'h-9 px-3 text-xs rounded-sm': size === 'sm' && variant !== 'icon',
+          'h-7 px-2 text-xs rounded-sm': size === 'xs' && variant !== 'icon',
         },
         {
           'h-10 rounded-md': size === 'lg' && variant === 'icon',
           'h-8 rounded-md': size === 'md' && variant === 'icon',
           'h-6 rounded-sm': size === 'sm' && variant === 'icon',
+          'h-4 rounded-sm': size === 'xs' && variant === 'icon',
         },
         {
           'bg-primary text-primary-foreground hover:bg-primary/80': variant === 'primary',

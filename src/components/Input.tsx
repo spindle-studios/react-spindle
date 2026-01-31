@@ -3,7 +3,7 @@ import React, { ComponentProps } from 'react';
 
 export const Input = React.forwardRef<
   HTMLInputElement,
-  ComponentProps<'input'> & {
+  Omit<ComponentProps<'input'>, 'size'> & {
     label?: React.ReactNode;
     containerClassName?: string;
     size?: 'lg' | 'md' | 'sm';
