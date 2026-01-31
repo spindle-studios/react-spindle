@@ -3,14 +3,15 @@
   "packageManager": "yarn@4.9.4",
   "description": "A component library for React",
   "homepage": "https://spindle-studios.github.io/react-spindle",
-  "version": "0.1.3",
+  "version": "0.1.4",
   "license": "MIT",
   "main": "build/index.js",
   "module": "build/index.js",
   "types": "build/index.d.ts",
   "style": "./build/global.css",
   "files": [
-    "build"
+    "build",
+    "SPINDLE.md"
   ],
   "repository": {
     "type": "git",
@@ -24,7 +25,8 @@
       "import": "./build/index.js",
       "types": "./build/index.d.ts"
     },
-    "./global.css": "./build/global.css"
+    "./global.css": "./build/global.css",
+    "./SPINDLE.md": "./SPINDLE.md"
   },
   "scripts": {
     "start": "storybook dev -p 3000",
