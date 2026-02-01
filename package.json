@@ -3,7 +3,7 @@
   "packageManager": "yarn@4.9.4",
   "description": "A component library for React",
   "homepage": "https://spindle-studios.github.io/react-spindle",
-  "version": "0.2.5",
+  "version": "0.2.6",
   "license": "MIT",
   "main": "build/index.js",
   "module": "build/index.js",
