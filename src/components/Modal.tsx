@@ -24,13 +24,14 @@ export const Modal: React.FC<
 
         <DialogPrimitive.Content
           className={clsx(
-            'fixed z-50 bg-background p-6 shadow-lg border-border border rounded-lg',
+            'fixed z-50 bg-background p-6',
             'left-[50%] top-[50%] translate-x-[-50%] translate-y-[-50%]',
             'data-[state=open]:animate-in data-[state=closed]:animate-out',
             'data-[state=open]:fade-in-0 data-[state=closed]:fade-out-0',
             'data-[state=open]:zoom-in-95 data-[state=closed]:zoom-out-95',
             'data-[state=closed]:slide-out-to-left-1/2 data-[state=closed]:slide-out-to-top-[48%]',
             'data-[state=open]:slide-in-from-left-1/2 data-[state=open]:slide-in-from-top-[48%]',
+            'sm:shadow-lg sm:border-border sm:border sm:rounded-lg',
             'w-full h-full sm:h-auto sm:max-w-[90vw] sm:max-h-[90vh]',
             {
               'sm:w-[400px]': size === 'sm',
