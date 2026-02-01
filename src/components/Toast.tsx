@@ -32,6 +32,7 @@ export const Toast: React.FC<{
         open={open}
         onOpenChange={onOpenChange}
         className={clsx(
+          'toast', // used in global.css
           'group pointer-events-auto relative justify-between flex w-full items-center space-x-4 rounded-md border p-4 shadow-lg transition-all bg-background text-foreground border-border',
           'data-[state=open]:animate-in data-[state=closed]:animate-out data-[swipe=end]:animate-out',
           'data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:slide-out-to-right-full data-[state=open]:slide-in-from-top-full sm:data-[state=open]:slide-in-from-bottom-full',
