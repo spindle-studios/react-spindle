@@ -9,15 +9,17 @@ export const Sheet: React.FC<
     isOpen: boolean;
     onClose: () => void;
     variant?: 'right' | 'left' | 'bottom';
+    showOverlay?: boolean;
     className?: string;
   }
-> = ({ isOpen, onClose, variant = 'left', className, children, ...props }) => {
+> = ({ isOpen, onClose, variant = 'right', showOverlay = true, className, children, ...props }) => {
   return (
     <DialogPrimitive.Root open={isOpen} onOpenChange={(open) => !open && onClose()}>
       <DialogPrimitive.Portal>
         <DialogPrimitive.Overlay
           className={clsx(
-            'fixed inset-0 z-50 bg-black/50',
+            showOverlay ? 'bg-black/50' : 'bg-transparent',
+            'fixed inset-0 z-50',
             'data-[state=open]:animate-in data-[state=closed]:animate-out',
             'data-[state=open]:fade-in data-[state=closed]:fade-out',
           )}

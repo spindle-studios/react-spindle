@@ -4,7 +4,8 @@ import React, { useState } from 'react';
 
 export const Default = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const [variant, setVariant] = useState<'right' | 'left' | 'bottom'>('left');
+  const [variant, setVariant] = useState<'right' | 'left' | 'bottom'>('right');
+  const [showOverlay, setShowOverlay] = useState(true);
 
   return (
     <div className="flex flex-row items-center gap-2">
@@ -35,7 +36,11 @@ export const Default = () => {
         Bottom
       </Button>
 
-      <Sheet isOpen={isOpen} onClose={() => setIsOpen(false)} variant={variant}>
+      <Button variant="outline" onClick={() => setShowOverlay(!showOverlay)}>
+        Overlay: {showOverlay ? 'On' : 'Off'}
+      </Button>
+
+      <Sheet isOpen={isOpen} onClose={() => setIsOpen(false)} variant={variant} showOverlay={showOverlay}>
         <div className="flex flex-col gap-4">
           <h2 className="text-lg font-semibold">Hello World!</h2>
           <p className="text-sm text-muted-foreground">

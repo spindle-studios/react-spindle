@@ -573,7 +573,8 @@ Slide-out panel from screen edge.
 |------|------|---------|-------------|
 | isOpen | boolean | required | Visibility state |
 | onClose | () => void | required | Close handler |
-| variant | 'left' \| 'right' \| 'bottom' | 'left' | Slide direction |
+| variant | 'left' \| 'right' \| 'bottom' | 'right' | Slide direction |
+| showOverlay | boolean | true | Show background overlay |
 
 #### Popover
 Floating panel attached to trigger element.
