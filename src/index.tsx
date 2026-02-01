@@ -19,91 +19,92 @@ import * as ToastPrimitives from '@radix-ui/react-toast';
 import * as TooltipPrimitive from '@radix-ui/react-tooltip';
 
 
-export const Avatar = forwardRef<
-  HTMLDivElement | HTMLButtonElement,
-  {
-    src?: string | null;
-    fallback?: string | ReactNode;
-    size?: 'xs' | 'sm' | 'md' | 'lg' | 'xl';
-    onClick?: () => void;
-  } & (
-    | (ComponentPropsWithoutRef<'button'> & { onClick: () => void })
-    | (ComponentPropsWithoutRef<'div'> & { onClick?: never })
-  )
->(({ src, fallback, size = 'md', className, onClick, ...props }, ref) => {
-  const [hasError, setHasError] = useState(false);
+type AvatarProps = {
+  src?: string | null;
+  fallback?: string | ReactNode;
+  size?: 'xs' | 'sm' | 'md' | 'lg' | 'xl';
+  onClick?: () => void;
+} & (
+  | (ComponentPropsWithoutRef<'button'> & { onClick: () => void })
+  | (ComponentPropsWithoutRef<'div'> & { onClick?: never })
+);
 
-  const shouldShowFallback = !src || hasError;
+export const Avatar = forwardRef<HTMLDivElement | HTMLButtonElement, AvatarProps>(
+  ({ src, fallback, size = 'md', className, onClick, ...props }, ref) => {
+    const [hasError, setHasError] = useState(false);
 
-  const content = (
-    <>
-      {!shouldShowFallback && (
-        <img
-          src={src}
-          alt="Avatar"
-          className="h-full w-full rounded-full object-cover"
-          onError={() => setHasError(true)}
-        />
-      )}
-      {shouldShowFallback && fallback && (
-        <div className="flex h-full w-full items-center justify-center rounded-full bg-muted border border-border">
-          {typeof fallback === 'string' ? (
-            <span
-              className={clsx('font-medium text-foreground', {
-                'text-[8px]': size === 'xs',
-                'text-[10px]': size === 'sm',
-                'text-xs': size === 'md',
-                'text-sm': size === 'lg',
-                'text-base': size === 'xl',
-              })}
-            >
-              {fallback}
-            </span>
-          ) : (
-            fallback
-          )}
-        </div>
-      )}
-    </>
-  );
+    const shouldShowFallback = !src || hasError;
 
-  const avatarClasses = clsx(
-    'aspect-square rounded-full flex items-center justify-center overflow-hidden flex-shrink-0',
-    {
-      'h-4 w-4': size === 'xs',
-      'h-6 w-6': size === 'sm',
-      'h-10 w-10': size === 'md',
-      'h-14 w-14': size === 'lg',
-      'h-20 w-20': size === 'xl',
-    },
-    onClick && 'cursor-pointer transition-opacity hover:opacity-80',
-    className,
-  );
+    const content = (
+      <>
+        {!shouldShowFallback && (
+          <img
+            src={src}
+            alt="Avatar"
+            className="h-full w-full rounded-full object-cover"
+            onError={() => setHasError(true)}
+          />
+        )}
+        {shouldShowFallback && fallback && (
+          <div className="flex h-full w-full items-center justify-center rounded-full bg-muted border border-border">
+            {typeof fallback === 'string' ? (
+              <span
+                className={clsx('font-medium text-foreground', {
+                  'text-[8px]': size === 'xs',
+                  'text-[10px]': size === 'sm',
+                  'text-xs': size === 'md',
+                  'text-sm': size === 'lg',
+                  'text-base': size === 'xl',
+                })}
+              >
+                {fallback}
+              </span>
+            ) : (
+              fallback
+            )}
+          </div>
+        )}
+      </>
+    );
 
-  if (onClick) {
+    const avatarClasses = clsx(
+      'aspect-square rounded-full flex items-center justify-center overflow-hidden flex-shrink-0',
+      {
+        'h-4 w-4': size === 'xs',
+        'h-6 w-6': size === 'sm',
+        'h-10 w-10': size === 'md',
+        'h-14 w-14': size === 'lg',
+        'h-20 w-20': size === 'xl',
+      },
+      onClick && 'cursor-pointer transition-opacity hover:opacity-80',
+      className,
+    );
+
+    if (onClick) {
+      return (
+        <button
+          ref={ref as React.Ref<HTMLButtonElement>}
+          type="button"
+          onClick={onClick}
+          className={avatarClasses}
+          {...(props as ComponentPropsWithoutRef<'button'>)}
+        >
+          {content}
+        </button>
+      );
+    }
+
     return (
-      <button
-        ref={ref as React.Ref<HTMLButtonElement>}
-        type="button"
-        onClick={onClick}
+      <div
+        ref={ref as React.Ref<HTMLDivElement>}
         className={avatarClasses}
-        {...(props as ComponentPropsWithoutRef<'button'>)}
+        {...(props as ComponentPropsWithoutRef<'div'>)}
       >
         {content}
-      </button>
+      </div>
     );
-  }
-
-  return (
-    <div
-      ref={ref as React.Ref<HTMLDivElement>}
-      className={avatarClasses}
-      {...(props as ComponentPropsWithoutRef<'div'>)}
-    >
-      {content}
-    </div>
-  );
-});
+  },
+);
 
 
 export const Badge = forwardRef<
@@ -135,7 +136,7 @@ export const Button = forwardRef<
   HTMLButtonElement,
   ComponentProps<'button'> & {
     variant?: 'primary' | 'secondary' | 'destructive' | 'outline' | 'ghost' | 'icon';
-    size?: 'lg' | 'md' | 'sm';
+    size?: 'lg' | 'md' | 'sm' | 'xs';
   }
 >(({ variant = 'primary', size = 'md', type = 'button', className, ...props }, ref) => {
   return (
@@ -154,11 +155,13 @@ export const Button = forwardRef<
           'h-11 px-8 rounded-md': size === 'lg' && variant !== 'icon',
           'h-10 px-4 py-2 rounded-md': size === 'md' && variant !== 'icon',
           'h-9 px-3 text-xs rounded-sm': size === 'sm' && variant !== 'icon',
+          'h-7 px-2 text-xs rounded-sm': size === 'xs' && variant !== 'icon',
         },
         {
           'h-10 rounded-md': size === 'lg' && variant === 'icon',
           'h-8 rounded-md': size === 'md' && variant === 'icon',
           'h-6 rounded-sm': size === 'sm' && variant === 'icon',
+          'h-4 rounded-sm': size === 'xs' && variant === 'icon',
         },
         {
           'bg-primary text-primary-foreground hover:bg-primary/80': variant === 'primary',
@@ -394,6 +397,247 @@ export const ColorPicker: React.FC<{
 };
 
 
+type DateFormatOptions = {
+  locale?: string;
+  includeTime?: boolean;
+};
+
+const formatDateDisplay = (date: Date | null, options: DateFormatOptions = {}): string => {
+  if (!date) return 'Select a date';
+
+  const { locale = 'en-GB', includeTime = false } = options;
+
+  const dateOptions: Intl.DateTimeFormatOptions = {
+    year: 'numeric',
+    month: 'short',
+    day: 'numeric',
+  };
+
+  if (includeTime) {
+    dateOptions.hour = '2-digit';
+    dateOptions.minute = '2-digit';
+  }
+
+  return date.toLocaleDateString(locale, dateOptions);
+};
+
+const QUICK_TIME_OPTIONS = [9, 12, 15, 18, 21];
+
+export const DatePicker: React.FC<{
+  value: Date | null;
+  onChange: (value: Date) => void;
+  label?: string;
+  tooltip?: string;
+  placeholder?: string;
+  includeTime?: boolean;
+  quickTimeOptions?: number[];
+  locale?: string;
+  minDate?: Date;
+  maxDate?: Date;
+  disabled?: boolean;
+  className?: string;
+  containerClassName?: string;
+}> = ({
+  value,
+  onChange,
+  label,
+  tooltip,
+  placeholder = 'Select a date',
+  includeTime = false,
+  quickTimeOptions = QUICK_TIME_OPTIONS,
+  locale = 'en-GB',
+  minDate,
+  maxDate,
+  disabled = false,
+  className,
+  containerClassName,
+}) => {
+  const [isOpen, setIsOpen] = useState(false);
+  const [step, setStep] = useState<'date' | 'time'>('date');
+
+  const handleDateChange = (date: Date) => {
+    const newDate = new Date(date);
+    if (value) {
+      newDate.setHours(value.getHours());
+      newDate.setMinutes(value.getMinutes());
+    }
+    onChange(newDate);
+
+    if (includeTime) {
+      setStep('time');
+    } else {
+      setIsOpen(false);
+    }
+  };
+
+  const handleTimeChange = (hours: number, minutes: number) => {
+    const newDate = value ? new Date(value) : new Date();
+    newDate.setHours(hours);
+    newDate.setMinutes(minutes);
+    onChange(newDate);
+  };
+
+  const handleOpenChange = (open: boolean) => {
+    setIsOpen(open);
+    if (!open) {
+      setStep('date');
+    }
+  };
+
+  return (
+    <Popover
+      open={isOpen}
+      onOpenChange={handleOpenChange}
+      trigger={
+        <div className={clsx('flex flex-col items-start', containerClassName)}>
+          {label && (
+            <div className="flex flex-row gap-1 items-center mb-1">
+              <span className="text-sm font-medium text-foreground">{label}</span>
+              {tooltip && <Tooltip trigger={<Icon name="Info" size={14} />} content={tooltip} />}
+            </div>
+          )}
+          <Button variant="secondary" disabled={disabled} className={clsx('gap-2', className)} type="button">
+            <Icon name="Calendar" size={16} />
+            <span className="text-sm">{value ? formatDateDisplay(value, { locale, includeTime }) : placeholder}</span>
+          </Button>
+        </div>
+      }
+      content={
+        <div className="space-y-3">
+          {step === 'date' && (
+            <Calendar
+              mode="single"
+              selected={value || undefined}
+              onSelect={(date) => handleDateChange(date ?? new Date())}
+              disabled={(date) => {
+                if (minDate && date < minDate) return true;
+                if (maxDate && date > maxDate) return true;
+                return false;
+              }}
+            />
+          )}
+
+          {step === 'time' && includeTime && (
+            <div className="flex flex-col space-y-4 p-3">
+              <div className="flex flex-col items-center space-y-3">
+                <label className="text-sm font-medium text-foreground">Select Time</label>
+                <div className="flex items-center space-x-2">
+                  <div className="flex flex-col items-center space-y-1">
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      className="h-7 w-7 p-0"
+                      type="button"
+                      onClick={() => handleTimeChange(((value?.getHours() || 0) + 1) % 24, value?.getMinutes() || 0)}
+                    >
+                      <Icon name="ChevronUp" size={16} />
+                    </Button>
+                    <input
+                      type="number"
+                      min="0"
+                      max="23"
+                      value={String(value?.getHours() || 0).padStart(2, '0')}
+                      onChange={(e) => {
+                        const hours = Math.max(0, Math.min(23, parseInt(e.target.value) || 0));
+                        handleTimeChange(hours, value?.getMinutes() || 0);
+                      }}
+                      className={clsx(
+                        'w-14 px-2 py-2 text-center text-base border border-border rounded-md bg-background',
+                        'focus:outline-none focus:ring-1 focus:ring-ring',
+                        '[appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none',
+                      )}
+                    />
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      className="h-7 w-7 p-0"
+                      type="button"
+                      onClick={() =>
+                        handleTimeChange(((value?.getHours() || 0) - 1 + 24) % 24, value?.getMinutes() || 0)
+                      }
+                    >
+                      <Icon name="ChevronDown" size={16} />
+                    </Button>
+                  </div>
+
+                  <span className="text-xl font-medium text-muted-foreground">:</span>
+
+                  <div className="flex flex-col items-center space-y-1">
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      className="h-7 w-7 p-0"
+                      type="button"
+                      onClick={() => handleTimeChange(value?.getHours() || 0, ((value?.getMinutes() || 0) + 15) % 60)}
+                    >
+                      <Icon name="ChevronUp" size={16} />
+                    </Button>
+                    <input
+                      type="number"
+                      min="0"
+                      max="59"
+                      value={String(value?.getMinutes() || 0).padStart(2, '0')}
+                      onChange={(e) => {
+                        const minutes = Math.max(0, Math.min(59, parseInt(e.target.value) || 0));
+                        handleTimeChange(value?.getHours() || 0, minutes);
+                      }}
+                      className={clsx(
+                        'w-14 px-2 py-2 text-center text-base border border-border rounded-md bg-background',
+                        'focus:outline-none focus:ring-1 focus:ring-ring',
+                        '[appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none',
+                      )}
+                    />
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      className="h-7 w-7 p-0"
+                      type="button"
+                      onClick={() =>
+                        handleTimeChange(value?.getHours() || 0, ((value?.getMinutes() || 0) - 15 + 60) % 60)
+                      }
+                    >
+                      <Icon name="ChevronDown" size={16} />
+                    </Button>
+                  </div>
+                </div>
+              </div>
+
+              {quickTimeOptions.length > 0 && (
+                <div className="border-t border-border pt-3">
+                  <div className="grid grid-cols-5 gap-2">
+                    {quickTimeOptions.map((hour) => (
+                      <Button
+                        key={hour}
+                        variant="outline"
+                        size="sm"
+                        className="h-8 text-xs"
+                        type="button"
+                        onClick={() => handleTimeChange(hour, 0)}
+                      >
+                        {hour}:00
+                      </Button>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              <div className="flex flex-row justify-between items-center gap-3">
+                <Button size="sm" variant="secondary" type="button" onClick={() => setStep('date')} className="w-full">
+                  Back
+                </Button>
+                <Button size="sm" type="button" onClick={() => handleOpenChange(false)} className="w-full">
+                  Done
+                </Button>
+              </div>
+            </div>
+          )}
+        </div>
+      }
+    />
+  );
+};
+
+
 export const Divider = React.forwardRef<
   React.ElementRef<'div'>,
   React.ComponentPropsWithoutRef<'div'> & {
@@ -471,6 +715,80 @@ export const Dropdown: React.FC<{
         </DropdownMenuPrimitive.Content>
       </DropdownMenuPrimitive.Portal>
     </DropdownMenuPrimitive.Root>
+  );
+};
+
+
+const DEFAULT_EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+export const Email: React.FC<{
+  value: string;
+  onChange: (value: string) => void;
+  onKeyDown?: (e: React.KeyboardEvent) => void;
+  onValidate?: (isValid: boolean) => void;
+  validate?: (value: string) => boolean;
+  placeholder?: string;
+  label?: string;
+  size?: 'lg' | 'md' | 'sm';
+  showIcon?: boolean;
+  showValidation?: boolean;
+  containerClassName?: string;
+  className?: string;
+}> = ({
+  value,
+  onChange,
+  onKeyDown,
+  onValidate,
+  validate,
+  placeholder = 'Email',
+  label,
+  size = 'md',
+  showIcon = true,
+  showValidation = true,
+  containerClassName,
+  className,
+}) => {
+  const [isValid, setIsValid] = useState<boolean>(false);
+
+  const validateEmail = (email: string): boolean => {
+    if (validate) {
+      return validate(email);
+    }
+    return DEFAULT_EMAIL_REGEX.test(email);
+  };
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const newValue = e.target.value;
+    onChange(newValue);
+    const emailValid = validateEmail(newValue);
+    setIsValid(emailValid);
+    onValidate?.(emailValid);
+  };
+
+  return (
+    <div className={clsx('flex flex-col gap-2', containerClassName)}>
+      <Input
+        type="email"
+        autoCapitalize="none"
+        autoComplete="email"
+        left={showIcon ? <Icon name="Mail" /> : undefined}
+        right={
+          showValidation && value ? (
+            <Icon
+              name={isValid ? 'CheckCircle' : 'Circle'}
+              className={isValid ? 'text-primary' : 'text-muted-foreground'}
+            />
+          ) : undefined
+        }
+        placeholder={placeholder}
+        label={label}
+        size={size}
+        value={value}
+        onChange={handleChange}
+        onKeyDown={onKeyDown}
+        className={clsx(isValid && value ? 'border-primary' : '', className)}
+      />
+    </div>
   );
 };
 
@@ -622,7 +940,7 @@ export const Icon: React.FC<{
 
 export const Input = React.forwardRef<
   HTMLInputElement,
-  ComponentProps<'input'> & {
+  Omit<ComponentProps<'input'>, 'size'> & {
     label?: React.ReactNode;
     containerClassName?: string;
     size?: 'lg' | 'md' | 'sm';
@@ -865,13 +1183,14 @@ export const Modal: React.FC<
 
         <DialogPrimitive.Content
           className={clsx(
-            'fixed z-50 bg-background p-6 shadow-lg border-border border rounded-lg',
+            'fixed z-50 bg-background p-6',
             'left-[50%] top-[50%] translate-x-[-50%] translate-y-[-50%]',
             'data-[state=open]:animate-in data-[state=closed]:animate-out',
             'data-[state=open]:fade-in-0 data-[state=closed]:fade-out-0',
             'data-[state=open]:zoom-in-95 data-[state=closed]:zoom-out-95',
             'data-[state=closed]:slide-out-to-left-1/2 data-[state=closed]:slide-out-to-top-[48%]',
             'data-[state=open]:slide-in-from-left-1/2 data-[state=open]:slide-in-from-top-[48%]',
+            'sm:shadow-lg sm:border-border sm:border sm:rounded-lg',
             'w-full h-full sm:h-auto sm:max-w-[90vw] sm:max-h-[90vh]',
             {
               'sm:w-[400px]': size === 'sm',
@@ -890,6 +1209,336 @@ export const Modal: React.FC<
         </DialogPrimitive.Content>
       </DialogPrimitive.Portal>
     </DialogPrimitive.Root>
+  );
+};
+
+
+export const Notification: React.FC<{
+  value: number;
+  size?: 'sm' | 'md' | 'lg';
+  max?: number;
+  description?: string;
+  showTooltip?: boolean;
+  variant?: 'destructive' | 'primary' | 'secondary';
+  className?: string;
+}> = ({
+  value,
+  size = 'sm',
+  max = 99,
+  description = 'unread notification',
+  showTooltip = true,
+  variant = 'destructive',
+  className,
+}) => {
+  if (!value || value <= 0) return null;
+
+  const displayValue = value > max ? `${max}+` : value.toString();
+
+  const variantStyles = {
+    destructive: 'bg-destructive text-destructive-foreground',
+    primary: 'bg-primary text-primary-foreground',
+    secondary: 'bg-secondary text-secondary-foreground',
+  };
+
+  const sizeStyles = {
+    sm: {
+      base: 'min-w-[18px] h-[18px] text-[10px]',
+      single: 'px-0',
+      multi: 'px-1',
+    },
+    md: {
+      base: 'min-w-[22px] h-[22px] text-xs',
+      single: 'px-0',
+      multi: 'px-1.5',
+    },
+    lg: {
+      base: 'min-w-[26px] h-[26px] text-sm',
+      single: 'px-0',
+      multi: 'px-2',
+    },
+  };
+
+  const isSingleDigit = displayValue.length === 1;
+  const styles = sizeStyles[size];
+
+  const content = (
+    <div
+      className={clsx(
+        'inline-flex items-center justify-center',
+        'rounded-full font-medium shadow-sm',
+        'transition-all',
+        variantStyles[variant],
+        styles.base,
+        isSingleDigit ? styles.single : styles.multi,
+        className,
+      )}
+    >
+      <span className="leading-none tabular-nums">{displayValue}</span>
+    </div>
+  );
+
+  if (!showTooltip) {
+    return content;
+  }
+
+  const tooltipText = `You have ${value} ${description}${value === 1 ? '' : 's'}`;
+
+  return <Tooltip content={tooltipText} trigger={content} />;
+};
+
+
+export type PaginationData = {
+  page: number;
+  limit: number;
+  total: number;
+  totalPages: number;
+  hasMore?: boolean;
+};
+
+export const Pagination: React.FC<{
+  data: PaginationData;
+  onChange: (page: number) => void;
+  showInfo?: boolean;
+  showFirstLast?: boolean;
+  size?: 'sm' | 'md' | 'lg';
+  variant?: 'default' | 'minimal';
+  className?: string;
+}> = ({ data, onChange, showInfo = true, showFirstLast = false, size = 'sm', variant = 'default', className }) => {
+  const { page, limit, total, totalPages, hasMore } = data;
+
+  const canGoPrevious = page > 1;
+  const canGoNext = hasMore !== undefined ? hasMore : page < totalPages;
+
+  const startItem = total > 0 ? (page - 1) * limit + 1 : 0;
+  const endItem = Math.min(page * limit, total);
+
+  if (variant === 'minimal') {
+    return (
+      <div className={clsx('flex items-center gap-2', className)}>
+        <Button variant="ghost" size={size} onClick={() => onChange(page - 1)} disabled={!canGoPrevious} type="button">
+          <Icon name="ChevronLeft" size={16} />
+        </Button>
+        <span className="text-sm text-muted-foreground tabular-nums">
+          {page} / {totalPages}
+        </span>
+        <Button variant="ghost" size={size} onClick={() => onChange(page + 1)} disabled={!canGoNext} type="button">
+          <Icon name="ChevronRight" size={16} />
+        </Button>
+      </div>
+    );
+  }
+
+  return (
+    <div className={clsx('flex items-center justify-between gap-4', className)}>
+      <div className="flex items-center gap-1">
+        {showFirstLast && (
+          <Button
+            variant="outline"
+            size={size}
+            onClick={() => onChange(1)}
+            disabled={!canGoPrevious}
+            type="button"
+            className="gap-1"
+          >
+            <Icon name="ChevronsLeft" size={16} />
+          </Button>
+        )}
+        <Button
+          variant="outline"
+          size={size}
+          onClick={() => onChange(page - 1)}
+          disabled={!canGoPrevious}
+          type="button"
+          className="gap-2"
+        >
+          <Icon name="ArrowLeft" size={16} />
+          <span className="hidden sm:inline">Back</span>
+        </Button>
+      </div>
+
+      {showInfo && (
+        <div className="text-sm text-muted-foreground tabular-nums">
+          {total > 0 ? (
+            <>
+              Showing {startItem}-{endItem} of {total}
+            </>
+          ) : (
+            'No results'
+          )}
+        </div>
+      )}
+
+      <div className="flex items-center gap-1">
+        <Button
+          variant="outline"
+          size={size}
+          onClick={() => onChange(page + 1)}
+          disabled={!canGoNext}
+          type="button"
+          className="gap-2"
+        >
+          <span className="hidden sm:inline">Next</span>
+          <Icon name="ArrowRight" size={16} />
+        </Button>
+        {showFirstLast && (
+          <Button
+            variant="outline"
+            size={size}
+            onClick={() => onChange(totalPages)}
+            disabled={!canGoNext}
+            type="button"
+            className="gap-1"
+          >
+            <Icon name="ChevronsRight" size={16} />
+          </Button>
+        )}
+      </div>
+    </div>
+  );
+};
+
+
+type PasswordRequirementConfig = {
+  minLength?: number;
+  maxLength?: number;
+  requireUppercase?: boolean;
+  requireLowercase?: boolean;
+  requireNumber?: boolean;
+  requireSpecial?: boolean;
+  specialChars?: string;
+};
+
+const DEFAULT_REQUIREMENTS: Required<PasswordRequirementConfig> = {
+  minLength: 8,
+  maxLength: 64,
+  requireUppercase: true,
+  requireLowercase: true,
+  requireNumber: false,
+  requireSpecial: true,
+  specialChars: '!@#$%^&*(),.?":{}|<>',
+};
+
+const PasswordRequirement: React.FC<{ text: string; isValid: boolean }> = ({ text, isValid }) => (
+  <div className="flex items-center gap-2">
+    <Icon
+      name={isValid ? 'CheckCircle' : 'Circle'}
+      size={14}
+      className={isValid ? 'text-primary' : 'text-muted-foreground'}
+    />
+    <span className={clsx('text-sm', isValid ? 'text-primary' : 'text-muted-foreground')}>{text}</span>
+  </div>
+);
+
+export const Password: React.FC<{
+  value: string;
+  onChange: (value: string) => void;
+  onKeyDown?: (e: React.KeyboardEvent) => void;
+  onValidate?: (isValid: boolean) => void;
+  requirements?: PasswordRequirementConfig;
+  showRequirements?: boolean;
+  placeholder?: string;
+  label?: string;
+  size?: 'lg' | 'md' | 'sm';
+  containerClassName?: string;
+  className?: string;
+}> = ({
+  value,
+  onChange,
+  onKeyDown,
+  onValidate,
+  requirements: customRequirements,
+  showRequirements = true,
+  placeholder = 'Password',
+  label,
+  size = 'md',
+  containerClassName,
+  className,
+}) => {
+  const requirements = { ...DEFAULT_REQUIREMENTS, ...customRequirements };
+  const [showPassword, setShowPassword] = useState(false);
+  const [validation, setValidation] = useState({
+    hasLength: false,
+    hasUppercase: false,
+    hasLowercase: false,
+    hasNumber: false,
+    hasSpecial: false,
+  });
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const newValue = e.target.value;
+    onChange(newValue);
+
+    const specialRegex = new RegExp(`[${requirements.specialChars.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}]`);
+
+    const newValidation = {
+      hasLength: newValue.length >= requirements.minLength && newValue.length <= requirements.maxLength,
+      hasUppercase: !requirements.requireUppercase || /[A-Z]/.test(newValue),
+      hasLowercase: !requirements.requireLowercase || /[a-z]/.test(newValue),
+      hasNumber: !requirements.requireNumber || /[0-9]/.test(newValue),
+      hasSpecial: !requirements.requireSpecial || specialRegex.test(newValue),
+    };
+
+    setValidation(newValidation);
+
+    const isValid =
+      newValidation.hasLength &&
+      newValidation.hasUppercase &&
+      newValidation.hasLowercase &&
+      newValidation.hasNumber &&
+      newValidation.hasSpecial;
+
+    onValidate?.(isValid);
+  };
+
+  const isValid =
+    validation.hasLength &&
+    validation.hasUppercase &&
+    validation.hasLowercase &&
+    validation.hasNumber &&
+    validation.hasSpecial;
+
+  return (
+    <div className={clsx('flex flex-col gap-2', containerClassName)}>
+      <Input
+        type={showPassword ? 'text' : 'password'}
+        placeholder={placeholder}
+        label={label}
+        size={size}
+        value={value}
+        onChange={handleChange}
+        onKeyDown={onKeyDown}
+        className={clsx(isValid && value ? 'border-primary' : '', className)}
+        right={
+          <button
+            type="button"
+            onClick={() => setShowPassword(!showPassword)}
+            className="text-muted-foreground hover:text-foreground transition-colors"
+          >
+            <Icon name={showPassword ? 'EyeOff' : 'Eye'} size={16} />
+          </button>
+        }
+      />
+      {showRequirements && (
+        <div className="ml-3 flex flex-col gap-1">
+          <PasswordRequirement
+            text={`Between ${requirements.minLength} and ${requirements.maxLength} characters`}
+            isValid={validation.hasLength}
+          />
+          {requirements.requireUppercase && (
+            <PasswordRequirement text="At least one uppercase letter" isValid={validation.hasUppercase} />
+          )}
+          {requirements.requireLowercase && (
+            <PasswordRequirement text="At least one lowercase letter" isValid={validation.hasLowercase} />
+          )}
+          {requirements.requireNumber && (
+            <PasswordRequirement text="At least one number" isValid={validation.hasNumber} />
+          )}
+          {requirements.requireSpecial && (
+            <PasswordRequirement text="At least one special character" isValid={validation.hasSpecial} />
+          )}
+        </div>
+      )}
+    </div>
   );
 };
 
@@ -1228,15 +1877,17 @@ export const Sheet: React.FC<
     isOpen: boolean;
     onClose: () => void;
     variant?: 'right' | 'left' | 'bottom';
+    showOverlay?: boolean;
     className?: string;
   }
-> = ({ isOpen, onClose, variant = 'left', className, children, ...props }) => {
+> = ({ isOpen, onClose, variant = 'right', showOverlay = true, className, children, ...props }) => {
   return (
     <DialogPrimitive.Root open={isOpen} onOpenChange={(open) => !open && onClose()}>
       <DialogPrimitive.Portal>
         <DialogPrimitive.Overlay
           className={clsx(
-            'fixed inset-0 z-50 bg-black/50',
+            showOverlay ? 'bg-black/50' : 'bg-transparent',
+            'fixed inset-0 z-50',
             'data-[state=open]:animate-in data-[state=closed]:animate-out',
             'data-[state=open]:fade-in data-[state=closed]:fade-out',
           )}
@@ -1302,6 +1953,77 @@ export const Slider: React.FC<
         />
       </SliderPrimitive.Root>
     </div>
+  );
+};
+
+
+type StatisticVariant = 'default' | 'compact';
+
+export const Statistic: React.FC<{
+  title: string;
+  value: string | number | ReactNode;
+  icon?: string;
+  iconColor?: string;
+  description?: string;
+  trend?: {
+    value: number;
+    direction: 'up' | 'down';
+  };
+  variant?: StatisticVariant;
+  className?: string;
+}> = ({
+  title,
+  value,
+  icon,
+  iconColor = 'hsl(var(--primary))',
+  description,
+  trend,
+  variant = 'default',
+  className,
+}) => {
+  const iconBackgroundColor = iconColor.startsWith('hsl') ? iconColor.replace(')', ' / 0.15)') : `${iconColor}20`;
+
+  return (
+    <Card className={clsx('flex flex-col items-start gap-3', className)}>
+      <div className={clsx('flex items-center gap-3', variant === 'compact' && 'gap-2')}>
+        {icon && (
+          <div
+            className={clsx(
+              'rounded-lg flex items-center justify-center',
+              variant === 'default' ? 'w-10 h-10' : 'w-8 h-8',
+            )}
+            style={{
+              backgroundColor: iconBackgroundColor,
+              color: iconColor,
+            }}
+          >
+            <Icon name={icon} size={variant === 'default' ? 20 : 16} className="text-current" />
+          </div>
+        )}
+        <div className="flex flex-col">
+          <span className={clsx('text-muted-foreground font-medium', variant === 'default' ? 'text-sm' : 'text-xs')}>
+            {title}
+          </span>
+          <div className="flex items-center gap-2">
+            <span className={clsx('font-bold text-foreground', variant === 'default' ? 'text-2xl' : 'text-xl')}>
+              {value}
+            </span>
+            {trend && (
+              <span
+                className={clsx(
+                  'flex items-center text-xs font-medium',
+                  trend.direction === 'up' ? 'text-green-500' : 'text-red-500',
+                )}
+              >
+                <Icon name={trend.direction === 'up' ? 'TrendingUp' : 'TrendingDown'} size={12} className="mr-0.5" />
+                {trend.value}%
+              </span>
+            )}
+          </div>
+        </div>
+      </div>
+      {description && <span className="text-xs text-muted-foreground">{description}</span>}
+    </Card>
   );
 };
 
